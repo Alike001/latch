@@ -340,9 +340,6 @@ export class TelemetryStateHub {
       .map((sensor) => this.snapshot(sensor));
   }
 
-  getSigningSecretForTest(sensor: string): string {
-    return this.requireSensor(sensor).definition.signingSecret;
-  }
 
   private createSignedReading(
     definition: SensorDefinition,
