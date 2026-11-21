@@ -501,3 +501,45 @@ The CI wrappers were also updated to the current official `actions/checkout@v7` 
 Exact next stage after merge:
 
 **Stage 4 — Provider API**, preceded by a fresh check of the live canonical SENSOR_TELEMETRY_VERIFY schema.
+
+
+---
+
+# Stage 3 merge milestone
+
+Date: 2026-11-21
+
+PR: `#2 feat: add Stage 3 deterministic Evidence Gate`
+
+Merge commit: `3929bc069afb2182291bf7b2f7367bf04cbea4a1`
+
+Status: **MERGED / COMPLETE**
+
+Final validation:
+
+- dependency audit: **0 vulnerabilities**
+- TypeScript typecheck: **passed**
+- Vitest: **25/25 tests passed**
+- Evidence Gate tests: **12/12 passed**
+- fixture validation: **7/7 passed**
+- CI wrappers: `actions/checkout@v7`, `actions/setup-node@v7`
+
+Stage 3 delivered:
+
+- unknown/untrusted Provider payload validation;
+- availability check;
+- sensor and metric identity checks;
+- accepted-unit check;
+- finite numeric value check;
+- timestamp validity and future rejection;
+- freshness/max-age enforcement;
+- plausible-range enforcement;
+- policy-controlled integrity verification;
+- deterministic CONTINUE / REBUY / HOLD / explicit ESCALATE outcomes;
+- fail-closed behavior for malformed payloads and missing integrity verification.
+
+Exact stopping point now:
+
+**Stage 4 — Provider API.**
+
+Before implementing or registering the Provider, re-check the exact live canonical `SENSOR_TELEMETRY_VERIFY` Intent schema, current Provider registration requirements, and any relevant scoring/evaluator path. Do not guess from old archived issue text.
