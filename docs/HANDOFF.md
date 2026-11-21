@@ -364,3 +364,42 @@ Validation status:
 
 Exact next build step after Stage 1 validation:
 **Stage 2 — software-only telemetry simulator/state hub.**
+
+
+---
+
+# Stage 2 milestone — telemetry simulator/state hub implemented
+
+Date: 2026-11-21
+
+Branch: `feat/stage2-telemetry-simulator`
+
+Stage 2 implementation now includes:
+
+- deterministic sensor registration;
+- telemetry publication with monotonic sequence numbers;
+- heartbeat + last-seen state;
+- disconnect/reconnect controls;
+- stale-reading injection;
+- wrong-unit injection;
+- corrupted-integrity injection;
+- canonical restore path;
+- deterministic HMAC-SHA256 simulator signatures;
+- integrity verification helper;
+- unit tests covering normal and fault paths.
+
+Important design decision:
+
+Stage 2 HMAC signing is a simulator integrity mechanism, not a claim about the final Provider cryptographic scheme. It exists so Stage 3 can prove that a valid signature does not imply fresh or semantically correct telemetry.
+
+CI was also adjusted to avoid requiring an npm lockfile for setup-node caching.
+
+Current GO/NO-GO:
+
+**IMPLEMENTED, PENDING CI VALIDATION**
+
+Do not mark Stage 2 complete until the feature-branch PR reports successful typecheck, tests and fixture validation.
+
+Exact next stage after successful validation/merge:
+
+**Stage 3 — deterministic Evidence Gate.**
