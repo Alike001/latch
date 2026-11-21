@@ -1,0 +1,22 @@
+{
+  "name": "latch",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Software-only machine intelligence recovery for Telegraph Mission 11 Route 2.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "validate:fixtures": "tsx scripts/validate-fixtures.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8",
+    "zod": "^3.24.1"
+  }
+}

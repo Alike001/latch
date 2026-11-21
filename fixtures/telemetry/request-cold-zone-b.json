@@ -1,0 +1,11 @@
+{
+  "sensor": "cold-zone-b-temp",
+  "metric": "temperature",
+  "acceptedUnits": ["C"],
+  "maxAgeSeconds": 120,
+  "plausibleRange": {
+    "min": -35,
+    "max": 10
+  },
+  "requireIntegrity": true
+}

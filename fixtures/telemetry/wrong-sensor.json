@@ -1,0 +1,10 @@
+{
+  "sensor": "cold-zone-c-temp",
+  "metric": "temperature",
+  "value": -18.3,
+  "unit": "C",
+  "observedAt": "2026-11-21T12:30:00Z",
+  "sequence": 311,
+  "source": "simulator:cold-zone-c",
+  "signature": "fixture-valid-signature"
+}
