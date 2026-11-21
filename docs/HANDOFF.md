@@ -334,3 +334,33 @@ After every major milestone update this document with:
 - exact next step
 
 A future agent must read this file before coding.
+
+
+---
+
+# Repository milestone — Latch Stage 1 foundation pushed
+
+Date: 2026-11-21
+
+Repository: `Alike001/latch`
+
+Main foundation commit: `9bc7cb1dca2037b7bd8f4ac4e2f727a63a139dc8`
+
+CI workflow commit: `78336a8efdde045f752cdcb2ea13fd30f41eb322`
+
+Repository now contains:
+- `AGENTS.md`
+- this continuity handoff
+- decision and architecture docs
+- TypeScript contracts
+- deterministic telemetry fixtures
+- contract tests
+- evidence-vault guidance
+- Stage 1 placeholders for simulator, Provider, controller and UI
+- GitHub Actions CI for typecheck, tests and fixture validation
+
+Validation status:
+**CI configured; do not mark Stage 1 PASS until a GitHub Actions run reports success.**
+
+Exact next build step after Stage 1 validation:
+**Stage 2 — software-only telemetry simulator/state hub.**
