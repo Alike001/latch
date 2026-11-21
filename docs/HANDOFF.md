@@ -602,3 +602,53 @@ Stage 4 uses one clear engineering commit, per repository commit discipline.
 Exact next stage after merge:
 
 **Stage 5 — Telegraph Provider validation/registration.**
+
+
+---
+
+# Stage 5 live schema verification + deployment preparation
+
+Date: 2026-11-21
+
+The user re-fetched the live node schema for `SENSOR_TELEMETRY_VERIFY_GENERAL`.
+
+Live facts:
+
+- class: judgment
+- miner_count: 23
+- request schema version: 3
+- required params: `sensor`, `metric`
+- response format version: 3
+- response fields: `sensor`, `metric`, `value`, `unit`, `observed_at`
+- family: `SENSOR_TELEMETRY_VERIFY`
+
+This removes the Stage 4 direct-node verification limitation.
+
+Stage 5 prepares:
+
+- runnable public Provider process;
+- continuously refreshed simulated cold-zone telemetry;
+- Miner YAML with exact canonical schema;
+- free Telegraph validator script;
+- deployment to Render;
+- identity candidates `id: 7317701`, `slug: latch-telemetry`.
+
+Do not register until the public endpoint and free validator both pass.
+
+Current status:
+
+**DEPLOYMENT / VALIDATION IN PROGRESS**
+
+Exact next checkpoint:
+
+Public Render URL + Telegraph validator `valid: true`.
+
+## Stage 5 validation correction
+
+The first automated validator attempt used the documented `https://integrate.telegraphprotocol.com/api/validate` endpoint.
+
+Actual result on 2026-11-21: the response was the Anjoman HTML application, not validator JSON, so no YAML pass/fail conclusion can be drawn from it.
+
+Latch now uses an automated Stage 5 readiness check for YAML contract structure, live Intent schema, public Provider response/freshness, and miner identity availability.
+
+Before on-chain registration, use the Anjoman Earn registration interface for the final sandbox validation.

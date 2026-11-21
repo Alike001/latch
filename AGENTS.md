@@ -155,9 +155,9 @@ Do not build the fancy UI before the purchase + validation loop works.
 
 Mission 11 claim is already recorded under `@Alike001` in `telegraphprotocol/bounties#199`.
 
-Current stage: **Stage 4 complete and validated on PR #3**.
+Current stage: **Stage 5 in progress — public Provider deployment and Telegraph validation**.
 
-Exact next task: **Stage 5 — re-check the live node schema from the user's environment, then validate/register the Telegraph Provider and capture paid evidence.**
+Exact next task: **finish public Provider deployment, obtain Telegraph validator `valid: true`, then perform wallet-bound registration and capture paid evidence.**
 
 ## Agent working style
 

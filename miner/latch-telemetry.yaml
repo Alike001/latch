@@ -1,0 +1,104 @@
+version: "1"
+kind: miner
+id: 7317701
+slug: latch-telemetry
+protocol: generic
+name: Latch Telemetry Provider
+description: >-
+  Shareable simulated machine telemetry for Telegraph Mission 11 Route 2.
+  Returns only policy-approved fresh readings and refuses stale, unavailable,
+  semantically invalid, or integrity-failed telemetry instead of fabricating data.
+base_url: https://latch-telemetry-provider.onrender.com
+
+rate_limit_per_sec: 5
+cache_ttl_sec: 0
+circuit_threshold: 3
+circuit_cooldown_seconds: 15
+
+endpoints:
+  - path: /telemetry
+    external_path: /telemetry
+    method: GET
+    description: >-
+      Returns a fresh policy-approved reading for an explicitly shareable machine
+      sensor. Current public demo capability is cold-zone-b-temp temperature.
+    intents:
+      - SENSOR_TELEMETRY_VERIFY_GENERAL
+    params:
+      query:
+        required:
+          - name: sensor
+            type: string
+            intents: ["*"]
+            description: >-
+              Exact shareable sensor identifier. Current public demo sensor is
+              cold-zone-b-temp.
+          - name: metric
+            type: string
+            intents: ["*"]
+            description: >-
+              Exact measured quantity. For cold-zone-b-temp use temperature.
+
+input_schema:
+  type: object
+  required:
+    - sensor
+    - metric
+  additionalProperties: false
+  properties:
+    sensor:
+      type: string
+    metric:
+      type: string
+
+output_schema:
+  type: object
+  required:
+    - sensor
+    - metric
+    - value
+    - unit
+    - observed_at
+  properties:
+    sensor:
+      type: string
+    metric:
+      type: string
+    value:
+      type: number
+    unit:
+      type: string
+    observed_at:
+      type: string
+    source:
+      type: string
+    sequence:
+      type: integer
+    integrity:
+      type: string
+    served_at:
+      type: string
+
+intent_mapping:
+  SENSOR_TELEMETRY_VERIFY_GENERAL:
+    endpoint: /telemetry
+    input:
+      sensor:
+        from: sensor
+      metric:
+        from: metric
+    output:
+      sensor:
+        path: sensor
+      metric:
+        path: metric
+      value:
+        path: value
+      unit:
+        path: unit
+      observed_at:
+        path: observed_at
+
+semantics:
+  supported_intents:
+    - SENSOR_TELEMETRY_VERIFY_GENERAL
