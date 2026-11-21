@@ -29,6 +29,7 @@ export type TelemetryRequest = z.infer<typeof TelemetryRequestSchema>;
 
 export const EvidenceCheckSchema = z.object({
   key: z.enum([
+    "availability",
     "sensor",
     "metric",
     "unit",
