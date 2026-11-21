@@ -1,3 +1,11 @@
-// Stage 1 placeholder.
-// Stage 2 will implement software-only machine/sensor simulation and telemetry state.
-export {};
+export {
+  TelemetryStateHub,
+  canonicalTelemetryPayload,
+  signTelemetry,
+  verifyTelemetrySignature,
+} from "./hub.js";
+
+export type {
+  SensorDefinition,
+  SensorSnapshot,
+} from "./hub.js";
