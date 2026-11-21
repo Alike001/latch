@@ -396,10 +396,17 @@ CI was also adjusted to avoid requiring an npm lockfile for setup-node caching.
 
 Current GO/NO-GO:
 
-**IMPLEMENTED, PENDING CI VALIDATION**
+**GO — VALIDATED**
 
-Do not mark Stage 2 complete until the feature-branch PR reports successful typecheck, tests and fixture validation.
+GitHub Actions run `44922372245` passed on Node 24:
 
-Exact next stage after successful validation/merge:
+- dependency audit: 0 vulnerabilities;
+- typecheck: passed;
+- Vitest: 13/13 passed;
+- fixture validation: 7/7 passed.
+
+PR: `#1 feat: add Stage 2 telemetry simulator and state hub`
+
+Exact next stage after merge:
 
 **Stage 3 — deterministic Evidence Gate.**
