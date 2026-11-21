@@ -57,6 +57,6 @@ The project is already committed to Mission 11 Route 2. Do not restart idea sele
 
 Mission 11 claim: **recorded** under `@Alike001`.
 
-Current build stage: **Stage 2 complete — telemetry simulator/state hub merged**.
+Current build stage: **Stage 3 complete — deterministic Evidence Gate merged**.
 
-Next: **Stage 3 — deterministic Evidence Gate**.
+Next: **Stage 4 — Provider API, after re-checking the live canonical SENSOR_TELEMETRY_VERIFY schema**.
