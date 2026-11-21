@@ -57,6 +57,6 @@ The project is already committed to Mission 11 Route 2. Do not restart idea sele
 
 Mission 11 claim: **recorded** under `@Alike001`.
 
-Current build stage: **Stage 3 complete — deterministic Evidence Gate merged**.
+Current build stage: **Stage 4 complete — SENSOR_TELEMETRY_VERIFY Provider API validated**.
 
-Next: **Stage 4 — Provider API, after re-checking the live canonical SENSOR_TELEMETRY_VERIFY schema**.
+Next: **Stage 5 — live schema re-check, Miner YAML, Provider validation/registration, and paid Telegraph evidence**.

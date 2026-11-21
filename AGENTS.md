@@ -155,9 +155,9 @@ Do not build the fancy UI before the purchase + validation loop works.
 
 Mission 11 claim is already recorded under `@Alike001` in `telegraphprotocol/bounties#199`.
 
-Current stage: **Stage 3 complete and merged**.
+Current stage: **Stage 4 complete and validated on PR #3**.
 
-Exact next task: **Stage 4 — implement the Provider API after re-checking the live canonical SENSOR_TELEMETRY_VERIFY schema.**
+Exact next task: **Stage 5 — re-check the live node schema from the user's environment, then validate/register the Telegraph Provider and capture paid evidence.**
 
 ## Agent working style
 
@@ -168,3 +168,6 @@ Exact next task: **Stage 4 — implement the Provider API after re-checking the 
 - Work incrementally.
 - Give the user one terminal task at a time when terminal work is required.
 - Never silently change the product thesis.
+- Prefer one clear commit per completed engineering unit; do not create micro-commits for every file edit.
+- Commit messages must state the completed outcome clearly (for example: `feat(provider): implement SENSOR_TELEMETRY_VERIFY Provider API`).
+- Use intermediate commits only for real checkpoints, and keep the final PR history concise.
