@@ -302,17 +302,18 @@ Then stale telemetry → reject → hold.
 
 ## Exact stopping point
 
-Completed through Stage 5:
+Completed through Stage 6:
 - ecosystem / mission / competitor research;
 - Mission 11 Route 2 commitment and claim;
 - Stage 1 contracts and deterministic fixtures;
 - Stage 2 telemetry simulator/state hub;
 - Stage 3 deterministic Evidence Gate;
 - Stage 4 canonical SENSOR_TELEMETRY_VERIFY Provider API;
-- Stage 5 public deployment, Telegraph registration and real paid request evidence.
+- Stage 5 public deployment, Telegraph registration and real paid request evidence;
+- Stage 6 autonomous recovery controller with single-attempt acquisition orchestration.
 
 Next:
-**Stage 6 — autonomous controller.**
+**Stage 7 — paid Telegraph purchase integration.**
 
 ## Continuity rule
 
@@ -712,3 +713,48 @@ Exact next stage:
 **Stage 6 — implement the autonomous controller.**
 
 Stage 6 should orchestrate task state + a single telemetry acquisition attempt + Evidence Gate evaluation. Do not add the final live payment integration or full retry/spend-authority system yet; those remain Stage 7 and Stage 8 respectively.
+
+
+---
+
+# Stage 6 completion milestone — autonomous recovery controller
+
+Date: 2026-11-21
+
+PR: `#5 feat(controller): add Stage 6 autonomous recovery orchestration`
+
+Merge commit: `9a05e0d71af74d208666050a4f6abeae7c48c1ad`
+
+Status: **MERGED / COMPLETE**
+
+Stage 6 delivered:
+- validates that the machine task declares the requested telemetry capability;
+- evaluates local telemetry first and avoids a purchase when evidence already passes;
+- performs exactly one injected acquisition attempt when local telemetry is missing/invalid;
+- validates acquired evidence through the existing deterministic Evidence Gate;
+- maps decisions to `RUNNING`, `HOLD`, or `ESCALATED`;
+- preserves optional Telegraph purchase metadata for the next integration stage;
+- fails closed when the acquisition adapter throws.
+
+Validation:
+- Node: **24.22.3**
+- npm: **11.19.1**
+- dependency audit: **0 vulnerabilities**
+- typecheck: **passed**
+- Vitest: **43/43 tests passed**
+- controller tests: **6/6 passed**
+- Evidence Gate tests: **12/12 passed**
+- Provider API tests: **12/12 passed**
+- telemetry simulator tests: **10/10 passed**
+- contract tests: **3/3 passed**
+- deterministic fixtures: **7/7 passed**
+
+Scope boundary preserved:
+- no live Telegraph signing/payment code was added in Stage 6;
+- no retry loop, session budget, or authorization/revocation logic was added;
+- Stage 7 owns the real paid acquisition adapter;
+- Stage 8 owns retry and spend authority.
+
+Exact next stage:
+
+**Stage 7 — connect the controller acquisition adapter to the real Telegraph paid Engine path while keeping wallet secrets out of the repository.**

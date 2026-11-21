@@ -155,9 +155,9 @@ Do not build the fancy UI before the purchase + validation loop works.
 
 Mission 11 claim is already recorded under `@Alike001` in `telegraphprotocol/bounties#199`.
 
-Current stage: **Stage 5 complete — registered Latch Provider completed a real paid Telegraph request**.
+Current stage: **Stage 6 complete — autonomous recovery controller merged and validated**.
 
-Exact next task: **Stage 6 — implement the autonomous controller that detects missing telemetry, acquires it through an injected Telegraph adapter, runs the Evidence Gate, and emits CONTINUE / HOLD / ESCALATE decisions.**
+Exact next task: **Stage 7 — connect the controller's acquisition adapter to a real paid Telegraph purchase without committing wallet secrets.**
 
 ## Agent working style
 
