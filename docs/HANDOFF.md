@@ -451,3 +451,43 @@ Exact stopping point now:
 **Stage 3 — implement the deterministic Evidence Gate.**
 
 Do not repeat Stage 2 work unless a regression or new requirement requires it.
+
+
+---
+
+# Stage 3 milestone — deterministic Evidence Gate implemented
+
+Date: 2026-11-21
+
+Branch: `feat/stage3-evidence-gate`
+
+Stage 3 implementation now includes:
+
+- explicit availability validation;
+- sensor identity check;
+- metric identity check;
+- accepted-unit check;
+- finite numeric value check;
+- observation-time validity;
+- future-timestamp rejection;
+- freshness/max-age enforcement;
+- plausible-range enforcement;
+- policy-controlled integrity verification;
+- deterministic actions: CONTINUE / REBUY / HOLD / explicit ESCALATE;
+- malformed remote Provider payload rejection.
+
+Important architectural boundary:
+
+The Evidence Gate accepts untrusted Provider input and validates it. It does not select Providers, spend funds, or execute machine actions. Retry permission is supplied by the caller; Provider selection and spending remain Stage 6+ controller responsibilities.
+
+Integrity rule:
+
+When the request requires integrity, verification fails closed if the payload is non-canonical, the verifier is absent, or verification fails. When integrity is explicitly not required, signature state alone does not reject otherwise valid telemetry.
+
+Current status:
+
+**IMPLEMENTED, PENDING CI VALIDATION**
+
+Exact next stage after successful validation/merge:
+
+**Stage 4 — Provider API**, preceded by a fresh check of the live canonical SENSOR_TELEMETRY_VERIFY schema.
