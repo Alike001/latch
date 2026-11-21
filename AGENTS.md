@@ -155,9 +155,9 @@ Do not build the fancy UI before the purchase + validation loop works.
 
 Mission 11 claim is already recorded under `@Alike001` in `telegraphprotocol/bounties#199`.
 
-Current stage: **Stage 1 repository foundation**.
+Current stage: **Stage 2 complete and merged**.
 
-Exact next task after Stage 1 validation: **Stage 2 — implement the software-only telemetry simulator/state hub.**
+Exact next task: **Stage 3 — implement the deterministic Evidence Gate.**
 
 ## Agent working style
 
