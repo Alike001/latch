@@ -105,3 +105,14 @@ Its output will be one of:
 - REBUY
 - HOLD
 - ESCALATE
+
+
+## Dependency gate
+
+The first green functional run exposed 7 npm audit findings (3 moderate, 2 high, 2 critical) in the older test/toolchain dependency graph.
+
+Before merge, the branch updates the maintained test runner/runtime helpers and CI now runs:
+
+`npm audit --audit-level=high`
+
+Stage 2 is not considered ready to merge until both the functional checks and this dependency gate pass.
