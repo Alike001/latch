@@ -410,3 +410,44 @@ PR: `#1 feat: add Stage 2 telemetry simulator and state hub`
 Exact next stage after merge:
 
 **Stage 3 — deterministic Evidence Gate.**
+
+
+---
+
+# Stage 2 merge milestone
+
+Date: 2026-11-21
+
+PR: `#1 feat: add Stage 2 telemetry simulator and state hub`
+
+Merge commit: `eb42ac7be080999b66c36306c43b396f87067d4e`
+
+Status: **MERGED / COMPLETE**
+
+Final validation before merge:
+
+- Node: 24.22.3
+- npm: 11.19.1
+- dependency audit: **0 vulnerabilities**
+- TypeScript typecheck: **passed**
+- Vitest: **13/13 tests passed**
+- fixture validation: **7/7 passed**
+
+Stage 2 delivered:
+
+- deterministic sensor registration;
+- telemetry publication;
+- sequence numbers;
+- heartbeat + last-seen;
+- disconnect/reconnect;
+- stale-data injection;
+- wrong-unit injection;
+- integrity corruption;
+- canonical restore;
+- deterministic simulator signing/verification.
+
+Exact stopping point now:
+
+**Stage 3 — implement the deterministic Evidence Gate.**
+
+Do not repeat Stage 2 work unless a regression or new requirement requires it.
