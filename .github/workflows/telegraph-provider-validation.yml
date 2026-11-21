@@ -1,0 +1,24 @@
+name: Telegraph Provider Readiness
+
+on:
+  pull_request:
+    paths:
+      - "miner/**"
+      - "scripts/validate-stage5-readiness.mjs"
+      - "services/provider-api/**"
+      - ".github/workflows/telegraph-provider-validation.yml"
+
+jobs:
+  validate-telegraph-provider:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Install dependencies
+        run: npm install
+      - name: Validate live Intent, public Provider, YAML contract, and miner identity
+        run: npm run validate:miner

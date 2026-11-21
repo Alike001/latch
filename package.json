@@ -10,13 +10,16 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "validate:fixtures": "tsx scripts/validate-fixtures.ts"
+    "validate:fixtures": "tsx scripts/validate-fixtures.ts",
+    "start:provider": "tsx services/provider-api/src/server.ts",
+    "validate:miner": "node scripts/validate-stage5-readiness.mjs miner/latch-telemetry.yaml"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
     "tsx": "^4.23.15",
     "typescript": "^5.7.2",
     "vitest": "^5.1.1",
-    "zod": "^4.6.7"
+    "zod": "^4.6.7",
+    "yaml": "^2.8.1"
   }
 }
