@@ -75,13 +75,14 @@ Branch tests cover:
 
 ## Current validation status
 
-Implementation is complete on the Stage 2 feature branch.
+**PASS**
 
-Do **not** mark Stage 2 PASS until GitHub Actions reports:
+GitHub Actions run `44922372245` completed successfully on Node 24:
 
-- TypeScript typecheck passes;
-- all Vitest tests pass;
-- fixture validation passes.
+- dependency audit: **0 vulnerabilities**;
+- TypeScript typecheck: **passed**;
+- Vitest: **13/13 tests passed** across 2 test files;
+- fixture validation: **7/7 fixtures passed**.
 
 ## Next stage after merge
 
@@ -115,4 +116,4 @@ Before merge, the branch updates the maintained test runner/runtime helpers and 
 
 `npm audit --audit-level=high`
 
-Stage 2 is not considered ready to merge until both the functional checks and this dependency gate pass.
+The dependency gate now passes with **0 vulnerabilities** after updating the maintained toolchain and Zod.
