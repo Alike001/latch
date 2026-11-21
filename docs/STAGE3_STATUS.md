@@ -91,14 +91,17 @@ Tests prove:
 - exhausted retry with explicit operator policy → ESCALATE;
 - integrity-disabled policy behaves as configured.
 
-## Validation gate
+## Validation status
 
-Do not merge Stage 3 until GitHub Actions reports:
+**PASS**
 
-- dependency audit passes;
-- TypeScript typecheck passes;
-- all tests pass;
-- fixture validation passes.
+GitHub Actions run `44923123801` passed with the current official GitHub Actions v7 wrappers:
+
+- dependency audit: **0 vulnerabilities**;
+- TypeScript typecheck: **passed**;
+- Vitest: **25/25 tests passed** across 3 test files;
+- Stage 3 Evidence Gate tests: **12/12 passed**;
+- fixture validation: **7/7 passed**.
 
 ## Next stage after merge
 
