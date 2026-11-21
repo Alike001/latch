@@ -486,8 +486,18 @@ When the request requires integrity, verification fails closed if the payload is
 
 Current status:
 
-**IMPLEMENTED, PENDING CI VALIDATION**
+**GO — VALIDATED**
 
-Exact next stage after successful validation/merge:
+GitHub Actions run `44923123801` passed:
+
+- dependency audit: 0 vulnerabilities;
+- typecheck: passed;
+- Vitest: 25/25 passed;
+- Evidence Gate tests: 12/12 passed;
+- fixtures: 7/7 passed.
+
+The CI wrappers were also updated to the current official `actions/checkout@v7` and `actions/setup-node@v7`.
+
+Exact next stage after merge:
 
 **Stage 4 — Provider API**, preceded by a fresh check of the live canonical SENSOR_TELEMETRY_VERIFY schema.
