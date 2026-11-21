@@ -57,6 +57,8 @@ The project is already committed to Mission 11 Route 2. Do not restart idea sele
 
 Mission 11 claim: **recorded** under `@Alike001`.
 
-Current build stage: **Stage 4 complete — SENSOR_TELEMETRY_VERIFY Provider API validated**.
+Current build stage: **Stage 5 complete — Latch Provider is live, registered as miner `7317701`, and has completed a real paid Telegraph request**.
 
-Next: **Stage 5 — live schema re-check, Miner YAML, Provider validation/registration, and paid Telegraph evidence**.
+Paid proof: `SENSOR_TELEMETRY_VERIFY_GENERAL` → `cold-zone-b-temp` / `temperature` returned **-18.4 C** with all canonical fields accepted at a cost of **$0.01**.
+
+Next: **Stage 6 — autonomous controller orchestration around Telegraph acquisition + Evidence Gate decisions**.

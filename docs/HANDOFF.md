@@ -302,22 +302,17 @@ Then stale telemetry → reject → hold.
 
 ## Exact stopping point
 
-Completed:
-- ecosystem and mission research
-- competitor research
-- paid Provider validation
-- idea selection
-- three-track strategy
-- software-only/safety decision
-- reverse-engineering research
-- pre-build attack
-- COMMIT
-- Mission 11 claim
-- repository creation
-- Stage 1 repository foundation in progress
+Completed through Stage 5:
+- ecosystem / mission / competitor research;
+- Mission 11 Route 2 commitment and claim;
+- Stage 1 contracts and deterministic fixtures;
+- Stage 2 telemetry simulator/state hub;
+- Stage 3 deterministic Evidence Gate;
+- Stage 4 canonical SENSOR_TELEMETRY_VERIFY Provider API;
+- Stage 5 public deployment, Telegraph registration and real paid request evidence.
 
 Next:
-**Validate Stage 1, then implement Stage 2 telemetry simulator/state hub.**
+**Stage 6 — autonomous controller.**
 
 ## Continuity rule
 
@@ -652,3 +647,68 @@ Actual result on 2026-11-21: the response was the Anjoman HTML application, not 
 Latch now uses an automated Stage 5 readiness check for YAML contract structure, live Intent schema, public Provider response/freshness, and miner identity availability.
 
 Before on-chain registration, use the Anjoman Earn registration interface for the final sandbox validation.
+
+
+---
+
+# Stage 5 completion milestone — registered Provider + real paid Telegraph evidence
+
+Date: 2026-11-21
+
+Status: **GO — COMPLETE**
+
+Public Provider:
+- URL: `https://latch-telemetry-provider.onrender.com`
+- miner id: `7317701`
+- slug: `latch-telemetry`
+- name: `Latch Telemetry Provider`
+- canonical Intent: `SENSOR_TELEMETRY_VERIFY_GENERAL`
+
+Live paid request:
+- pinned Engine route: `/engine/v1/ask/7317701`
+- sensor: `cold-zone-b-temp`
+- metric: `temperature`
+- HTTP status: **200**
+- value: **-18.4**
+- unit: **C**
+- observed_at: `2026-11-21T19:53:26.338Z`
+- format version: **3**
+- input schema version: **3**
+- field status: sensor / metric / value / unit / observed_at = **ok**
+- cost: **$0.01**
+- duration: **22506 ms**
+- signal hash: `0x7b1f2d491b1938275dbc94524df0146687f43669ce34558364fbbba5eed928c0`
+
+Payment evidence:
+- wallet: `0xde67a35b322e5a31e8215b5245ca4e48d7977f71`
+- pre-request spendable escrow: **940000 uUSDC**
+- post-request spendable escrow: **930000 uUSDC**
+- `charged_this_block`: **10000 uUSDC**
+- `unbilled`: **10000 uUSDC** pending inclusion in the next active ledger root
+- payment rail: Telegraph escrow / Ethereum Sepolia / EIP-191 personal_sign
+
+This proves the real network path:
+
+```text
+caller
+→ Telegraph paid Engine request
+→ registered miner 7317701
+→ Latch Provider /telemetry
+→ canonical SENSOR_TELEMETRY_VERIFY_GENERAL response
+→ $0.01 escrow charge
+```
+
+Important correction preserved from the captured paid payload:
+the returned temperature was **-18.4 C**, not +18.4 C.
+
+Local evidence helper:
+- `~/Desktop/telegraph/paid-latch-telemetry.py`
+- evidence directory: `~/Desktop/telegraph/evidence/latch-paid-validation`
+
+Do not repeat the paid request merely to reproduce the screenshot; preserve the first successful evidence set.
+
+Exact next stage:
+
+**Stage 6 — implement the autonomous controller.**
+
+Stage 6 should orchestrate task state + a single telemetry acquisition attempt + Evidence Gate evaluation. Do not add the final live payment integration or full retry/spend-authority system yet; those remain Stage 7 and Stage 8 respectively.
