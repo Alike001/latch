@@ -543,3 +543,62 @@ Exact stopping point now:
 **Stage 4 — Provider API.**
 
 Before implementing or registering the Provider, re-check the exact live canonical `SENSOR_TELEMETRY_VERIFY` Intent schema, current Provider registration requirements, and any relevant scoring/evaluator path. Do not guess from old archived issue text.
+
+
+---
+
+# Stage 4 research + implementation milestone
+
+Date: 2026-11-21
+
+Branch: `feat/stage4-provider-api`
+
+Current published canonical contract:
+
+- family: `SENSOR_TELEMETRY_VERIFY`
+- Intent: `SENSOR_TELEMETRY_VERIFY_GENERAL`
+- class: judgment
+- request params: `sensor`, `metric`
+- answer fields: `sensor`, `metric`, `value`, `unit`, `observed_at`
+
+This matches the live paid request shape already tested earlier on 2026-11-21.
+
+Important verification limitation:
+
+The assistant environment could not directly reach `devnode.telegraphprotocol.com` during Stage 4. Therefore Stage 5 must re-run the live node schema check from the user's environment before Miner registration. Do not claim the direct live node was re-fetched here.
+
+Stage 4 Provider API implementation:
+
+- GET `/telemetry?sensor=...&metric=...`;
+- GET `/health`;
+- explicit shareable-sensor policies;
+- no arbitrary internal telemetry exposure;
+- canonical answer fields;
+- Provider-side freshness, unit, plausible-range and integrity checks;
+- real non-200 failures for stale/offline/invalid telemetry;
+- no fabricated fallback values;
+- tests for success and failure paths.
+
+Commit discipline added to `AGENTS.md`:
+
+Prefer one clear commit per completed engineering unit. Avoid micro-commits and vague messages.
+
+Current status:
+
+**GO — VALIDATED**
+
+GitHub Actions run `44924350241` passed:
+
+- dependency audit: 0 vulnerabilities;
+- typecheck: passed;
+- Vitest: 37/37 passed;
+- Provider API tests: 12/12 passed;
+- fixtures: 7/7 passed.
+
+PR: `#3 feat(provider): implement SENSOR_TELEMETRY_VERIFY Provider API`
+
+Stage 4 uses one clear engineering commit, per repository commit discipline.
+
+Exact next stage after merge:
+
+**Stage 5 — Telegraph Provider validation/registration.**
