@@ -14,7 +14,8 @@ function asset(name: string): string {
   return readFileSync(join(PUBLIC_DIR, name), "utf8");
 }
 
-const INDEX_HTML = asset("index.html");
+const LANDING_HTML = asset("index.html");
+const CONTROL_ROOM_HTML = asset("control-room.html");
 const APP_JS = asset("app.js");
 const STYLES = asset("styles.css");
 
@@ -80,7 +81,20 @@ export async function startControlRoomServer(
 
     try {
       if (request.method === "GET" && url.pathname === "/") {
-        return text(response, 200, INDEX_HTML, "text/html; charset=utf-8");
+        return text(response, 200, LANDING_HTML, "text/html; charset=utf-8");
+      }
+
+      if (
+        request.method === "GET" &&
+        (url.pathname === "/control-room" ||
+          url.pathname === "/control-room/")
+      ) {
+        return text(
+          response,
+          200,
+          CONTROL_ROOM_HTML,
+          "text/html; charset=utf-8",
+        );
       }
 
       if (request.method === "GET" && url.pathname === "/app.js") {
@@ -141,7 +155,9 @@ export async function startControlRoomServer(
         const mode = body.mode as RecoveryMode;
 
         if (mode !== "simulation" && mode !== "live") {
-          return json(response, 400, { error: "mode_must_be_simulation_or_live" });
+          return json(response, 400, {
+            error: "mode_must_be_simulation_or_live",
+          });
         }
 
         return json(response, 200, await runtime.recover(mode));
@@ -195,7 +211,8 @@ async function main(): Promise<void> {
   console.log(
     JSON.stringify({
       event: "control_room_started",
-      url: `http://${running.host}:${running.port}`,
+      landing: `http://${running.host}:${running.port}/`,
+      controlRoom: `http://${running.host}:${running.port}/control-room`,
       liveTelegraphEnabled:
         process.env.LATCH_UI_LIVE_TELEGRAPH === "1",
     }),

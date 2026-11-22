@@ -276,7 +276,8 @@ export class ControlRoomRuntime {
       localReading: snapshot.reading,
       acquire,
       authority: this.authority,
-      plannedPriceUusdc: PLANNED_PRICE_UUSDC,
+      plannedPriceUusdc:
+        mode === "live" ? PLANNED_PRICE_UUSDC : 0,
       context: {
         now: this.now,
         verifyIntegrity:
@@ -302,7 +303,7 @@ export class ControlRoomRuntime {
         purchase
           ? `Telegraph spend: ${purchase.priceUusdc} uUSDC via ${purchase.paymentRail ?? "unknown rail"}.`
           : mode === "simulation" && result.acquisitionAttempted
-            ? "Simulation recovery used no Telegraph receipt."
+            ? "Simulation recovery exercised policy and evidence logic with zero real spend and no Telegraph receipt."
             : "No recovery purchase.",
       ].join(" "),
     );
