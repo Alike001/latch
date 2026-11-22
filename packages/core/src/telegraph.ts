@@ -9,6 +9,8 @@ export const TelegraphPurchaseRecordSchema = z.object({
   requestId: z.string().min(1).optional(),
   signalId: z.string().min(1).optional(),
   transactionHash: z.string().min(1).optional(),
+  paymentRail: z.enum(["escrow", "x402"]).optional(),
+  paymentReceipt: z.unknown().optional(),
   purchasedAt: z.string().datetime({ offset: true }),
   rawResponsePath: z.string().min(1).optional(),
 });
