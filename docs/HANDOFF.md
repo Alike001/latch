@@ -1752,3 +1752,196 @@ The official evaluator kit supports CPU fallback but explicitly warns it is slow
 
 Exact next stage:
 **Train the real SENSOR_TELEMETRY_VERIFY ModernBERT/LoRA adapter, capture the local validation gate, then export the safetensors delta.**
+
+
+---
+
+# STOP POINT — handoff for next agent
+
+Date: 2026-11-22
+
+Project: **Latch**
+Hackathon: **Telegraph Season II**
+Primary mission path: **Mission 11 · Route 2**
+Tracks being built for:
+1. **Apps & Agents**
+2. **Miners / Providers**
+3. **Evaluators**
+
+Product direction is unchanged:
+Latch is a software recovery/control layer for autonomous machines. When local trusted telemetry disappears, Latch checks spend authority, buys replacement telemetry through Telegraph, validates the returned evidence, and decides whether the machine may continue or must hold.
+
+Do not redesign the product, change the mission/route, or return to UI polish yet. Core functionality and Telegraph integration remain the priority.
+
+## Proven core milestones
+
+- Live paid Telegraph telemetry acquisition works.
+- Dedicated payer wallet and Telegraph escrow are functional.
+- Real paid recovery succeeded for `SENSOR_TELEMETRY_VERIFY_GENERAL`.
+- Evidence Gate accepted the purchased telemetry and changed the machine decision from HOLD/REBUY to CONTINUE.
+- Live payment receipt captured.
+- Control-room and landing-page UI exist and are sufficient for now.
+- UI/UX polish is intentionally frozen until the three-track functionality is complete.
+
+## Evaluator-track live contribution
+
+Intent:
+`SENSOR_TELEMETRY_VERIFY_GENERAL`
+
+Family:
+`SENSOR_TELEMETRY_VERIFY`
+
+Class:
+**judgment**
+
+Live scorer when last checked:
+- `served_by: GENERIC`
+- `generic_fallback: true`
+- no telemetry-specific scorer active yet
+
+Evaluation Pool upload:
+- exact live upload rows: **40**
+- received: **40**
+- accepted: **40**
+- curated: **40**
+- duplicates: **0**
+- rejected: **0**
+- upload SHA256:
+  `adfffb5732a49730ed292bcac1ca235a5a9ba72e63078bc9c38ddf385971b677`
+- Latch wallet became submitter **#3**
+- last observed:
+  - submitters: **3**
+  - eligible_submitters: **2**
+  - live devnode min_submitters: **3**
+  - active snapshot still contained only the previous two eligible submitters
+  - current epoch at that check: **39**
+
+Important:
+The 40 live rows are already uploaded. **Do not upload them again.**
+The immutable exact upload body is archived under:
+`evaluator/sensor-telemetry/history/`
+
+## Adapter-training corpus
+
+Training corpus is separate from the 40-row live upload.
+
+Current training corpus:
+- **64 preference pairs**
+- **64 distinct normalized prompts**
+- **64 unique rejected answers**
+- **8 operational telemetry domains**
+- **8 failure classes**
+
+Official Telegraph dataset gate:
+**PASS (64 pairs)**
+
+Official metrics:
+- unique negatives: **100.0%**
+- largest single negative: **1.6%**
+- length shortcut: **51.6%**
+- held-out leak: **0.0%**
+- surface probe: **56.7%**
+- mean length: chosen **118** / rejected **115**
+
+Do not modify this corpus casually. It was iteratively hardened specifically to pass Telegraph's official anti-shortcut checks.
+
+Pinned training config:
+`evaluator/sensor-telemetry/train-config.json`
+
+Official base/training design:
+- `answerdotai/ModernBERT-base`
+- PEFT LoRA
+- LoRA targets: `Wqkv`, `Wo`, `Wi`
+- rank: **8**
+- alpha: **32**
+- epochs: **3**
+- seed: **42**
+- max length: **512**
+- output later exported as shared-foundation safetensors delta
+
+## Local machine limitation
+
+The laptop cannot currently use its NVIDIA GPU:
+
+`nvidia-smi` -> cannot communicate with NVIDIA driver.
+
+Do not waste hackathon time repairing the local GPU.
+Use Google Colab for the first real adapter-training run.
+
+## Colab notebook
+
+Checked-in notebook:
+`notebooks/stage10-telegraph-evaluator-training.ipynb`
+
+GPU guide:
+`docs/STAGE10_GPU_TRAINING.md`
+
+Latest main commit at stop point:
+`179ae8a944aa4598ed7a886cf9a6e1fe0b46725c`
+(`fix(evaluator): pin training cwd in Colab notebook`)
+
+A T4 Colab runtime was successfully obtained.
+The official dataset gate also passed again inside Colab.
+
+## Tonight's Colab issue
+
+Training itself **has NOT started successfully yet**.
+
+The internet dropped during the Colab session. Colab's temporary `/content` workspace became inconsistent/reset. After that, Step 4 repeatedly showed:
+
+```
+[Errno 2] No such file or directory: '/content/telegraph-wasm-baseline'
+ModuleNotFoundError: No module named 'float_runtime'
+```
+
+This is a transient Colab/runtime state issue, not a Latch corpus/model failure.
+
+The notebook has already been fixed so Step 4 explicitly begins with:
+
+```python
+%cd /content/telegraph-wasm-baseline
+```
+
+## EXACT NEXT TASK TOMORROW
+
+Start a **fresh Google Colab runtime** rather than trying to repair tonight's stale session.
+
+1. Open:
+   `notebooks/stage10-telegraph-evaluator-training.ipynb`
+   from `Alike001/latch`.
+2. Select **T4 GPU**.
+3. Run the notebook **from Step 1 onward in order**.
+4. After Step 1, verify before proceeding:
+   ```python
+   !ls /content/telegraph-wasm-baseline/float_runtime
+   !ls /content/latch/evaluator/sensor-telemetry
+   ```
+5. Run Step 2 dependencies.
+6. Run Step 3 and require:
+   `dataset gate: PASS (64 pairs)`
+7. Run Step 4 actual ModernBERT/LoRA training.
+8. Do not run Step 5 until Step 4 finishes successfully.
+9. Capture the final training result:
+   - `pairwise_accuracy`
+   - `baseline_accuracy`
+   - `verdict`
+   - `fail_reason`
+10. Require the official model evaluation gate to say **PASS**.
+11. Immediately archive/download:
+   `SENSOR_TELEMETRY_VERIFY-training.zip`
+
+After a training PASS, next stage is:
+- export the LoRA safetensors delta;
+- validate/package with Telegraph's adapter tooling;
+- test the scorer locally;
+- re-check the live Evaluation Pool snapshot;
+- only then prepare evaluator registration/competition.
+
+## Do NOT do tomorrow
+
+- Do not re-upload the 40 Evaluation Pool rows.
+- Do not rebuild the product idea from scratch.
+- Do not change Mission 11 / Route 2.
+- Do not return to UI polish.
+- Do not claim the third submitter is eligible until `stage10:status` proves it.
+- Do not register an adapter before training + validation PASS.
