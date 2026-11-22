@@ -970,3 +970,27 @@ Important:
 
 Exact next step:
 **Run `npx -y @telegraphprotocol/telegraph-protocol-mcp status` and compare escrow spendable/unbilled values against the pre-run state of 0.1 / 0.**
+
+
+---
+
+# Stage 7 first live attempt — escrow verification
+
+Date: 2026-11-22
+
+Post-failure Telegraph status:
+- wallet USDC: **0.9**
+- wallet Sepolia ETH: approximately **0.001**
+- escrow spendable USDC: **0.1**
+- escrow balance USDC: **0.1**
+- deposited USDC: **0.1**
+- unbilled USDC: **0**
+- spent today USD: **0**
+
+Conclusion:
+**No Telegraph payment was charged by the failed autonomous attempt.**
+
+The `fetch failed` occurred before a billable paid request completed. It is safe to debug the network/request path without treating this as a duplicate-payment scenario.
+
+Exact next step:
+**Probe the pinned miner route with an unpaid Node fetch and confirm that it returns the expected HTTP 402 payment challenge before retrying the live paid runner.**
