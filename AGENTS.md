@@ -155,9 +155,9 @@ Do not build the fancy UI before the purchase + validation loop works.
 
 Mission 11 claim is already recorded under `@Alike001` in `telegraphprotocol/bounties#199`.
 
-Current stage: **Stage 7 in progress — dedicated Telegraph agent wallet created and funded with Sepolia ETH; paid acquisition integration not yet completed**.
+Current stage: **Stage 7 in progress — dedicated Telegraph agent wallet funded with gas + test USDC, and 0.1 USDC is spendable in Telegraph escrow; paid acquisition integration not yet completed**.
 
-Exact next task: **Fund the dedicated agent wallet with Telegraph test USDC, deposit a small amount into Telegraph escrow, then wire the controller acquisition adapter to a pinned paid call to miner `7317701` without committing wallet secrets.**
+Exact next task: **Wire the controller acquisition adapter to a pinned escrow-paid call to miner `7317701`, using the local Telegraph wallet without committing or logging its private key.**
 
 ## Agent working style
 

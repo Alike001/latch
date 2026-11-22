@@ -816,3 +816,40 @@ Exact stopping point:
 
 Exact next step:
 **Fund wallet `0x95dC03c1F3937341aEa4943fC5376085fDffBEba` with a small amount of Telegraph test USDC, verify with `telegraph-protocol-mcp status`, then deposit only the amount needed for Stage 7 into escrow.**
+
+
+---
+
+# Stage 7 funded-escrow checkpoint
+
+Date: 2026-11-22
+
+Status: **GO — READY FOR PAID ADAPTER INTEGRATION**
+
+Dedicated agent wallet:
+- address: `0x95dC03c1F3937341aEa4943fC5376085fDffBEba`
+- wallet test USDC: **0.9**
+- wallet Sepolia ETH: approximately **0.001**
+- Telegraph escrow spendable USDC: **0.1**
+- Telegraph escrow balance USDC: **0.1**
+- deposited USDC: **0.1**
+- unbilled USDC: **0**
+- pending withdrawal USDC: **0**
+
+Funding operation:
+- amount moved to escrow: **0.1 test USDC**
+- approval transaction: `0x801c60e8775263f6a0419e4de281da0d09d3a005ede0632ce35d6e00d032c650`
+- deposit transaction: `0x1a9389d00bffa07ae4316d05aa8bcde1ad94eca1ebd85200eaeb8541a7f586ee`
+
+The official CLI confirmed:
+```text
+Deposited. Escrow now 0.1 USDC spendable.
+```
+
+Security boundary remains unchanged:
+- never commit or print `~/.telegraph/wallet.json`;
+- never expose the wallet private key in logs, tests, docs, screenshots, or agent prompts;
+- use the local wallet only at runtime for EIP-191 escrow challenge signing.
+
+Exact next step:
+**Implement the Stage 7 pinned Telegraph acquisition adapter for miner `7317701`, validate it in CI with mocked payment challenges, then execute one live autonomous controller recovery against the funded escrow.**
