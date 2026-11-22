@@ -1,0 +1,139 @@
+# Latch telemetry evaluator — Stage 10
+
+Family: **SENSOR_TELEMETRY_VERIFY**  
+Intent used for public material: **SENSOR_TELEMETRY_VERIFY_GENERAL**  
+Class: **judgment**
+
+This directory is the public, reproducible evaluator contribution for Latch.
+
+## Why this evaluator exists
+
+Latch started after live Telegraph telemetry validation produced answers that could look
+plausible while missing or breaking fields that a machine needs to act safely:
+sensor identity, metric identity, unit, value and observation time.
+
+The live canonical answer shape is:
+
+```text
+sensor
+metric
+value
+unit
+observed_at
+```
+
+The public corpus therefore teaches preference ordering around those fields rather than
+generic writing quality.
+
+## Corpus
+
+`pairs.jsonl` contains **40 public preference pairs** across five operational scenarios
+and eight failure classes:
+
+- wrong sensor identity;
+- wrong metric;
+- wrong unit;
+- non-numeric value;
+- implausible/calibration-breaking value;
+- stale timestamp;
+- future timestamp;
+- missing timestamp.
+
+Each prompt supplies the evaluation time, accepted unit, plausible calibration range and
+freshness limit so the better/worse ordering is checkable from the public row itself.
+
+Build and verify:
+
+```bash
+npm run stage10:build-corpus
+npm run stage10:check-corpus
+npm test
+```
+
+The deterministic `referenceCorpusScore` is **corpus QA only**. It is not presented or
+registered as a Telegraph scorer. Telegraph V2 judgment families require a trained
+Evaluator adapter.
+
+## Live network status
+
+Before training or upload:
+
+```bash
+npm run stage10:status
+```
+
+This checks:
+- the live Intent class;
+- which scoring family currently serves the Intent;
+- whether that scorer is routed;
+- current Evaluation Pool contributor/material state.
+
+Do not train a judgment adapter if the live class changes.
+
+## Upload evaluation material
+
+Review `pairs.jsonl` first. Uploading changes the live Evaluation Pool.
+
+The uploader uses the same dedicated Telegraph wallet already used by Latch, but never
+prints or exports its private key.
+
+```bash
+LATCH_EVALPOOL_UPLOAD=1 npm run stage10:upload-material
+```
+
+A judgment pool is only used after it has material from enough distinct contributors.
+One Latch upload must not be misrepresented as independent ecosystem coverage.
+
+## Train the official V2 adapter
+
+Telegraph V2 expects a LoRA safetensors delta on its shared ModernBERT-base Foundation
+Model. Older comparator, MiniLM rank_answer, Q32.32, and full-model WASM formats are not
+accepted.
+
+Use the official kit:
+
+```bash
+mkdir -p vendor
+git clone https://github.com/telegraphprotocol/telegraph-wasm-baseline.git vendor/telegraph-wasm-baseline
+
+cd vendor/telegraph-wasm-baseline
+pip install -r requirements.txt
+
+python -m float_runtime.train_adapter \
+  --intent SENSOR_TELEMETRY_VERIFY \
+  --data ../../evaluator/sensor-telemetry/pairs.jsonl \
+  --check-data
+
+python -m float_runtime.train_adapter \
+  --intent SENSOR_TELEMETRY_VERIFY \
+  --data ../../evaluator/sensor-telemetry/pairs.jsonl \
+  --out runs/SENSOR_TELEMETRY_VERIFY
+```
+
+Training is a separate compute step; GPU is recommended by the official kit.
+
+Then obtain the released Foundation metadata and export the adapter:
+
+```bash
+mkdir -p foundation
+curl -fLo foundation/foundation.json \
+  https://github.com/telegraphprotocol/telegraph-foundation/releases/download/modernbert-base-lora16-v1/foundation.json
+
+python -m float_runtime.export_adapter \
+  --run runs/SENSOR_TELEMETRY_VERIFY \
+  --intent SENSOR_TELEMETRY_VERIFY \
+  --class judgment \
+  --foundation foundation/foundation.json
+```
+
+Validate/package with the node parser before hosting or registration.
+
+## Integrity limitation discovered
+
+The family description mentions cryptographic payload integrity, but the current canonical
+answer shape exposes only sensor, metric, value, unit and observed_at. The public adapter
+corpus does **not** claim it can cryptographically verify integrity evidence that is not
+present in the answer.
+
+That is a protocol/schema gap to document separately, not a reason to fabricate an
+integrity score.

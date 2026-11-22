@@ -1,0 +1,113 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+
+import {
+  TELEMETRY_FAULTS,
+  buildTelemetryPreferenceCorpus,
+  referenceCorpusScore,
+} from "./corpus.js";
+
+const path = join(
+  process.cwd(),
+  "evaluator",
+  "sensor-telemetry",
+  "pairs.jsonl",
+);
+
+const rows = readFileSync(path, "utf8")
+  .split("\n")
+  .filter(Boolean)
+  .map((line, index) => {
+    try {
+      return JSON.parse(line);
+    } catch {
+      throw new Error(`pairs.jsonl row ${index + 1} is not valid JSON`);
+    }
+  });
+
+const generated = buildTelemetryPreferenceCorpus();
+
+if (rows.length !== generated.length) {
+  throw new Error(
+    `Corpus row count mismatch: file=${rows.length}, generated=${generated.length}`,
+  );
+}
+
+const prompts = new Set<string>();
+
+for (const [index, item] of generated.entries()) {
+  const row = rows[index];
+
+  if (row.prompt !== item.row.prompt) {
+    throw new Error(`Corpus drift at row ${index + 1}: prompt changed`);
+  }
+
+  if (row.chosen !== item.row.chosen || row.rejected !== item.row.rejected) {
+    throw new Error(`Corpus drift at row ${index + 1}: answer changed`);
+  }
+
+  if (
+    typeof row.prompt !== "string" ||
+    row.prompt.length < 16 ||
+    row.prompt.length > 16_000
+  ) {
+    throw new Error(`Invalid prompt length at row ${index + 1}`);
+  }
+
+  if (
+    typeof row.chosen !== "string" ||
+    row.chosen.length < 8 ||
+    row.chosen.length > 32_000 ||
+    typeof row.rejected !== "string" ||
+    row.rejected.length < 8 ||
+    row.rejected.length > 32_000
+  ) {
+    throw new Error(`Invalid answer length at row ${index + 1}`);
+  }
+
+  if (row.chosen === row.rejected) {
+    throw new Error(`Identical answers at row ${index + 1}`);
+  }
+
+  const chosenScore = referenceCorpusScore(
+    item.scenario,
+    row.chosen,
+  );
+  const rejectedScore = referenceCorpusScore(
+    item.scenario,
+    row.rejected,
+  );
+
+  if (chosenScore <= rejectedScore) {
+    throw new Error(
+      `Preference inversion at row ${index + 1}: chosen=${chosenScore}, rejected=${rejectedScore}`,
+    );
+  }
+
+  prompts.add(row.prompt);
+}
+
+if (prompts.size !== 5) {
+  throw new Error(
+    `Expected 5 distinct scenario prompts, got ${prompts.size}`,
+  );
+}
+
+for (const fault of TELEMETRY_FAULTS) {
+  const count = generated.filter((item) => item.fault === fault).length;
+
+  if (count < 5) {
+    throw new Error(
+      `Insufficient coverage for ${fault}: expected >=5, got ${count}`,
+    );
+  }
+}
+
+console.log(
+  JSON.stringify({
+    event: "stage10_corpus_valid",
+    rows: rows.length,
+    prompts: prompts.size,
+    faults: TELEMETRY_FAULTS.length,
+  }),
+);
