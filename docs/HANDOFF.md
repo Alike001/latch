@@ -1186,3 +1186,82 @@ Required Stage 8 policy:
 
 Required demo failure scenario:
 **Revoke Spend** → controller must refuse to purchase and HOLD/ESCALATE safely.
+
+
+---
+
+# Stage 8 completion milestone — bounded retry + spending authority
+
+Date: 2026-11-22
+
+PR: `#7 feat(controller): add bounded retry and spend authority`
+
+Merge commit: `212c7f8f7a9ae56b866ef9ed71ab2bd77114125b`
+
+Status: **MERGED / COMPLETE**
+
+Stage 8 delivered:
+- explicit spend authorization and revocation;
+- max per-purchase ceiling;
+- max attempts per telemetry capability;
+- configurable session spend cap;
+- pre-call spend reservation so concurrent recoveries cannot both exceed the same remaining session budget;
+- failed network/Provider attempts release reserved money but still consume an attempt;
+- delivered purchases settle actual recorded spend into session state;
+- bounded retry on network failure or rejected Provider evidence;
+- deterministic HOLD or explicit ESCALATE when policy blocks another purchase;
+- valid local telemetry continues without requiring spend authorization.
+
+Required demo scenario implemented:
+**Revoke Spend**
+- telemetry unavailable;
+- spend authority revoked;
+- controller does not call Telegraph;
+- no payment occurs;
+- final state HOLD (or ESCALATED when configured).
+
+Validation:
+- dependency audit: **0 vulnerabilities**
+- typecheck: **passed**
+- Vitest: **59/59 tests passed**
+- Stage 8 spend-authority tests: **10/10 passed**
+- Stage 7 escrow adapter tests: **6/6 passed**
+- Stage 6 controller tests: **6/6 passed**
+- Evidence Gate tests: **12/12 passed**
+- Provider API tests: **12/12 passed**
+- telemetry simulator tests: **10/10 passed**
+- contract tests: **3/3 passed**
+- fixtures: **7/7 passed**
+
+Default demo policy remains:
+- max purchase: **10000 uUSDC = $0.01**
+- max attempts per capability: **2**
+- session cap: configurable
+- explicit authorization/revocation state
+
+Build order status:
+1. contracts/interfaces + fixtures — COMPLETE
+2. telemetry simulator/state hub — COMPLETE
+3. Evidence Gate — COMPLETE
+4. Provider API — COMPLETE
+5. Provider validation/registration — COMPLETE
+6. autonomous controller — COMPLETE
+7. paid Telegraph purchase — COMPLETE
+8. retry + spending authority — COMPLETE
+9. operations UI — NEXT
+10. evaluator contribution
+11. independent developer test
+12. demo/docs/submission evidence
+
+Exact next stage:
+**Stage 9 — operations UI.**
+
+The UI must expose existing runtime truth rather than invent new logic:
+- machine task/state;
+- telemetry healthy/stale/unavailable state;
+- Telegraph Intent / Provider / price / latency / receipt;
+- Evidence Gate checks;
+- attempts and session spend;
+- authorization state;
+- final CONTINUE / REBUY / HOLD / ESCALATE decision;
+- failure controls for disconnect telemetry, stale telemetry, wrong unit, corrupted integrity, revoke spend, and Provider unavailable.

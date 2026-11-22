@@ -155,9 +155,9 @@ Do not build the fancy UI before the purchase + validation loop works.
 
 Mission 11 claim is already recorded under `@Alike001` in `telegraphprotocol/bounties#199`.
 
-Current stage: **Stage 7 complete — autonomous controller made a real $0.01 Telegraph escrow purchase, passed the Evidence Gate, and resumed the machine task**.
+Current stage: **Stage 8 complete — bounded retry + spending authority merged and validated**.
 
-Exact next task: **Stage 8 — implement bounded retry + spending authority: explicit authorization/revocation, max attempts per capability, per-session spend cap, and fail-closed HOLD/ESCALATE behavior.**
+Exact next task: **Stage 9 — build the operations control-room UI around the already-working controller, paid purchase, Evidence Gate, retry, and spend-authority flows.**
 
 ## Agent working style
 
