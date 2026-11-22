@@ -27,8 +27,9 @@ generic writing quality.
 
 ## Corpus
 
-`pairs.jsonl` contains **40 public preference pairs** across five operational scenarios
-and eight failure classes:
+`pairs.jsonl` contains **40 public preference pairs** across five operational domains
+and eight failure classes. Every row has its own distinct normalized question so the
+Telegraph node does not collapse multiple fault variants into duplicate cases:
 
 - wrong sensor identity;
 - wrong metric;
@@ -39,8 +40,10 @@ and eight failure classes:
 - future timestamp;
 - missing timestamp.
 
-Each prompt supplies the evaluation time, accepted unit, plausible calibration range and
-freshness limit so the better/worse ordering is checkable from the public row itself.
+Each prompt supplies a distinct operational context plus the evaluation time, accepted unit,
+plausible calibration range and freshness limit so the better/worse ordering is checkable
+from the public row itself. Telegraph keeps only the first valid row for a normalized
+question, so prompt uniqueness is a hard upload gate.
 
 Build and verify:
 

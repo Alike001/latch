@@ -10,7 +10,7 @@ import {
 describe("Stage 10 telemetry evaluator corpus", () => {
   const corpus = buildTelemetryPreferenceCorpus();
 
-  it("covers five operational scenarios and eight failure classes", () => {
+  it("covers five operational domains and eight failure classes", () => {
     expect(TELEMETRY_SCENARIOS).toHaveLength(5);
     expect(TELEMETRY_FAULTS).toHaveLength(8);
     expect(corpus).toHaveLength(40);
@@ -20,6 +20,14 @@ describe("Stage 10 telemetry evaluator corpus", () => {
         corpus.filter((item) => item.fault === fault),
       ).toHaveLength(5);
     }
+  });
+
+  it("uses one distinct normalized question per upload row", () => {
+    const normalized = corpus.map((item) =>
+      item.row.prompt.normalize("NFC").replace(/\s+/g, " ").trim(),
+    );
+
+    expect(new Set(normalized).size).toBe(corpus.length);
   });
 
   it("labels the structurally and semantically stronger answer as chosen", () => {

@@ -33,6 +33,10 @@ if (rows.length !== generated.length) {
   );
 }
 
+function normalizePrompt(prompt: string): string {
+  return prompt.normalize("NFC").replace(/\s+/g, " ").trim();
+}
+
 const prompts = new Set<string>();
 
 for (const [index, item] of generated.entries()) {
@@ -84,12 +88,20 @@ for (const [index, item] of generated.entries()) {
     );
   }
 
-  prompts.add(row.prompt);
+  const normalized = normalizePrompt(row.prompt);
+
+  if (prompts.has(normalized)) {
+    throw new Error(
+      `Duplicate normalized prompt at row ${index + 1}`,
+    );
+  }
+
+  prompts.add(normalized);
 }
 
-if (prompts.size !== 5) {
+if (prompts.size !== generated.length) {
   throw new Error(
-    `Expected 5 distinct scenario prompts, got ${prompts.size}`,
+    `Every upload row must have a distinct prompt: rows=${generated.length}, prompts=${prompts.size}`,
   );
 }
 
@@ -107,7 +119,7 @@ console.log(
   JSON.stringify({
     event: "stage10_corpus_valid",
     rows: rows.length,
-    prompts: prompts.size,
+    distinct_prompts: prompts.size,
     faults: TELEMETRY_FAULTS.length,
   }),
 );

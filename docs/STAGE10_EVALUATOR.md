@@ -50,7 +50,7 @@ the current response shape does not expose integrity evidence.
 Stage 10 material GO:
 - corpus generator deterministic;
 - 40 preference pairs;
-- five distinct machine scenarios;
+- 40 distinct normalized questions across five machine domains;
 - eight failure classes;
 - local QA proves every chosen answer outranks its paired rejected answer;
 - upload format matches Telegraph preference-pair schema;

@@ -3,6 +3,7 @@
   "family": "SENSOR_TELEMETRY_VERIFY",
   "class": "judgment",
   "pair_count": 40,
+  "distinct_prompt_count": 40,
   "scenario_count": 5,
   "fault_counts": {
     "wrong_sensor": 5,

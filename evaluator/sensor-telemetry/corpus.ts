@@ -10,6 +10,7 @@ export type TelemetryFault =
 
 export interface TelemetryScenario {
   id: string;
+  context: string;
   sensor: string;
   metric: string;
   value: number;
@@ -44,6 +45,8 @@ export interface CorpusCase {
 export const TELEMETRY_SCENARIOS: readonly TelemetryScenario[] = [
   {
     id: "cold-chain-temperature",
+    context:
+      "A refrigerated logistics operator is moving frozen vaccine cartons between two warehouses. The cart has crossed into a zone managed by a different vendor, so the controller must decide whether the remote cold-room reading is usable before continuing the transfer.",
     sensor: "cold-zone-b-temp",
     metric: "temperature",
     value: -18.4,
@@ -55,6 +58,8 @@ export const TELEMETRY_SCENARIOS: readonly TelemetryScenario[] = [
   },
   {
     id: "pump-pressure",
+    context:
+      "A water-treatment robot is waiting for permission to open a transfer valve. The pressure sensor is owned by the pump station operator rather than the robot fleet, so the machine needs a trustworthy cross-operator reading before it resumes the pumping sequence.",
     sensor: "pump-17-pressure",
     metric: "pressure",
     value: 241,
@@ -66,6 +71,8 @@ export const TELEMETRY_SCENARIOS: readonly TelemetryScenario[] = [
   },
   {
     id: "motor-vibration",
+    context:
+      "An autonomous inspection trolley is approaching a production cell maintained by another contractor. It needs the motor vibration reading to decide whether the cell is operating normally enough for the scheduled inspection task to continue.",
     sensor: "motor-a-vibration",
     metric: "vibration",
     value: 3.1,
@@ -77,6 +84,8 @@ export const TELEMETRY_SCENARIOS: readonly TelemetryScenario[] = [
   },
   {
     id: "greenhouse-humidity",
+    context:
+      "A greenhouse service drone is about to begin a misting job in a bay operated by a partner farm. The drone does not own the humidity sensor and must verify the partner's live environmental reading before it changes the task plan.",
     sensor: "greenhouse-4-humidity",
     metric: "relative_humidity",
     value: 61,
@@ -88,6 +97,8 @@ export const TELEMETRY_SCENARIOS: readonly TelemetryScenario[] = [
   },
   {
     id: "freezer-current",
+    context:
+      "A maintenance agent is diagnosing a freezer door actuator at a third-party cold-storage site. The current sensor belongs to the site operator, and the agent needs a valid electrical reading before it can continue the non-emergency maintenance workflow.",
     sensor: "freezer-door-current",
     metric: "current",
     value: 1.8,
@@ -113,14 +124,33 @@ export const TELEMETRY_FAULTS: readonly TelemetryFault[] = [
 const PROVENANCE_URL =
   "https://github.com/Alike001/latch/blob/main/evaluator/sensor-telemetry/README.md";
 
-function promptFor(scenario: TelemetryScenario): string {
-  return [
-    `Verify the live telemetry answer for sensor "${scenario.sensor}" and metric "${scenario.metric}".`,
-    `Evaluate it at ${scenario.queryTime}.`,
-    `The accepted unit is "${scenario.unit}", the plausible calibration range is ${scenario.plausibleRange.min} to ${scenario.plausibleRange.max},`,
-    `and readings older than ${scenario.maxAgeSeconds} seconds are stale.`,
-    "Prefer the answer that preserves the requested sensor/metric identity, a finite plausible value, the accepted unit, and a present, non-future, fresh observed_at timestamp.",
-  ].join(" ");
+function promptFor(
+  scenario: TelemetryScenario,
+  fault: TelemetryFault,
+): string {
+  const facts =
+    `Requested sensor: "${scenario.sensor}". Requested metric: "${scenario.metric}". Accepted unit: "${scenario.unit}". Plausible range: ${scenario.plausibleRange.min} to ${scenario.plausibleRange.max}. Evaluate at ${scenario.queryTime}; readings older than ${scenario.maxAgeSeconds} seconds are stale.`;
+
+  const focus: Record<TelemetryFault, string> = {
+    wrong_sensor:
+      "Identity check: choose the answer that actually belongs to the requested sensor. A numerically plausible reading from a different device is not acceptable.",
+    wrong_metric:
+      "Semantic check: choose the answer that reports the requested metric itself. Reject an answer carrying another measurement type even when its other fields look well formed.",
+    wrong_unit:
+      "Unit check: choose the answer expressed in the accepted unit for this task. Do not silently reinterpret a value from an incompatible or unknown unit.",
+    non_numeric_value:
+      "Value-type check: choose the answer with a finite numeric measurement. Error strings, status words, or placeholders cannot substitute for telemetry.",
+    implausible_value:
+      "Calibration check: choose the finite reading that stays inside the stated operational range. Reject a well-structured but physically implausible outlier.",
+    stale_timestamp:
+      "Freshness check: choose the reading whose observation time is recent enough for the task. A correctly shaped historical reading outside the freshness window must lose.",
+    future_timestamp:
+      "Clock-sanity check: choose the answer whose observation time is not later than the evaluation time. Future-dated telemetry is not trustworthy for this decision.",
+    missing_timestamp:
+      "Traceability check: choose the answer that includes a usable observed_at timestamp. Without observation time, freshness cannot be established.",
+  };
+
+  return `${scenario.context} ${facts} ${focus[fault]}`;
 }
 
 function canonicalAnswer(scenario: TelemetryScenario): Record<string, unknown> {
@@ -190,7 +220,7 @@ export function buildTelemetryPreferenceCorpus(): CorpusCase[] {
       fault,
       scenario,
       row: {
-        prompt: promptFor(scenario),
+        prompt: promptFor(scenario, fault),
         chosen: JSON.stringify(canonicalAnswer(scenario)),
         rejected: JSON.stringify(rejectedAnswer(scenario, fault)),
         label_kind: "preference_pair" as const,

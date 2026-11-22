@@ -1487,3 +1487,67 @@ Capture:
 - active snapshot/current epoch
 
 Do not upload material or start expensive adapter training until this live state is captured.
+
+
+---
+
+# Stage 10 live scorer/pool checkpoint + corpus correction
+
+Date: 2026-11-22
+
+Live status command:
+`npm run stage10:status`
+
+Transport:
+- Node fetch failed on the local machine because of the known Node/OpenSSL issue;
+- curl fallback succeeded;
+- read-only status completed successfully.
+
+Live Intent:
+- `SENSOR_TELEMETRY_VERIFY_GENERAL`
+- class: **judgment**
+- served by family: `SENSOR_TELEMETRY_VERIFY`
+
+Live scorer:
+- class: **judgment**
+- served_by: `GENERIC`
+- inherited: **true**
+- scorer: `judgment`
+- routed: **true**
+- generic_fallback: **true**
+
+Conclusion:
+**No telemetry-specific scorer is active on this path; the Intent currently uses the generic judgment fallback.**
+A specialist telemetry adapter would therefore fill a real scoring gap.
+
+Live Evaluation Pool:
+- eligible rows: **314**
+- quarantine rows: **390**
+- rejected rows: **1**
+- submitters: **2**
+- eligible submitters: **2**
+- live devnode `min_submitters`: **3**
+- snapshot rows: **314**
+- snapshot submitters: **2**
+- qualification rows: **165**
+- ranking rows: **149**
+- ranking split: **5000 bps**
+- quality rules: `evalpool-quality-v1`
+- snapshot published: `2026-11-17T11:48:07.052641Z`
+- activation epoch: **1**
+- current epoch: **38**
+
+Documentation discrepancy:
+The public Telegraph evaluation-data guide currently says judgment questions are used after at least 5 contributors, while this live devnode reports `min_submitters: 3`. Preserve both facts. For decisions against this devnode, use its live status value rather than silently rewriting the documentation.
+
+Critical corpus correction caught before upload:
+Telegraph allows one normalized question per row. The first Stage 10 corpus had 40 preference rows but only 5 distinct prompts because each scenario reused its prompt across eight fault variants. No live upload occurred.
+
+Corrected upload gate:
+- 40 preference rows;
+- **40 distinct normalized questions**;
+- five operational domains;
+- eight failure classes;
+- no upload until CI proves the distinct-prompt invariant.
+
+If the Latch wallet is not already one of the two submitters, admitted material could make it the third live-devnode contributor. Do not claim that threshold is met until a post-upload status proves it.
