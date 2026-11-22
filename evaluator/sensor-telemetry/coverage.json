@@ -9,10 +9,10 @@
     "pairCount": 64,
     "uniqueRejectedCount": 64,
     "largestSingleRejectedShare": 0.015625,
-    "pickShorterAccuracy": 0.46875,
-    "pickLongerAccuracy": 0.53125,
+    "pickShorterAccuracy": 0.484375,
+    "pickLongerAccuracy": 0.515625,
     "meanChosenLength": 117.75,
-    "meanRejectedLength": 116.359375
+    "meanRejectedLength": 114.96875
   },
   "fault_counts": {
     "wrong_sensor": 8,

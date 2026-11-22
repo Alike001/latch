@@ -45,6 +45,15 @@ describe("Stage 10 telemetry evaluator corpus", () => {
     expect(metrics.pickLongerAccuracy).toBeLessThanOrEqual(0.65);
   });
 
+  it("avoids obvious error-shaped surface tokens in rejected answers", () => {
+    const rejected = corpus.map((item) => item.row.rejected.toLowerCase());
+
+    expect(rejected.join("\n")).not.toContain("sensor-error");
+    expect(rejected.join("\n")).not.toContain('"null"');
+    expect(rejected.join("\n")).not.toContain("-other");
+    expect(rejected.join("\n")).not.toContain("unknown");
+  });
+
   it("labels the semantically stronger answer as chosen", () => {
     for (const item of corpus) {
       const chosen = referenceCorpusScore(

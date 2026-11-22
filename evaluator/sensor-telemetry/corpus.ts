@@ -212,27 +212,73 @@ function canonicalAnswer(scenario: TelemetryScenario): Record<string, unknown> {
   };
 }
 
-function wrongUnit(unit: string, index: number): string {
-  const short: Record<string, string> = {
-    C: "K",
-    kPa: "Pa",
-    "mm/s": "g",
-    "%": "x",
-    A: "V",
-    "m/s": "Hz",
-    V: "A",
-  };
-  const long: Record<string, string> = {
-    C: "fahrenheit",
-    kPa: "psi",
-    "mm/s": "in/s",
-    "%": "fraction",
-    A: "mA",
-    "m/s": "km/h",
-    V: "millivolt",
-  };
+function donorScenario(
+  scenarioIndex: number,
+  offset: number,
+): TelemetryScenario {
+  return TELEMETRY_SCENARIOS[
+    (scenarioIndex + offset) % TELEMETRY_SCENARIOS.length
+  ]!;
+}
 
-  return (index % 2 === 0 ? short : long)[unit] ?? "unknown";
+function donorWithDifferentUnit(
+  scenario: TelemetryScenario,
+  scenarioIndex: number,
+): TelemetryScenario {
+  for (let offset = 1; offset < TELEMETRY_SCENARIOS.length; offset += 1) {
+    const donor = donorScenario(scenarioIndex, offset);
+
+    if (donor.unit !== scenario.unit) {
+      return donor;
+    }
+  }
+
+  throw new Error(`No alternate unit donor for ${scenario.id}`);
+}
+
+function donorImplausibleValue(
+  scenario: TelemetryScenario,
+  scenarioIndex: number,
+): number {
+  const candidates = TELEMETRY_SCENARIOS.filter(
+    (candidate) =>
+      candidate.value < scenario.plausibleRange.min ||
+      candidate.value > scenario.plausibleRange.max,
+  );
+
+  if (candidates.length === 0) {
+    return scenario.plausibleRange.max + 1;
+  }
+
+  return candidates[scenarioIndex % candidates.length]!.value;
+}
+
+function staleTimestamp(
+  scenario: TelemetryScenario,
+): string {
+  const query = new Date(scenario.queryTime).getTime();
+
+  const donor = TELEMETRY_SCENARIOS.find((candidate) => {
+    const ageSeconds =
+      (query - new Date(candidate.observedAt).getTime()) / 1000;
+
+    return ageSeconds > scenario.maxAgeSeconds;
+  });
+
+  return donor?.observedAt ?? "2026-11-22T07:50:00.000Z";
+}
+
+function futureTimestamp(
+  scenario: TelemetryScenario,
+): string {
+  const query = new Date(scenario.queryTime).getTime();
+
+  const donor = TELEMETRY_SCENARIOS.find(
+    (candidate) =>
+      new Date(candidate.observedAt).getTime() > query,
+  );
+
+  return donor?.observedAt ?? "2026-11-22T09:20:00.000Z";
 }
 
 function rejectedAnswer(
@@ -244,46 +290,55 @@ function rejectedAnswer(
 
   switch (fault) {
     case "wrong_sensor":
-      answer.sensor =
-        scenarioIndex % 2 === 0
-          ? scenario.sensor.slice(0, -2)
-          : `${scenario.sensor}-other`;
+      answer.sensor = donorScenario(
+        scenarioIndex,
+        1,
+      ).sensor;
       break;
+
     case "wrong_metric":
-      answer.metric =
-        scenarioIndex % 2 === 1
-          ? scenario.metric.slice(0, -1)
-          : `${scenario.metric}_other`;
+      answer.metric = donorScenario(
+        scenarioIndex,
+        2,
+      ).metric;
       break;
+
     case "wrong_unit":
-      answer.unit = wrongUnit(scenario.unit, scenarioIndex);
+      answer.unit = donorWithDifferentUnit(
+        scenario,
+        scenarioIndex,
+      ).unit;
       break;
+
     case "non_numeric_value":
-      answer.value =
-        scenarioIndex % 2 === 0 ? "x" : "sensor-error";
+      // Keep the surface tokens looking like real telemetry. JSON quotes make
+      // the value the wrong type even though its digits are borrowed from a
+      // valid reading elsewhere in the corpus.
+      answer.value = String(
+        donorScenario(scenarioIndex, 3).value,
+      );
       break;
+
     case "implausible_value":
-      answer.value =
-        scenarioIndex % 2 === 0
-          ? scenario.plausibleRange.max + 1000
-          : scenario.plausibleRange.min > 0
-            ? scenario.plausibleRange.min - 1
-            : -1;
+      // Borrow another real telemetry value that is outside this task's
+      // calibration range instead of inventing an obvious outlier token.
+      answer.value = donorImplausibleValue(
+        scenario,
+        scenarioIndex,
+      );
       break;
-    case "stale_timestamp": {
-      const query = new Date(scenario.queryTime);
-      answer.observed_at = new Date(
-        query.getTime() - (scenario.maxAgeSeconds + 300) * 1000,
-      ).toISOString();
+
+    case "stale_timestamp":
+      answer.observed_at = staleTimestamp(scenario);
       break;
-    }
-    case "future_timestamp": {
-      const query = new Date(scenario.queryTime);
-      answer.observed_at = new Date(query.getTime() + 300_000).toISOString();
+
+    case "future_timestamp":
+      answer.observed_at = futureTimestamp(scenario);
       break;
-    }
+
     case "missing_timestamp":
-      answer.observed_at = null;
+      // Keep the canonical field shape but remove usable time evidence.
+      answer.observed_at = "";
       break;
   }
 
