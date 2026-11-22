@@ -1,0 +1,16 @@
+{
+  "event": "stage10_evalpool_upload",
+  "date": "2026-11-22",
+  "intent": "SENSOR_TELEMETRY_VERIFY_GENERAL",
+  "submitter": "0x95dC03c1F3937341aEa4943fC5376085fDffBEba",
+  "body_sha256": "adfffb5732a49730ed292bcac1ca235a5a9ba72e63078bc9c38ddf385971b677",
+  "rows": 40,
+  "distinct_prompts": 40,
+  "received": 40,
+  "accepted": 40,
+  "duplicate": 0,
+  "rejected": 0,
+  "curated": 40,
+  "state": "admitted",
+  "note": "Immutable copy of the exact JSONL body accepted by Telegraph. Current pairs.jsonl may evolve for adapter training."
+}

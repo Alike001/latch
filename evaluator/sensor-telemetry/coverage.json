@@ -2,18 +2,27 @@
   "intent": "SENSOR_TELEMETRY_VERIFY_GENERAL",
   "family": "SENSOR_TELEMETRY_VERIFY",
   "class": "judgment",
-  "pair_count": 40,
-  "distinct_prompt_count": 40,
-  "scenario_count": 5,
+  "pair_count": 64,
+  "distinct_prompt_count": 64,
+  "scenario_count": 8,
+  "shortcut_metrics": {
+    "pairCount": 64,
+    "uniqueRejectedCount": 64,
+    "largestSingleRejectedShare": 0.015625,
+    "pickShorterAccuracy": 0.46875,
+    "pickLongerAccuracy": 0.53125,
+    "meanChosenLength": 117.75,
+    "meanRejectedLength": 116.359375
+  },
   "fault_counts": {
-    "wrong_sensor": 5,
-    "wrong_metric": 5,
-    "wrong_unit": 5,
-    "non_numeric_value": 5,
-    "implausible_value": 5,
-    "stale_timestamp": 5,
-    "future_timestamp": 5,
-    "missing_timestamp": 5
+    "wrong_sensor": 8,
+    "wrong_metric": 8,
+    "wrong_unit": 8,
+    "non_numeric_value": 8,
+    "implausible_value": 8,
+    "stale_timestamp": 8,
+    "future_timestamp": 8,
+    "missing_timestamp": 8
   },
   "cases": [
     {
@@ -215,6 +224,126 @@
       "id": "freezer-current::missing_timestamp",
       "fault": "missing_timestamp",
       "scenario": "freezer-current"
+    },
+    {
+      "id": "conveyor-speed::wrong_sensor",
+      "fault": "wrong_sensor",
+      "scenario": "conveyor-speed"
+    },
+    {
+      "id": "conveyor-speed::wrong_metric",
+      "fault": "wrong_metric",
+      "scenario": "conveyor-speed"
+    },
+    {
+      "id": "conveyor-speed::wrong_unit",
+      "fault": "wrong_unit",
+      "scenario": "conveyor-speed"
+    },
+    {
+      "id": "conveyor-speed::non_numeric_value",
+      "fault": "non_numeric_value",
+      "scenario": "conveyor-speed"
+    },
+    {
+      "id": "conveyor-speed::implausible_value",
+      "fault": "implausible_value",
+      "scenario": "conveyor-speed"
+    },
+    {
+      "id": "conveyor-speed::stale_timestamp",
+      "fault": "stale_timestamp",
+      "scenario": "conveyor-speed"
+    },
+    {
+      "id": "conveyor-speed::future_timestamp",
+      "fault": "future_timestamp",
+      "scenario": "conveyor-speed"
+    },
+    {
+      "id": "conveyor-speed::missing_timestamp",
+      "fault": "missing_timestamp",
+      "scenario": "conveyor-speed"
+    },
+    {
+      "id": "battery-voltage::wrong_sensor",
+      "fault": "wrong_sensor",
+      "scenario": "battery-voltage"
+    },
+    {
+      "id": "battery-voltage::wrong_metric",
+      "fault": "wrong_metric",
+      "scenario": "battery-voltage"
+    },
+    {
+      "id": "battery-voltage::wrong_unit",
+      "fault": "wrong_unit",
+      "scenario": "battery-voltage"
+    },
+    {
+      "id": "battery-voltage::non_numeric_value",
+      "fault": "non_numeric_value",
+      "scenario": "battery-voltage"
+    },
+    {
+      "id": "battery-voltage::implausible_value",
+      "fault": "implausible_value",
+      "scenario": "battery-voltage"
+    },
+    {
+      "id": "battery-voltage::stale_timestamp",
+      "fault": "stale_timestamp",
+      "scenario": "battery-voltage"
+    },
+    {
+      "id": "battery-voltage::future_timestamp",
+      "fault": "future_timestamp",
+      "scenario": "battery-voltage"
+    },
+    {
+      "id": "battery-voltage::missing_timestamp",
+      "fault": "missing_timestamp",
+      "scenario": "battery-voltage"
+    },
+    {
+      "id": "tank-level::wrong_sensor",
+      "fault": "wrong_sensor",
+      "scenario": "tank-level"
+    },
+    {
+      "id": "tank-level::wrong_metric",
+      "fault": "wrong_metric",
+      "scenario": "tank-level"
+    },
+    {
+      "id": "tank-level::wrong_unit",
+      "fault": "wrong_unit",
+      "scenario": "tank-level"
+    },
+    {
+      "id": "tank-level::non_numeric_value",
+      "fault": "non_numeric_value",
+      "scenario": "tank-level"
+    },
+    {
+      "id": "tank-level::implausible_value",
+      "fault": "implausible_value",
+      "scenario": "tank-level"
+    },
+    {
+      "id": "tank-level::stale_timestamp",
+      "fault": "stale_timestamp",
+      "scenario": "tank-level"
+    },
+    {
+      "id": "tank-level::future_timestamp",
+      "fault": "future_timestamp",
+      "scenario": "tank-level"
+    },
+    {
+      "id": "tank-level::missing_timestamp",
+      "fault": "missing_timestamp",
+      "scenario": "tank-level"
     }
   ]
 }

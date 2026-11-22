@@ -4,6 +4,7 @@ import { join } from "node:path";
 import {
   TELEMETRY_FAULTS,
   buildTelemetryPreferenceCorpus,
+  datasetShortcutMetrics,
   referenceCorpusScore,
 } from "./corpus.js";
 
@@ -101,18 +102,43 @@ for (const [index, item] of generated.entries()) {
 
 if (prompts.size !== generated.length) {
   throw new Error(
-    `Every upload row must have a distinct prompt: rows=${generated.length}, prompts=${prompts.size}`,
+    `Every row must have a distinct prompt: rows=${generated.length}, prompts=${prompts.size}`,
   );
 }
 
 for (const fault of TELEMETRY_FAULTS) {
   const count = generated.filter((item) => item.fault === fault).length;
 
-  if (count < 5) {
+  if (count < 8) {
     throw new Error(
-      `Insufficient coverage for ${fault}: expected >=5, got ${count}`,
+      `Insufficient coverage for ${fault}: expected >=8, got ${count}`,
     );
   }
+}
+
+const shortcuts = datasetShortcutMetrics(generated);
+
+if (shortcuts.uniqueRejectedCount !== generated.length) {
+  throw new Error(
+    `Rejected answers must be unique: unique=${shortcuts.uniqueRejectedCount}, rows=${generated.length}`,
+  );
+}
+
+if (shortcuts.largestSingleRejectedShare > 0.02) {
+  throw new Error(
+    `Largest single rejected answer share ${(shortcuts.largestSingleRejectedShare * 100).toFixed(2)}% exceeds Telegraph's 2% dataset gate`,
+  );
+}
+
+if (
+  Math.max(
+    shortcuts.pickShorterAccuracy,
+    shortcuts.pickLongerAccuracy,
+  ) > 0.65
+) {
+  throw new Error(
+    `Answer length is too predictive: shorter=${(shortcuts.pickShorterAccuracy * 100).toFixed(1)}%, longer=${(shortcuts.pickLongerAccuracy * 100).toFixed(1)}%`,
+  );
 }
 
 console.log(
@@ -121,5 +147,6 @@ console.log(
     rows: rows.length,
     distinct_prompts: prompts.size,
     faults: TELEMETRY_FAULTS.length,
+    shortcuts,
   }),
 );

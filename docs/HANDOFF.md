@@ -1604,3 +1604,53 @@ Stage 10 material contribution status:
 
 Next evaluator step:
 Proceed with the official `SENSOR_TELEMETRY_VERIFY` ModernBERT/LoRA adapter preparation and local data check while continuing to use `npm run stage10:status` as the network gate before any adapter registration or promotion claim.
+
+
+---
+
+# Stage 10 official dataset gate — first run and hardening
+
+Date: 2026-11-22
+
+Official Telegraph evaluator kit was successfully downloaded and verified after local network/TLS retries:
+- archive integrity: **ARCHIVE OK**
+- Python venv created
+- NumPy installed
+- `float_runtime.train_adapter --check-data` executed against the Latch corpus
+
+First official gate result:
+**FAIL (40 pairs)**
+
+Passing diagnostics:
+- unique negatives: **100.0%**
+- held-out leak: **0.0%**
+- surface probe: **65.0%** (no failure marker)
+
+Failing diagnostics:
+- largest single negative: **2.5% > 2%**
+- pick-shorter shortcut: **66.2% > 65%**
+- mean lengths: chosen **119**, rejected **117** characters
+
+Interpretation:
+The 2% rule is mathematically impossible for a 40-pair corpus even with all negatives unique because a single appearance is 1/40 = 2.5%. The corpus therefore needs >50 rows. The length result also shows a minor answer-length shortcut.
+
+Hardening decision:
+- expand training corpus from **40 → 64 pairs**;
+- expand machine domains from **5 → 8**;
+- keep eight telemetry failure classes;
+- make every rejected answer unique;
+- balance shorter/longer rejected variants;
+- represent missing timestamp as `observed_at: null` so structure is preserved while freshness remains unverifiable;
+- add local CI gates matching the official 2% negative-reuse and 65% length-shortcut limits.
+
+Reproducibility:
+The exact 40-row corpus already uploaded to Telegraph remains archived at:
+`evaluator/sensor-telemetry/history/evalpool-upload-2026-11-22.jsonl`
+
+Its live-upload SHA256 remains:
+`adfffb5732a49730ed292bcac1ca235a5a9ba72e63078bc9c38ddf385971b677`
+
+The expanded 64-pair corpus is for adapter training and must not be automatically re-uploaded to the live Evaluation Pool.
+
+Uploader safety:
+`stage10:upload-material` now requires an explicit `LATCH_EVALPOOL_FILE` in addition to `LATCH_EVALPOOL_UPLOAD=1`, preventing accidental re-upload of the evolving training corpus.

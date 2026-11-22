@@ -140,3 +140,21 @@ present in the answer.
 
 That is a protocol/schema gap to document separately, not a reason to fabricate an
 integrity score.
+
+
+## Official dataset-gate hardening
+
+The first official Telegraph `--check-data` run on the 40-pair training set failed two anti-shortcut rules:
+
+- `largest single neg 2.5% > 2%`: even a perfectly unique 40-row set cannot satisfy a 2% maximum because one appearance is already 1/40 = 2.5%;
+- `pick the shorter answer 66.2% > 65%`: answer length was slightly predictive of the preferred label.
+
+The training corpus was therefore expanded to **64 pairs** and the answer mutations were length-balanced.
+
+Local CI now enforces before the official Python gate:
+- every normalized prompt is unique;
+- every rejected answer is unique;
+- largest single rejected-answer share <= 2%;
+- neither shorter-answer nor longer-answer choice predicts the label above 65%.
+
+The live Evaluation Pool upload is preserved unchanged; this hardening is for adapter training.
