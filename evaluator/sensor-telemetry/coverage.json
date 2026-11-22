@@ -1,0 +1,219 @@
+{
+  "intent": "SENSOR_TELEMETRY_VERIFY_GENERAL",
+  "family": "SENSOR_TELEMETRY_VERIFY",
+  "class": "judgment",
+  "pair_count": 40,
+  "scenario_count": 5,
+  "fault_counts": {
+    "wrong_sensor": 5,
+    "wrong_metric": 5,
+    "wrong_unit": 5,
+    "non_numeric_value": 5,
+    "implausible_value": 5,
+    "stale_timestamp": 5,
+    "future_timestamp": 5,
+    "missing_timestamp": 5
+  },
+  "cases": [
+    {
+      "id": "cold-chain-temperature::wrong_sensor",
+      "fault": "wrong_sensor",
+      "scenario": "cold-chain-temperature"
+    },
+    {
+      "id": "cold-chain-temperature::wrong_metric",
+      "fault": "wrong_metric",
+      "scenario": "cold-chain-temperature"
+    },
+    {
+      "id": "cold-chain-temperature::wrong_unit",
+      "fault": "wrong_unit",
+      "scenario": "cold-chain-temperature"
+    },
+    {
+      "id": "cold-chain-temperature::non_numeric_value",
+      "fault": "non_numeric_value",
+      "scenario": "cold-chain-temperature"
+    },
+    {
+      "id": "cold-chain-temperature::implausible_value",
+      "fault": "implausible_value",
+      "scenario": "cold-chain-temperature"
+    },
+    {
+      "id": "cold-chain-temperature::stale_timestamp",
+      "fault": "stale_timestamp",
+      "scenario": "cold-chain-temperature"
+    },
+    {
+      "id": "cold-chain-temperature::future_timestamp",
+      "fault": "future_timestamp",
+      "scenario": "cold-chain-temperature"
+    },
+    {
+      "id": "cold-chain-temperature::missing_timestamp",
+      "fault": "missing_timestamp",
+      "scenario": "cold-chain-temperature"
+    },
+    {
+      "id": "pump-pressure::wrong_sensor",
+      "fault": "wrong_sensor",
+      "scenario": "pump-pressure"
+    },
+    {
+      "id": "pump-pressure::wrong_metric",
+      "fault": "wrong_metric",
+      "scenario": "pump-pressure"
+    },
+    {
+      "id": "pump-pressure::wrong_unit",
+      "fault": "wrong_unit",
+      "scenario": "pump-pressure"
+    },
+    {
+      "id": "pump-pressure::non_numeric_value",
+      "fault": "non_numeric_value",
+      "scenario": "pump-pressure"
+    },
+    {
+      "id": "pump-pressure::implausible_value",
+      "fault": "implausible_value",
+      "scenario": "pump-pressure"
+    },
+    {
+      "id": "pump-pressure::stale_timestamp",
+      "fault": "stale_timestamp",
+      "scenario": "pump-pressure"
+    },
+    {
+      "id": "pump-pressure::future_timestamp",
+      "fault": "future_timestamp",
+      "scenario": "pump-pressure"
+    },
+    {
+      "id": "pump-pressure::missing_timestamp",
+      "fault": "missing_timestamp",
+      "scenario": "pump-pressure"
+    },
+    {
+      "id": "motor-vibration::wrong_sensor",
+      "fault": "wrong_sensor",
+      "scenario": "motor-vibration"
+    },
+    {
+      "id": "motor-vibration::wrong_metric",
+      "fault": "wrong_metric",
+      "scenario": "motor-vibration"
+    },
+    {
+      "id": "motor-vibration::wrong_unit",
+      "fault": "wrong_unit",
+      "scenario": "motor-vibration"
+    },
+    {
+      "id": "motor-vibration::non_numeric_value",
+      "fault": "non_numeric_value",
+      "scenario": "motor-vibration"
+    },
+    {
+      "id": "motor-vibration::implausible_value",
+      "fault": "implausible_value",
+      "scenario": "motor-vibration"
+    },
+    {
+      "id": "motor-vibration::stale_timestamp",
+      "fault": "stale_timestamp",
+      "scenario": "motor-vibration"
+    },
+    {
+      "id": "motor-vibration::future_timestamp",
+      "fault": "future_timestamp",
+      "scenario": "motor-vibration"
+    },
+    {
+      "id": "motor-vibration::missing_timestamp",
+      "fault": "missing_timestamp",
+      "scenario": "motor-vibration"
+    },
+    {
+      "id": "greenhouse-humidity::wrong_sensor",
+      "fault": "wrong_sensor",
+      "scenario": "greenhouse-humidity"
+    },
+    {
+      "id": "greenhouse-humidity::wrong_metric",
+      "fault": "wrong_metric",
+      "scenario": "greenhouse-humidity"
+    },
+    {
+      "id": "greenhouse-humidity::wrong_unit",
+      "fault": "wrong_unit",
+      "scenario": "greenhouse-humidity"
+    },
+    {
+      "id": "greenhouse-humidity::non_numeric_value",
+      "fault": "non_numeric_value",
+      "scenario": "greenhouse-humidity"
+    },
+    {
+      "id": "greenhouse-humidity::implausible_value",
+      "fault": "implausible_value",
+      "scenario": "greenhouse-humidity"
+    },
+    {
+      "id": "greenhouse-humidity::stale_timestamp",
+      "fault": "stale_timestamp",
+      "scenario": "greenhouse-humidity"
+    },
+    {
+      "id": "greenhouse-humidity::future_timestamp",
+      "fault": "future_timestamp",
+      "scenario": "greenhouse-humidity"
+    },
+    {
+      "id": "greenhouse-humidity::missing_timestamp",
+      "fault": "missing_timestamp",
+      "scenario": "greenhouse-humidity"
+    },
+    {
+      "id": "freezer-current::wrong_sensor",
+      "fault": "wrong_sensor",
+      "scenario": "freezer-current"
+    },
+    {
+      "id": "freezer-current::wrong_metric",
+      "fault": "wrong_metric",
+      "scenario": "freezer-current"
+    },
+    {
+      "id": "freezer-current::wrong_unit",
+      "fault": "wrong_unit",
+      "scenario": "freezer-current"
+    },
+    {
+      "id": "freezer-current::non_numeric_value",
+      "fault": "non_numeric_value",
+      "scenario": "freezer-current"
+    },
+    {
+      "id": "freezer-current::implausible_value",
+      "fault": "implausible_value",
+      "scenario": "freezer-current"
+    },
+    {
+      "id": "freezer-current::stale_timestamp",
+      "fault": "stale_timestamp",
+      "scenario": "freezer-current"
+    },
+    {
+      "id": "freezer-current::future_timestamp",
+      "fault": "future_timestamp",
+      "scenario": "freezer-current"
+    },
+    {
+      "id": "freezer-current::missing_timestamp",
+      "fault": "missing_timestamp",
+      "scenario": "freezer-current"
+    }
+  ]
+}

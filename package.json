@@ -14,7 +14,11 @@
     "start:provider": "tsx services/provider-api/src/server.ts",
     "start:web": "tsx apps/web/src/server.ts",
     "validate:miner": "node scripts/validate-stage5-readiness.mjs miner/latch-telemetry.yaml",
-    "stage7:live": "tsx scripts/run-stage7-live.ts"
+    "stage7:live": "tsx scripts/run-stage7-live.ts",
+    "stage10:status": "tsx scripts/stage10-evaluator-status.ts",
+    "stage10:build-corpus": "tsx evaluator/sensor-telemetry/build-corpus.ts",
+    "stage10:check-corpus": "tsx evaluator/sensor-telemetry/check-corpus.ts",
+    "stage10:upload-material": "tsx scripts/stage10-upload-evalpool.ts"
   },
   "dependencies": {
     "viem": "^2.21.0"
