@@ -155,9 +155,9 @@ Do not build the fancy UI before the purchase + validation loop works.
 
 Mission 11 claim is already recorded under `@Alike001` in `telegraphprotocol/bounties#199`.
 
-Current stage: **Stage 9 code complete — operations control room merged and CI-validated; local browser acceptance remains**.
+Current stage: **Stage 9B code complete — landing page + polished control room merged and CI-validated; local browser acceptance remains**.
 
-Exact next task: **Pull current `main`, run `npm run start:web`, verify the control room visually and exercise disconnect / stale / wrong-unit / corrupt-integrity / Provider-unavailable / Revoke Spend flows. Do not enable live Telegraph mode during visual acceptance.**
+Exact next task: **Pull current `main`, run `npm run start:web`, review `/` and `/control-room`, then exercise disconnect / stale / wrong-unit / corrupt-integrity / Provider-unavailable / Revoke Spend flows. Keep live Telegraph mode disabled during this visual acceptance pass.**
 
 ## Agent working style
 

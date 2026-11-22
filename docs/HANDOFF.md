@@ -1336,3 +1336,51 @@ Browser acceptance still required before declaring Stage 9 fully complete:
 7. keep live Telegraph mode disabled during this acceptance pass.
 
 Do not proceed to Stage 10 evaluator work until the control room passes this browser acceptance checkpoint.
+
+
+---
+
+# Stage 9B product UI milestone — landing page + polished control room
+
+Date: 2026-11-22
+
+PR: `#9 feat(web): add product landing page and polish control room`
+
+Merge commit: `ba0ae9a4ade998038edd92c284515b35e8d41417`
+
+Status: **CODE COMPLETE / BROWSER ACCEPTANCE PENDING**
+
+What changed:
+- `/` is now a real product landing page;
+- `/control-room` is the functional operations surface;
+- landing page explains the real Telegraph telemetry failure that produced Latch;
+- landing page presents the single coherent three-track strategy:
+  - Apps & Agents — autonomous recovery buyer;
+  - Miners / Providers — canonical telemetry supply;
+  - Evaluators — measurement of identity/value/unit/time/freshness/integrity;
+- landing page includes verified Stage 7 proof without inventing new claims;
+- control-room hierarchy is tighter and less presentation-heavy;
+- machine state, telemetry, Evidence Gate, Telegraph evidence, spend authority and failure controls are prioritized;
+- simulation accounting corrected: simulation still exercises authorization/attempt policy but records **0 real USDC spend** and never fabricates a Telegraph receipt;
+- live Telegraph mode remains explicit opt-in and unchanged.
+
+Validation:
+- dependency audit: **0 vulnerabilities**
+- typecheck: **passed**
+- Vitest: **67/67 tests passed**
+- control-room HTTP/runtime tests: **8/8 passed**
+- deterministic fixtures: **7/7 passed**
+
+Browser acceptance checklist:
+1. pull current `main`;
+2. run `npm run start:web`;
+3. review landing page at `http://127.0.0.1:4173/`;
+4. open control room at `http://127.0.0.1:4173/control-room`;
+5. verify desktop layout and hierarchy;
+6. verify mobile/responsive behavior if possible;
+7. run the failure scenarios in safe simulation mode;
+8. confirm Revoke Spend blocks recovery;
+9. confirm simulation recovery shows no real Telegraph receipt and no real session USDC spend;
+10. do not enable live mode during this acceptance pass.
+
+Do not begin Stage 10 evaluator work until this browser acceptance is accepted.
