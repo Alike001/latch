@@ -57,8 +57,8 @@ The project is already committed to Mission 11 Route 2. Do not restart idea sele
 
 Mission 11 claim: **recorded** under `@Alike001`.
 
-Current build stage: **Stage 9B code complete — landing page and polished control room are merged and CI-validated; browser acceptance remains before Stage 10**.
+Current build stage: **Stage 9 presentation accepted for now — product UI is sufficient and frozen while Stage 10 evaluator/core validation work proceeds**.
 
 Paid proof: `SENSOR_TELEMETRY_VERIFY_GENERAL` → `cold-zone-b-temp` / `temperature` returned **-18.4 C** with all canonical fields accepted at a cost of **$0.01**.
 
-Next: **Review `/` and `/control-room` locally, complete Stage 9 browser acceptance, then proceed to Stage 10 evaluator contribution**.
+Next: **Stage 10 — inspect the live Telegraph evaluator/scoring path, build the qualifying telemetry evaluator contribution, and deepen end-to-end feature testing**.

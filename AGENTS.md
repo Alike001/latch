@@ -155,9 +155,9 @@ Do not build the fancy UI before the purchase + validation loop works.
 
 Mission 11 claim is already recorded under `@Alike001` in `telegraphprotocol/bounties#199`.
 
-Current stage: **Stage 9B code complete — landing page + polished control room merged and CI-validated; local browser acceptance remains**.
+Current stage: **Stage 9 presentation accepted for now — landing page + control room are sufficient; UI polish is frozen while core hackathon functionality continues**.
 
-Exact next task: **Pull current `main`, run `npm run start:web`, review `/` and `/control-room`, then exercise disconnect / stale / wrong-unit / corrupt-integrity / Provider-unavailable / Revoke Spend flows. Keep live Telegraph mode disabled during this visual acceptance pass.**
+Exact next task: **Stage 10 — inspect Telegraph's live evaluator/scoring path, implement a qualifying telemetry evaluator contribution only where it is actually consumed, then expand end-to-end feature tests before returning to UI polish.**
 
 ## Agent working style
 

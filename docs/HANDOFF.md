@@ -1384,3 +1384,33 @@ Browser acceptance checklist:
 10. do not enable live mode during this acceptance pass.
 
 Do not begin Stage 10 evaluator work until this browser acceptance is accepted.
+
+
+---
+
+# Stage 9 presentation decision — UI frozen, core functionality prioritized
+
+Date: 2026-11-22
+
+Status: **ACCEPTED FOR NOW / UI POLISH FROZEN**
+
+Browser review confirmed:
+- landing page is usable as the public product surface;
+- control room is usable as the operational demo surface;
+- information hierarchy is materially improved from the first shell;
+- current UI is sufficient for the hackathon while core functionality remains unfinished.
+
+Product decision:
+**Do not spend more time on visual polish now.**
+
+Return to the locked build order and prioritize:
+1. Stage 10 evaluator contribution;
+2. deeper feature and end-to-end testing;
+3. Stage 11 independent developer test;
+4. Stage 12 demo/docs/submission evidence;
+5. only then revisit non-blocking UI/UX polish.
+
+This does not change the product thesis, mission, route, or three-track strategy.
+
+Exact next task:
+**Inspect Telegraph's current live evaluator/scoring path and implement only an evaluator contribution that genuinely participates in scoring for SENSOR_TELEMETRY_VERIFY_GENERAL or the relevant live telemetry path.**
