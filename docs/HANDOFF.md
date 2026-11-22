@@ -1551,3 +1551,56 @@ Corrected upload gate:
 - no upload until CI proves the distinct-prompt invariant.
 
 If the Latch wallet is not already one of the two submitters, admitted material could make it the third live-devnode contributor. Do not claim that threshold is met until a post-upload status proves it.
+
+
+---
+
+# Stage 10 live Evaluation Pool upload — SUCCESS
+
+Date: 2026-11-22
+
+Upload command:
+`LATCH_EVALPOOL_UPLOAD=1 npm run stage10:upload-material`
+
+Pre-upload corpus gate:
+- rows: **40**
+- distinct normalized prompts: **40**
+- failure classes: **8**
+
+Upload result:
+- HTTP status: **200**
+- intent: `SENSOR_TELEMETRY_VERIFY_GENERAL`
+- submitter: `0x95dC03c1F3937341aEa4943fC5376085fDffBEba`
+- body SHA256: `adfffb5732a49730ed292bcac1ca235a5a9ba72e63078bc9c38ddf385971b677`
+- signed: **true**
+- received: **40**
+- accepted: **40**
+- duplicate: **0**
+- rejected: **0**
+- curated: **40**
+- resulting state counts immediately after upload:
+  - admitted: **40**
+  - eligible: **314**
+  - quarantine: **390**
+  - rejected: **1**
+
+Post-upload live status:
+- current epoch: **39**
+- submitters: **3**
+- eligible submitters: **2**
+- live devnode min_submitters: **3**
+- active snapshot rows: **314**
+- active snapshot submitters: **2**
+- active snapshot corpus version: `7d5057566b24b2e5eec0e8915e1af37391e5e433d6703aa46b211eadab18a6c7`
+- scorer remains **GENERIC judgment fallback**
+
+Interpretation:
+The Latch wallet is now the third distinct submitter, but its 40 rows are only `admitted`, not yet `eligible`. Telegraph freezes pool state at epoch rollover. Until a later snapshot contains the Latch contribution, the active snapshot correctly remains at two submitters and the generic fallback remains in place.
+
+Do not claim the contributor threshold has activated yet.
+
+Stage 10 material contribution status:
+**LIVE UPLOAD COMPLETE / SNAPSHOT ACTIVATION PENDING**
+
+Next evaluator step:
+Proceed with the official `SENSOR_TELEMETRY_VERIFY` ModernBERT/LoRA adapter preparation and local data check while continuing to use `npm run stage10:status` as the network gate before any adapter registration or promotion claim.
