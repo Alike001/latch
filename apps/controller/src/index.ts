@@ -175,3 +175,6 @@ export async function recoverTaskTelemetry(
     finalDecision: providerDecision,
   };
 }
+
+
+export * from "./spend-authority.js";
