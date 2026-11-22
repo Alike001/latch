@@ -57,8 +57,8 @@ The project is already committed to Mission 11 Route 2. Do not restart idea sele
 
 Mission 11 claim: **recorded** under `@Alike001`.
 
-Current build stage: **Stage 6 complete — the autonomous recovery controller is merged and validated; Latch Provider remains live as miner `7317701` with real paid evidence**.
+Current build stage: **Stage 9 code complete — the operations control room is merged and CI-validated; browser acceptance is the remaining Stage 9 checkpoint**.
 
 Paid proof: `SENSOR_TELEMETRY_VERIFY_GENERAL` → `cold-zone-b-temp` / `temperature` returned **-18.4 C** with all canonical fields accepted at a cost of **$0.01**.
 
-Next: **Stage 9 — operations control-room UI for machine state, Telegraph purchases, Evidence Gate results, spend controls, and failure scenarios**.
+Next: **Run browser acceptance for the Stage 9 control room, then proceed to Stage 10 evaluator contribution**.

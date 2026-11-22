@@ -1265,3 +1265,74 @@ The UI must expose existing runtime truth rather than invent new logic:
 - authorization state;
 - final CONTINUE / REBUY / HOLD / ESCALATE decision;
 - failure controls for disconnect telemetry, stale telemetry, wrong unit, corrupted integrity, revoke spend, and Provider unavailable.
+
+
+---
+
+# Stage 9 code milestone — operations control room
+
+Date: 2026-11-22
+
+PR: `#8 feat(web): build Stage 9 operations control room`
+
+Merge commit: `cfe75860f554d4592b9d9dcf61c1b66b800fcda5`
+
+Status: **CODE COMPLETE / BROWSER ACCEPTANCE PENDING**
+
+Stage 9 implementation:
+- functional operations control room served by the repository itself;
+- no separate business-logic copy: UI calls the existing simulator, Evidence Gate, Stage 8 spend authority and Stage 7 live Telegraph adapter;
+- machine task/state display;
+- local telemetry status and integrity state;
+- independent remote Provider status;
+- spend authorization, attempt limit and session spend display;
+- Evidence Gate check-by-check result display;
+- real Telegraph Provider / price / latency / receipt shown only when a real purchase exists;
+- Stage 7 historical live proof shown separately from current-session purchases;
+- event log;
+- responsive desktop/mobile layout.
+
+Failure Lab controls mutate actual runtime state:
+- disconnect telemetry;
+- stale telemetry;
+- wrong unit;
+- corrupt integrity;
+- Provider unavailable;
+- restore healthy state;
+- Revoke Spend / Authorize Spend.
+
+Cross-operator design preserved:
+- local machine telemetry and remote Provider telemetry are independent sources;
+- a local sensor failure does not imply the remote Provider failed;
+- this remains the Mission 11 Route 2 telemetry-market problem, not a company paying to read its own sensor.
+
+Payment honesty:
+- default `npm run start:web` is safe simulation mode and cannot spend Telegraph funds;
+- simulation recovery never fabricates a Telegraph receipt;
+- optional live mode requires explicit `LATCH_UI_LIVE_TELEGRAPH=1`;
+- live mode reuses pinned miner `7317701`, Sepolia escrow, local Telegraph wallet, and the $0.01 per-attempt ceiling.
+
+Validation:
+- dependency audit: **0 vulnerabilities**
+- typecheck: **passed**
+- Vitest: **67/67 tests passed**
+- Stage 9 control-room tests: **8/8 passed**
+- Stage 8 spend-authority tests: **10/10 passed**
+- Stage 7 escrow adapter tests: **6/6 passed**
+- Stage 6 controller tests: **6/6 passed**
+- Evidence Gate tests: **12/12 passed**
+- Provider API tests: **12/12 passed**
+- telemetry simulator tests: **10/10 passed**
+- contract tests: **3/3 passed**
+- fixtures: **7/7 passed**
+
+Browser acceptance still required before declaring Stage 9 fully complete:
+1. pull current `main`;
+2. run `npm run start:web`;
+3. open `http://127.0.0.1:4173`;
+4. verify desktop layout and readable state hierarchy;
+5. inject each failure control and confirm displayed state matches runtime behavior;
+6. verify Revoke Spend prevents recovery purchases;
+7. keep live Telegraph mode disabled during this acceptance pass.
+
+Do not proceed to Stage 10 evaluator work until the control room passes this browser acceptance checkpoint.

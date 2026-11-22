@@ -155,9 +155,9 @@ Do not build the fancy UI before the purchase + validation loop works.
 
 Mission 11 claim is already recorded under `@Alike001` in `telegraphprotocol/bounties#199`.
 
-Current stage: **Stage 8 complete — bounded retry + spending authority merged and validated**.
+Current stage: **Stage 9 code complete — operations control room merged and CI-validated; local browser acceptance remains**.
 
-Exact next task: **Stage 9 — build the operations control-room UI around the already-working controller, paid purchase, Evidence Gate, retry, and spend-authority flows.**
+Exact next task: **Pull current `main`, run `npm run start:web`, verify the control room visually and exercise disconnect / stale / wrong-unit / corrupt-integrity / Provider-unavailable / Revoke Spend flows. Do not enable live Telegraph mode during visual acceptance.**
 
 ## Agent working style
 
