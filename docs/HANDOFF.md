@@ -1654,3 +1654,48 @@ The expanded 64-pair corpus is for adapter training and must not be automaticall
 
 Uploader safety:
 `stage10:upload-material` now requires an explicit `LATCH_EVALPOOL_FILE` in addition to `LATCH_EVALPOOL_UPLOAD=1`, preventing accidental re-upload of the evolving training corpus.
+
+
+---
+
+# Stage 10 official dataset gate — surface-probe hardening
+
+Date: 2026-11-22
+
+Second official `--check-data` result on the 64-pair corpus:
+**FAIL — one remaining anti-shortcut check**
+
+Passed:
+- unique negatives: **100.0%**
+- largest single negative: **1.6%**
+- length shortcut: **53.1%**
+- held-out leak: **0.0%**
+
+Failed:
+- surface probe: **77.8% > 65%**
+
+Official gate implementation inspected directly in
+`telegraphprotocol/telegraph-wasm-baseline/float_runtime/train_adapter.py`.
+
+The surface probe:
+- hides the prompt;
+- tokenizes only chosen/rejected answer text;
+- trains a simple bag-of-words logistic classifier;
+- fails if chosen vs rejected is predictable above 65%.
+
+Root cause:
+Rejected answers still used label-specific surface markers such as synthetic `-other`
+suffixes, `sensor-error`, `null`, and unit names that never appeared on the chosen side.
+
+Hardening:
+- wrong sensor IDs now come from other valid scenarios;
+- wrong metrics come from other valid scenarios;
+- wrong units come from other valid scenarios;
+- non-numeric values use numeric-looking strings whose digits come from valid readings;
+- implausible values are borrowed real readings that violate this task's calibration range;
+- stale/future timestamps preserve canonical timestamp shape;
+- missing timestamp preserves the `observed_at` field with an empty unusable value.
+
+Private reproduction of Telegraph's exact surface-probe algorithm on the redesigned 64-pair
+answers produced approximately **56.7%**, below the 65% gate. The official Python gate remains
+the authority and must be rerun locally after this patch is merged.

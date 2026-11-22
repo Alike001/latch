@@ -158,3 +158,26 @@ Local CI now enforces before the official Python gate:
 - neither shorter-answer nor longer-answer choice predicts the label above 65%.
 
 The live Evaluation Pool upload is preserved unchanged; this hardening is for adapter training.
+
+
+## Surface-probe hardening
+
+The second official Telegraph `--check-data` run passed repetition, length and leakage checks
+but failed the answer-only bag-of-words surface probe at **77.8%** (>65%).
+
+Root cause:
+the rejected side still contained obvious label-correlated tokens such as synthetic suffixes,
+error words, `null`, and non-canonical unit names. The probe could identify a rejected answer
+without reading the telemetry task.
+
+The corpus now uses **cross-scenario semantic swaps**:
+- wrong sensor -> another real sensor ID from the corpus;
+- wrong metric -> another real metric name;
+- wrong unit -> another real unit;
+- non-numeric value -> a numeric-looking string borrowed from another valid reading;
+- implausible value -> another real reading that falls outside this task's range;
+- stale/future time -> canonical timestamp-shaped values;
+- missing time -> canonical `observed_at` field with no usable timestamp.
+
+This keeps the negative answers superficially normal and forces the evaluator to use the
+prompt's sensor/metric/unit/range/time constraints rather than answer style.
