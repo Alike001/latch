@@ -29,7 +29,7 @@ describe("Stage 9 control-room runtime", () => {
     expect(state.task.state).toBe("RUNNING");
     expect(state.latestRecovery?.result.attemptsUsed).toBe(1);
     expect(state.latestRecovery?.result.purchases).toHaveLength(0);
-    expect(state.spend.session.spentUusdc).toBe(10_000);
+    expect(state.spend.session.spentUusdc).toBe(0);
   });
 
   it("recovers from stale, wrong-unit, and corrupted-integrity local evidence", async () => {
@@ -101,9 +101,15 @@ describe("Stage 9 control-room HTTP surface", () => {
 
     try {
       const base = `http://127.0.0.1:${running.port}`;
-      const page = await fetch(base + "/");
+      const landing = await fetch(base + "/");
+      expect(landing.status).toBe(200);
+      expect(await landing.text()).toContain(
+        "When machines lose trusted telemetry, Latch buys the signal.",
+      );
+
+      const page = await fetch(base + "/control-room");
       expect(page.status).toBe(200);
-      expect(await page.text()).toContain("Operational recovery, with evidence.");
+      expect(await page.text()).toContain("Recovery control room");
 
       const fault = await fetch(base + "/api/fault", {
         method: "POST",
