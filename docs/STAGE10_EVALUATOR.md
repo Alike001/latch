@@ -69,3 +69,17 @@ Stage 10 adapter GO:
 - adapterbuild Stage 1 parser passes;
 - runnable executor is reproducible;
 - registration/promotion evidence captured if we proceed on-chain.
+
+
+## Official dataset gate — passed
+
+The final 64-pair training corpus passes Telegraph's official `float_runtime.train_adapter --check-data` gate:
+
+- unique negatives: 100.0%
+- largest single negative: 1.6%
+- length shortcut: 51.6%
+- held-out leak: 0.0%
+- surface probe: 56.7%
+- result: **PASS**
+
+The first reproducible adapter run should use `train-config.json`, which pins Telegraph's official default ModernBERT/LoRA hyperparameters.
