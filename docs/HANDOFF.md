@@ -994,3 +994,39 @@ The `fetch failed` occurred before a billable paid request completed. It is safe
 
 Exact next step:
 **Probe the pinned miner route with an unpaid Node fetch and confirm that it returns the expected HTTP 402 payment challenge before retrying the live paid runner.**
+
+
+---
+
+# Stage 7 pinned-route recovery probe
+
+Date: 2026-11-22
+
+After the first live autonomous attempt failed with `fetch failed`, an unpaid Node.js probe was run directly against:
+
+`https://devnode.telegraphprotocol.com/engine/v1/ask/7317701`
+
+Request:
+- Intent: `SENSOR_TELEMETRY_VERIFY_GENERAL`
+- sensor: `cold-zone-b-temp`
+- metric: `temperature`
+- max_budget_usdc: `10000`
+
+Result:
+- HTTP **402 Payment Required**
+- Base Sepolia exact payment offered at **$0.01**
+- Solana exact payment offered at **$0.01**
+- Ethereum Sepolia Telegraph escrow offered at **$0.01**
+- escrow network: `eip155:11155111`
+- escrow payTo: `0x72a70e949362670bf8bcead24efc5b8f950aa08b`
+- resource: `/v1/ask/7317701`
+- signing: `personal_sign (EIP-191)`
+
+Conclusion:
+The pinned Telegraph route is reachable again from Node.js and is returning the expected escrow challenge. Since the previous failed live attempt was confirmed unbilled, one controlled retry of the autonomous Stage 7 runner is safe.
+
+Exact next step:
+```bash
+LATCH_LIVE_PAID=1 npm run stage7:live
+```
+Run once only, preserve the output, then immediately re-check Telegraph escrow status.
