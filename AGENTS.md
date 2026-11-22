@@ -155,9 +155,9 @@ Do not build the fancy UI before the purchase + validation loop works.
 
 Mission 11 claim is already recorded under `@Alike001` in `telegraphprotocol/bounties#199`.
 
-Current stage: **Stage 9 presentation accepted for now — landing page + control room are sufficient; UI polish is frozen while core hackathon functionality continues**.
+Current stage: **Stage 10 evaluator foundation merged — 40 public telemetry preference pairs, corpus QA, live scorer/pool inspection, and guarded Evaluation Pool upload tooling are complete**.
 
-Exact next task: **Stage 10 — inspect Telegraph's live evaluator/scoring path, implement a qualifying telemetry evaluator contribution only where it is actually consumed, then expand end-to-end feature tests before returning to UI polish.**
+Exact next task: **Run `npm run stage10:status` from current `main`, capture the live scorer and Evaluation Pool state for SENSOR_TELEMETRY_VERIFY_GENERAL, then decide whether to upload material immediately and whether adapter training can enter a live competition round.**
 
 ## Agent working style
 

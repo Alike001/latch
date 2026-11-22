@@ -1414,3 +1414,76 @@ This does not change the product thesis, mission, route, or three-track strategy
 
 Exact next task:
 **Inspect Telegraph's current live evaluator/scoring path and implement only an evaluator contribution that genuinely participates in scoring for SENSOR_TELEMETRY_VERIFY_GENERAL or the relevant live telemetry path.**
+
+
+---
+
+# Stage 10 evaluator foundation milestone
+
+Date: 2026-11-22
+
+PR: `#10 feat(evaluator): add telemetry preference corpus and live tooling`
+
+Merge commit: `f86511f387b60d99ac0a3623d1c1df8bcfffd329`
+
+Status: **FOUNDATION MERGED / LIVE NETWORK CHECK NEXT**
+
+Official live classification verified from Telegraph public catalogue:
+- family: `SENSOR_TELEMETRY_VERIFY`
+- intent: `SENSOR_TELEMETRY_VERIFY_GENERAL`
+- class: **judgment**
+- canonical answer fields: `sensor`, `metric`, `value`, `unit`, `observed_at`
+- evaluator route: **question pairs + adapter on family prefix**
+- do not build a deterministic comparator for this family
+
+Stage 10 merged artifacts:
+- **40 public preference pairs**
+- five operational machine scenarios
+- eight failure classes:
+  - wrong sensor
+  - wrong metric
+  - wrong unit
+  - non-numeric value
+  - implausible value
+  - stale timestamp
+  - future timestamp
+  - missing timestamp
+- deterministic reference rubric used only for corpus QA
+- live Intent/scorer/Evaluation Pool status script
+- guarded EIP-191 Evaluation Pool uploader
+- official V2 ModernBERT/LoRA adapter training instructions
+- documentation of the integrity/schema limitation
+
+Important integrity limitation:
+The live family description mentions cryptographic payload integrity and calibration bounds, but the current canonical answer shape exposes only sensor/metric/value/unit/observed_at. Latch must not claim an evaluator can cryptographically verify evidence that is absent from the scored answer.
+
+Official V2 adapter direction:
+- LoRA safetensors delta on the shared ModernBERT-base Foundation Model
+- register on the `SENSOR_TELEMETRY_VERIFY` family prefix
+- comparator / rank_answer / Q32.32 / full-model WASM formats are not accepted
+- promotion depends on the network's hidden evaluation competition
+
+Validation:
+- **71/71 tests passed**
+- evaluator corpus tests: **4/4 passed**
+- typecheck: **passed**
+- dependency audit: **0 vulnerabilities**
+- deterministic fixtures: **7/7 passed**
+
+Evaluation Pool diversity rule:
+A judgment pool is only used once it has enough independent contributors. Latch must not fake contributor diversity with multiple addresses controlled by the same builder.
+
+Exact next command:
+```bash
+npm run stage10:status
+```
+
+Capture:
+- live Intent class
+- resolved scoring family/module
+- routed state
+- Evaluation Pool submitter counts
+- eligible submitter count
+- active snapshot/current epoch
+
+Do not upload material or start expensive adapter training until this live state is captured.

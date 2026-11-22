@@ -57,8 +57,8 @@ The project is already committed to Mission 11 Route 2. Do not restart idea sele
 
 Mission 11 claim: **recorded** under `@Alike001`.
 
-Current build stage: **Stage 9 presentation accepted for now — product UI is sufficient and frozen while Stage 10 evaluator/core validation work proceeds**.
+Current build stage: **Stage 10 evaluator foundation merged — public preference material and live evaluation tooling are ready; live scorer/pool status is the next gate**.
 
 Paid proof: `SENSOR_TELEMETRY_VERIFY_GENERAL` → `cold-zone-b-temp` / `temperature` returned **-18.4 C** with all canonical fields accepted at a cost of **$0.01**.
 
-Next: **Stage 10 — inspect the live Telegraph evaluator/scoring path, build the qualifying telemetry evaluator contribution, and deepen end-to-end feature testing**.
+Next: **Run the Stage 10 live scorer/pool status check, then upload accepted evaluation material and proceed to the official ModernBERT/LoRA adapter path if the live network state supports it**.
