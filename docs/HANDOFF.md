@@ -758,3 +758,61 @@ Scope boundary preserved:
 Exact next stage:
 
 **Stage 7 — connect the controller acquisition adapter to the real Telegraph paid Engine path while keeping wallet secrets out of the repository.**
+
+
+---
+
+# Stage 7 checkpoint — dedicated Telegraph agent wallet initialized
+
+Date: 2026-11-22
+
+Status: **IN PROGRESS**
+
+Goal:
+connect the Stage 6 controller acquisition adapter to a real paid Telegraph purchase while keeping wallet secrets out of the repository.
+
+Official Telegraph CLI:
+- package: `@telegraphprotocol/telegraph-protocol-mcp`
+- payment mode: `escrow`
+- node: `https://devnode.telegraphprotocol.com`
+- live Intent count observed during setup: **136**
+
+Transient setup issue:
+- first CLI attempt returned `fetch failed`;
+- direct curl to `/engine/v1/intents` succeeded with **136** intents;
+- Node.js `fetch` to the same endpoint also succeeded with **136** intents;
+- rerunning setup then worked normally.
+
+Dedicated agent wallet:
+- address: `0x95dC03c1F3937341aEa4943fC5376085fDffBEba`
+- network: Ethereum Sepolia / `eip155:11155111`
+- wallet file: `~/.telegraph/wallet.json`
+- **Never commit, paste, log, or expose the private key from that file.**
+- Telegraph test USDC token: `0xcc194e1a843B658526D0D5C431f670028582Ae17`
+- Telegraph escrow contract: `0x72a70e949362670Bf8bceAd24eFC5b8f950aa08b`
+
+Current wallet state at this checkpoint:
+- Sepolia ETH: **0.001**
+- wallet test USDC: **0**
+- Telegraph escrow spendable USDC: **0**
+- deposited USDC: **0**
+- unbilled USDC: **0**
+- pending withdrawal: **0**
+
+Security / architecture decision:
+- keep this dedicated agent wallet separate from the browser MetaMask wallet used for the manual Stage 5 proof;
+- do not import the browser-wallet private key into Latch;
+- Stage 7 should use the dedicated Telegraph wallet and official escrow payment semantics;
+- keep the private key local under `~/.telegraph/wallet.json` with no repo secret material.
+
+Important payment behavior confirmed from the current official Telegraph MCP implementation:
+- escrow payments sign the node challenge with EIP-191 `personal_sign`;
+- escrow mode does not fall back to wallet x402 payment;
+- failed escrow asks are not billed;
+- the private key remains local and is not part of agent config.
+
+Exact stopping point:
+**The dedicated Stage 7 wallet exists and has gas, but no Telegraph test USDC yet.**
+
+Exact next step:
+**Fund wallet `0x95dC03c1F3937341aEa4943fC5376085fDffBEba` with a small amount of Telegraph test USDC, verify with `telegraph-protocol-mcp status`, then deposit only the amount needed for Stage 7 into escrow.**
