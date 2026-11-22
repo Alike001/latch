@@ -42,6 +42,16 @@ export interface CorpusCase {
   row: PreferenceRow;
 }
 
+export interface DatasetShortcutMetrics {
+  pairCount: number;
+  uniqueRejectedCount: number;
+  largestSingleRejectedShare: number;
+  pickShorterAccuracy: number;
+  pickLongerAccuracy: number;
+  meanChosenLength: number;
+  meanRejectedLength: number;
+}
+
 export const TELEMETRY_SCENARIOS: readonly TelemetryScenario[] = [
   {
     id: "cold-chain-temperature",
@@ -108,6 +118,45 @@ export const TELEMETRY_SCENARIOS: readonly TelemetryScenario[] = [
     maxAgeSeconds: 60,
     plausibleRange: { min: 0, max: 5 },
   },
+  {
+    id: "conveyor-speed",
+    context:
+      "A parcel-sorting robot is entering a conveyor segment operated by a neighboring logistics company. It needs the partner conveyor speed to coordinate a routine handoff without guessing the belt timing.",
+    sensor: "conveyor-3-speed",
+    metric: "belt_speed",
+    value: 1.25,
+    unit: "m/s",
+    observedAt: "2026-11-22T08:50:00.000Z",
+    queryTime: "2026-11-22T08:50:20.000Z",
+    maxAgeSeconds: 60,
+    plausibleRange: { min: 0.2, max: 2.5 },
+  },
+  {
+    id: "battery-voltage",
+    context:
+      "A warehouse service agent is checking a battery rack owned by the facility operator before beginning a scheduled charging-cycle inspection. The agent needs a current voltage reading from the operator's telemetry system.",
+    sensor: "battery-rack-voltage",
+    metric: "voltage",
+    value: 51.8,
+    unit: "V",
+    observedAt: "2026-11-22T09:00:00.000Z",
+    queryTime: "2026-11-22T09:00:25.000Z",
+    maxAgeSeconds: 90,
+    plausibleRange: { min: 44, max: 58 },
+  },
+  {
+    id: "tank-level",
+    context:
+      "An autonomous inventory agent is reconciling a shared process tank before a routine material transfer. The tank instrumentation belongs to another operator, so the agent must validate the external level reading before updating the transfer plan.",
+    sensor: "tank-9-level",
+    metric: "liquid_level",
+    value: 72.4,
+    unit: "%",
+    observedAt: "2026-11-22T09:10:00.000Z",
+    queryTime: "2026-11-22T09:10:30.000Z",
+    maxAgeSeconds: 120,
+    plausibleRange: { min: 0, max: 100 },
+  },
 ];
 
 export const TELEMETRY_FAULTS: readonly TelemetryFault[] = [
@@ -147,7 +196,7 @@ function promptFor(
     future_timestamp:
       "Clock-sanity check: choose the answer whose observation time is not later than the evaluation time. Future-dated telemetry is not trustworthy for this decision.",
     missing_timestamp:
-      "Traceability check: choose the answer that includes a usable observed_at timestamp. Without observation time, freshness cannot be established.",
+      "Traceability check: choose the answer that includes a usable observed_at timestamp. A null or missing observation time cannot establish freshness.",
   };
 
   return `${scenario.context} ${facts} ${focus[fault]}`;
@@ -163,35 +212,63 @@ function canonicalAnswer(scenario: TelemetryScenario): Record<string, unknown> {
   };
 }
 
+function wrongUnit(unit: string, index: number): string {
+  const short: Record<string, string> = {
+    C: "K",
+    kPa: "Pa",
+    "mm/s": "g",
+    "%": "x",
+    A: "V",
+    "m/s": "Hz",
+    V: "A",
+  };
+  const long: Record<string, string> = {
+    C: "fahrenheit",
+    kPa: "psi",
+    "mm/s": "in/s",
+    "%": "fraction",
+    A: "mA",
+    "m/s": "km/h",
+    V: "millivolt",
+  };
+
+  return (index % 2 === 0 ? short : long)[unit] ?? "unknown";
+}
+
 function rejectedAnswer(
   scenario: TelemetryScenario,
   fault: TelemetryFault,
+  scenarioIndex: number,
 ): Record<string, unknown> {
   const answer = canonicalAnswer(scenario);
 
   switch (fault) {
     case "wrong_sensor":
-      answer.sensor = `${scenario.sensor}-other`;
+      answer.sensor =
+        scenarioIndex % 2 === 0
+          ? scenario.sensor.slice(0, -2)
+          : `${scenario.sensor}-other`;
       break;
     case "wrong_metric":
-      answer.metric = `${scenario.metric}_other`;
+      answer.metric =
+        scenarioIndex % 2 === 1
+          ? scenario.metric.slice(0, -1)
+          : `${scenario.metric}_other`;
       break;
     case "wrong_unit":
-      answer.unit =
-        scenario.unit === "C"
-          ? "F"
-          : scenario.unit === "%"
-            ? "fraction"
-            : "unknown";
+      answer.unit = wrongUnit(scenario.unit, scenarioIndex);
       break;
     case "non_numeric_value":
-      answer.value = "sensor-error";
+      answer.value =
+        scenarioIndex % 2 === 0 ? "x" : "sensor-error";
       break;
     case "implausible_value":
-      answer.value = scenario.plausibleRange.max + Math.max(
-        50,
-        Math.abs(scenario.plausibleRange.max - scenario.plausibleRange.min) * 10,
-      );
+      answer.value =
+        scenarioIndex % 2 === 0
+          ? scenario.plausibleRange.max + 1000
+          : scenario.plausibleRange.min > 0
+            ? scenario.plausibleRange.min - 1
+            : -1;
       break;
     case "stale_timestamp": {
       const query = new Date(scenario.queryTime);
@@ -206,7 +283,7 @@ function rejectedAnswer(
       break;
     }
     case "missing_timestamp":
-      delete answer.observed_at;
+      answer.observed_at = null;
       break;
   }
 
@@ -214,7 +291,7 @@ function rejectedAnswer(
 }
 
 export function buildTelemetryPreferenceCorpus(): CorpusCase[] {
-  return TELEMETRY_SCENARIOS.flatMap((scenario) =>
+  return TELEMETRY_SCENARIOS.flatMap((scenario, scenarioIndex) =>
     TELEMETRY_FAULTS.map((fault) => ({
       id: `${scenario.id}::${fault}`,
       fault,
@@ -222,7 +299,9 @@ export function buildTelemetryPreferenceCorpus(): CorpusCase[] {
       row: {
         prompt: promptFor(scenario, fault),
         chosen: JSON.stringify(canonicalAnswer(scenario)),
-        rejected: JSON.stringify(rejectedAnswer(scenario, fault)),
+        rejected: JSON.stringify(
+          rejectedAnswer(scenario, fault, scenarioIndex),
+        ),
         label_kind: "preference_pair" as const,
         provenance: {
           source_kind: "human" as const,
@@ -231,6 +310,54 @@ export function buildTelemetryPreferenceCorpus(): CorpusCase[] {
       },
     })),
   );
+}
+
+export function datasetShortcutMetrics(
+  cases: readonly CorpusCase[],
+): DatasetShortcutMetrics {
+  const rejectedCounts = new Map<string, number>();
+  let shorterChosen = 0;
+  let shorterRejected = 0;
+  let ties = 0;
+  let chosenLength = 0;
+  let rejectedLength = 0;
+
+  for (const item of cases) {
+    const chosen = item.row.chosen.length;
+    const rejected = item.row.rejected.length;
+
+    chosenLength += chosen;
+    rejectedLength += rejected;
+    rejectedCounts.set(
+      item.row.rejected,
+      (rejectedCounts.get(item.row.rejected) ?? 0) + 1,
+    );
+
+    if (chosen < rejected) {
+      shorterChosen += 1;
+    } else if (rejected < chosen) {
+      shorterRejected += 1;
+    } else {
+      ties += 1;
+    }
+  }
+
+  const pairCount = cases.length;
+  const largestRejectedCount = Math.max(
+    ...rejectedCounts.values(),
+  );
+
+  return {
+    pairCount,
+    uniqueRejectedCount: rejectedCounts.size,
+    largestSingleRejectedShare: largestRejectedCount / pairCount,
+    pickShorterAccuracy:
+      (shorterChosen + ties * 0.5) / pairCount,
+    pickLongerAccuracy:
+      (shorterRejected + ties * 0.5) / pairCount,
+    meanChosenLength: chosenLength / pairCount,
+    meanRejectedLength: rejectedLength / pairCount,
+  };
 }
 
 function parseAnswer(text: string): Record<string, unknown> | null {

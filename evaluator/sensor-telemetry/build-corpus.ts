@@ -3,6 +3,7 @@ import { join } from "node:path";
 
 import {
   buildTelemetryPreferenceCorpus,
+  datasetShortcutMetrics,
   referenceCorpusScore,
 } from "./corpus.js";
 
@@ -34,12 +35,20 @@ for (const item of cases) {
 const jsonl =
   cases.map((item) => JSON.stringify(item.row)).join("\n") + "\n";
 
+const shortcuts = datasetShortcutMetrics(cases);
+
 const coverage = {
   intent: "SENSOR_TELEMETRY_VERIFY_GENERAL",
   family: "SENSOR_TELEMETRY_VERIFY",
   class: "judgment",
   pair_count: cases.length,
+  distinct_prompt_count: new Set(
+    cases.map((item) =>
+      item.row.prompt.normalize("NFC").replace(/\s+/g, " ").trim(),
+    ),
+  ).size,
   scenario_count: new Set(cases.map((item) => item.scenario.id)).size,
+  shortcut_metrics: shortcuts,
   fault_counts: Object.fromEntries(
     [...new Set(cases.map((item) => item.fault))].map((fault) => [
       fault,
@@ -71,6 +80,7 @@ console.log(
   JSON.stringify({
     event: "stage10_corpus_built",
     pairs: cases.length,
+    shortcuts,
     output: join(root, "pairs.jsonl"),
   }),
 );

@@ -1,6 +1,6 @@
 import { createHash, randomBytes } from "node:crypto";
 import { readFileSync } from "node:fs";
-import { join } from "node:path";
+import { resolve } from "node:path";
 
 import { loadLocalTelegraphSigner } from "../apps/controller/src/telegraph-escrow.js";
 
@@ -9,12 +9,6 @@ const NODE =
   "https://devnode.telegraphprotocol.com";
 const INTENT = "SENSOR_TELEMETRY_VERIFY_GENERAL";
 const CHAIN_ID = "11155111";
-const FILE = join(
-  process.cwd(),
-  "evaluator",
-  "sensor-telemetry",
-  "pairs.jsonl",
-);
 
 function sha256(bytes: Buffer): string {
   return createHash("sha256").update(bytes).digest("hex");
@@ -23,11 +17,20 @@ function sha256(bytes: Buffer): string {
 async function main() {
   if (process.env.LATCH_EVALPOOL_UPLOAD !== "1") {
     throw new Error(
-      "Refusing to change the live Telegraph Evaluation Pool. Re-run with LATCH_EVALPOOL_UPLOAD=1 after reviewing pairs.jsonl and stage10:status.",
+      "Refusing to change the live Telegraph Evaluation Pool. Set LATCH_EVALPOOL_UPLOAD=1 only after reviewing the exact upload file.",
     );
   }
 
-  const body = readFileSync(FILE);
+  const selected = process.env.LATCH_EVALPOOL_FILE;
+
+  if (!selected) {
+    throw new Error(
+      "LATCH_EVALPOOL_FILE is required. The current pairs.jsonl is a training corpus and must not be blindly re-uploaded. Select an explicit, reviewed JSONL file.",
+    );
+  }
+
+  const file = resolve(process.cwd(), selected);
+  const body = readFileSync(file);
   const signer = loadLocalTelegraphSigner();
   const nonce = randomBytes(16).toString("hex");
   const bodyHash = sha256(body);
@@ -73,6 +76,7 @@ async function main() {
         http_status: response.status,
         submitter: signer.address,
         intent: INTENT,
+        file,
         body_sha256: bodyHash,
         response: parsed,
       },

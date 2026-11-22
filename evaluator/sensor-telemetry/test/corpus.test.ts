@@ -4,25 +4,26 @@ import {
   TELEMETRY_FAULTS,
   TELEMETRY_SCENARIOS,
   buildTelemetryPreferenceCorpus,
+  datasetShortcutMetrics,
   referenceCorpusScore,
 } from "../corpus.js";
 
 describe("Stage 10 telemetry evaluator corpus", () => {
   const corpus = buildTelemetryPreferenceCorpus();
 
-  it("covers five operational domains and eight failure classes", () => {
-    expect(TELEMETRY_SCENARIOS).toHaveLength(5);
+  it("covers eight operational domains and eight failure classes", () => {
+    expect(TELEMETRY_SCENARIOS).toHaveLength(8);
     expect(TELEMETRY_FAULTS).toHaveLength(8);
-    expect(corpus).toHaveLength(40);
+    expect(corpus).toHaveLength(64);
 
     for (const fault of TELEMETRY_FAULTS) {
       expect(
         corpus.filter((item) => item.fault === fault),
-      ).toHaveLength(5);
+      ).toHaveLength(8);
     }
   });
 
-  it("uses one distinct normalized question per upload row", () => {
+  it("uses one distinct normalized question per row", () => {
     const normalized = corpus.map((item) =>
       item.row.prompt.normalize("NFC").replace(/\s+/g, " ").trim(),
     );
@@ -30,7 +31,21 @@ describe("Stage 10 telemetry evaluator corpus", () => {
     expect(new Set(normalized).size).toBe(corpus.length);
   });
 
-  it("labels the structurally and semantically stronger answer as chosen", () => {
+  it("keeps every rejected answer unique and below Telegraph's 2% reuse gate", () => {
+    const metrics = datasetShortcutMetrics(corpus);
+
+    expect(metrics.uniqueRejectedCount).toBe(corpus.length);
+    expect(metrics.largestSingleRejectedShare).toBeLessThanOrEqual(0.02);
+  });
+
+  it("does not allow answer length to predict the preference label", () => {
+    const metrics = datasetShortcutMetrics(corpus);
+
+    expect(metrics.pickShorterAccuracy).toBeLessThanOrEqual(0.65);
+    expect(metrics.pickLongerAccuracy).toBeLessThanOrEqual(0.65);
+  });
+
+  it("labels the semantically stronger answer as chosen", () => {
     for (const item of corpus) {
       const chosen = referenceCorpusScore(
         item.scenario,
@@ -60,7 +75,7 @@ describe("Stage 10 telemetry evaluator corpus", () => {
     }
   });
 
-  it("keeps upload rows in Telegraph preference-pair format", () => {
+  it("keeps rows in Telegraph preference-pair format", () => {
     for (const item of corpus) {
       expect(item.row.label_kind).toBe("preference_pair");
       expect(item.row.prompt.length).toBeGreaterThanOrEqual(16);
