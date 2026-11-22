@@ -155,9 +155,9 @@ Do not build the fancy UI before the purchase + validation loop works.
 
 Mission 11 claim is already recorded under `@Alike001` in `telegraphprotocol/bounties#199`.
 
-Current stage: **Stage 7 live autonomous paid recovery succeeded; post-call escrow verification remains before closing the stage**.
+Current stage: **Stage 7 complete — autonomous controller made a real $0.01 Telegraph escrow purchase, passed the Evidence Gate, and resumed the machine task**.
 
-Exact next task: **Run the official Telegraph CLI `status`, confirm the $0.01 escrow debit/unbilled state, record the result, then mark Stage 7 complete and begin Stage 8 retry + spending authority.**
+Exact next task: **Stage 8 — implement bounded retry + spending authority: explicit authorization/revocation, max attempts per capability, per-session spend cap, and fail-closed HOLD/ESCALATE behavior.**
 
 ## Agent working style
 

@@ -61,4 +61,4 @@ Current build stage: **Stage 6 complete — the autonomous recovery controller i
 
 Paid proof: `SENSOR_TELEMETRY_VERIFY_GENERAL` → `cold-zone-b-temp` / `temperature` returned **-18.4 C** with all canonical fields accepted at a cost of **$0.01**.
 
-Next: **Verify the post-call escrow debit for the successful Stage 7 autonomous purchase, then begin Stage 8 retry + spending authority**.
+Next: **Stage 8 — bounded retry + spending authority with explicit authorization/revocation and session spend caps**.

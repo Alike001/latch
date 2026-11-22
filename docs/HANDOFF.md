@@ -1112,3 +1112,77 @@ Important:
 
 Exact next step:
 **Run `npx -y @telegraphprotocol/telegraph-protocol-mcp status` and confirm the post-call escrow debit/unbilled state. After that, Stage 7 can be marked COMPLETE.**
+
+
+---
+
+# Stage 7 completion milestone — autonomous paid Telegraph recovery
+
+Date: 2026-11-22
+
+Status: **GO — COMPLETE**
+
+The successful autonomous Stage 7 run was verified against the Telegraph ledger after execution.
+
+Post-call Telegraph wallet/escrow state:
+- agent wallet: `0x95dC03c1F3937341aEa4943fC5376085fDffBEba`
+- wallet test USDC: **0.9**
+- wallet Sepolia ETH: approximately **0.001**
+- escrow spendable USDC: **0.09**
+- escrow balance USDC: **0.1**
+- deposited USDC: **0.1**
+- unbilled USDC: **0.01**
+- pending withdrawal USDC: **0**
+- CLI spent_today_usd: **0** at this instant because the charge is still pending ledger settlement
+
+Pre-call spendable escrow was **0.10 USDC**.
+Post-call spendable escrow is **0.09 USDC**.
+Therefore the successful autonomous run reserved exactly **0.01 USDC**.
+
+Combined Stage 7 proof:
+- local telemetry unavailable;
+- controller selected `REBUY`;
+- controller invoked the pinned Telegraph acquisition adapter;
+- dedicated local Telegraph wallet signed the EIP-191 escrow challenge;
+- miner `7317701` returned canonical telemetry;
+- Telegraph purchase cost: **10000 uUSDC = $0.01**;
+- payment rail: **escrow**;
+- receipt hash: `0xc4767a0ad9c19d0900a55b2eaff5f921616bec9f6647467837ef24b86cf56258`;
+- signal id: `0xf44ccf4f86719dbd2621d782581e7316be90c56e44b967694b04937f53ae057b`;
+- latency: **42608 ms**;
+- Evidence Gate accepted availability, sensor, metric, unit, value, timestamp, freshness and plausibility;
+- integrity policy passed as `integrity_not_required`;
+- final controller action: **CONTINUE**;
+- final task state: **RUNNING**.
+
+Stage 7 code:
+- PR: `#6 feat(controller): add pinned Telegraph escrow acquisition`
+- merge commit: `f455c7c034bd6ae644a8c979cc00a08fa04c61b4`
+- validation: **49/49 tests passed**
+- dependency audit: **0 vulnerabilities**
+- typecheck: **passed**
+- fixtures: **7/7 passed**
+
+A first live attempt failed with `fetch failed` and correctly ended in `HOLD`. It was confirmed **unbilled** before any retry. A subsequent unpaid probe returned the expected 402 challenge, and the controlled retry produced the successful paid recovery above.
+
+This means Stage 7 demonstrates both:
+1. safe fail-closed behavior on acquisition/network failure; and
+2. successful autonomous paid recovery when Telegraph is reachable.
+
+Exact next stage:
+
+**Stage 8 — retry + spending authority.**
+
+Required Stage 8 policy:
+- explicit authorization / revocation state;
+- max purchase: **$0.01** test USDC per attempt;
+- max attempts per capability: **2**;
+- configurable session spend cap;
+- no purchase after revocation;
+- no purchase after attempt exhaustion;
+- no purchase that would exceed session cap;
+- fail closed to HOLD or explicit ESCALATE;
+- preserve attempts, spend, receipt and final decision evidence.
+
+Required demo failure scenario:
+**Revoke Spend** → controller must refuse to purchase and HOLD/ESCALATE safely.
