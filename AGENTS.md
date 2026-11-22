@@ -155,9 +155,9 @@ Do not build the fancy UI before the purchase + validation loop works.
 
 Mission 11 claim is already recorded under `@Alike001` in `telegraphprotocol/bounties#199`.
 
-Current stage: **Stage 7 in progress — dedicated Telegraph agent wallet funded with gas + test USDC, and 0.1 USDC is spendable in Telegraph escrow; paid acquisition integration not yet completed**.
+Current stage: **Stage 7 code complete — pinned Telegraph escrow acquisition adapter merged and CI-validated; one live autonomous paid run remains**.
 
-Exact next task: **Wire the controller acquisition adapter to a pinned escrow-paid call to miner `7317701`, using the local Telegraph wallet without committing or logging its private key.**
+Exact next task: **From a local checkout of `main`, run `LATCH_LIVE_PAID=1 npm run stage7:live` exactly once, capture the output and post-call escrow status, then mark Stage 7 complete.**
 
 ## Agent working style
 

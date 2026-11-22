@@ -853,3 +853,84 @@ Security boundary remains unchanged:
 
 Exact next step:
 **Implement the Stage 7 pinned Telegraph acquisition adapter for miner `7317701`, validate it in CI with mocked payment challenges, then execute one live autonomous controller recovery against the funded escrow.**
+
+
+---
+
+# Stage 7 code milestone — pinned paid acquisition adapter merged
+
+Date: 2026-11-22
+
+PR: `#6 feat(controller): add pinned Telegraph escrow acquisition`
+
+Merge commit: `f455c7c034bd6ae644a8c979cc00a08fa04c61b4`
+
+Status: **CODE COMPLETE / LIVE PROOF PENDING**
+
+Stage 7 implementation now includes:
+- direct pinned Engine route to miner `7317701`;
+- hard payment ceiling of `10000 uUSDC` ($0.01);
+- Ethereum Sepolia Telegraph escrow only;
+- no automatic multi-miner routing;
+- no fallback to direct wallet x402 settlement;
+- official local Telegraph wallet loading from `~/.telegraph/wallet.json`;
+- signer abstraction that never returns or logs the private key;
+- EIP-191 escrow challenge signing;
+- payment receipt preservation in the Telegraph purchase record;
+- canonical Telegraph response mapping into the Evidence Gate;
+- explicit live opt-in guard: `LATCH_LIVE_PAID=1`;
+- `.telegraph/` added to `.gitignore`.
+
+Security boundary:
+- private key remains local only;
+- do not paste or commit `~/.telegraph/wallet.json`;
+- live runner is pinned to the registered Latch Provider and cannot authorize above $0.01.
+
+Validation:
+- dependency audit: **0 vulnerabilities**
+- typecheck: **passed**
+- Vitest: **49/49 tests passed**
+- Stage 7 escrow adapter tests: **6/6 passed**
+- controller tests: **6/6 passed**
+- Evidence Gate tests: **12/12 passed**
+- Provider API tests: **12/12 passed**
+- telemetry simulator tests: **10/10 passed**
+- contract tests: **3/3 passed**
+- fixtures: **7/7 passed**
+
+One initial CI run failed only because the live runner used top-level await under the current module mode. It was fixed by wrapping the runner in an async `main()`; the next CI run passed fully.
+
+Funded live-wallet state immediately before the pending live run:
+- agent wallet: `0x95dC03c1F3937341aEa4943fC5376085fDffBEba`
+- wallet test USDC: **0.9**
+- wallet Sepolia ETH: approximately **0.001**
+- Telegraph escrow spendable: **0.1 USDC**
+- unbilled: **0**
+
+Exact next step:
+**Run one live autonomous recovery from a local checkout of current `main`:**
+
+```bash
+LATCH_LIVE_PAID=1 npm run stage7:live
+```
+
+Expected behavior:
+```text
+local telemetry unavailable
+→ controller invokes paid acquisition adapter
+→ Telegraph returns 402 escrow challenge
+→ local agent wallet signs EIP-191 challenge
+→ $0.01 paid request to miner 7317701
+→ canonical telemetry response
+→ Evidence Gate
+→ CONTINUE
+```
+
+After the run:
+1. preserve the first successful live output;
+2. run the official Telegraph CLI `status`;
+3. confirm escrow decreased by approximately $0.01 (or appears as unbilled until the next ledger root);
+4. record the result here;
+5. do not repeat the paid call merely to recreate evidence.
+
+Do not mark Stage 7 complete until that real autonomous run succeeds.
