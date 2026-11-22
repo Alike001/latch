@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Latch — Operations Control Room</title>
+  <meta name="description" content="Latch operations control room for Telegraph-powered machine telemetry recovery.">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand-block">
+        <div class="mark">L</div>
+        <div>
+          <div class="brand">Latch</div>
+          <div class="subbrand">Trusted signals before machines move.</div>
+        </div>
+      </div>
+      <div class="top-meta">
+        <span class="tag">Mission 11</span>
+        <span class="tag">Route 2 · Machines trade telemetry</span>
+        <span id="mode-badge" class="tag tag-mode">Loading…</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero-row">
+        <div>
+          <p class="eyebrow">OPERATIONS CONTROL ROOM</p>
+          <h1>Operational recovery, with evidence.</h1>
+          <p class="lede">When trusted telemetry disappears, Latch checks spend authority, acquires replacement intelligence through Telegraph, validates the evidence, and decides whether the machine should continue.</p>
+        </div>
+        <div class="hero-actions">
+          <button id="recover-sim" class="button button-primary">Run recovery</button>
+          <button id="recover-live" class="button button-danger">Live Telegraph recovery</button>
+          <button id="reset" class="button button-ghost">Reset session</button>
+        </div>
+      </section>
+
+      <section class="metrics" id="metrics"></section>
+
+      <section class="grid-main">
+        <div class="stack">
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">MACHINE TASK</p>
+                <h2 id="task-name">—</h2>
+              </div>
+              <span id="task-state" class="state-pill">—</span>
+            </div>
+            <div class="machine-line">
+              <div class="machine-icon">C7</div>
+              <div>
+                <strong id="machine-id">—</strong>
+                <span>Autonomous cold-chain cart</span>
+              </div>
+              <div class="route-line">
+                <span>Cold Zone B</span><i></i><span>Outbound Dock</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">TELEMETRY EVIDENCE</p>
+                <h2>cold-zone-b-temp</h2>
+              </div>
+              <span id="telemetry-state" class="state-pill">—</span>
+            </div>
+            <div id="telemetry-detail" class="telemetry-detail"></div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">DECISION TRACE</p>
+                <h2>Evidence Gate</h2>
+              </div>
+              <span id="decision-pill" class="decision-pill neutral">NO RUN</span>
+            </div>
+            <div id="checks" class="checks empty-state">Run recovery to inspect evidence checks.</div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">TELEGRAPH PURCHASE</p>
+                <h2>Payment evidence</h2>
+              </div>
+              <span class="provider-id">Miner 7317701</span>
+            </div>
+            <div id="purchase" class="purchase empty-state">No purchase in this control-room session.</div>
+            <div class="historical-proof">
+              <span>Verified Stage 7 proof</span>
+              <code id="historical-receipt">—</code>
+            </div>
+          </article>
+        </div>
+
+        <aside class="stack">
+          <article class="panel sticky">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">RECOVERY POLICY</p>
+                <h2>Spend authority</h2>
+              </div>
+              <span id="spend-state" class="state-pill">—</span>
+            </div>
+            <div id="spend-detail" class="policy-list"></div>
+            <div class="split-actions">
+              <button id="authorize" class="button button-ghost">Authorize spend</button>
+              <button id="revoke" class="button button-danger">Revoke spend</button>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">FAILURE LAB</p>
+                <h2>Inject a real failure path</h2>
+              </div>
+            </div>
+            <p class="muted">These controls mutate the same simulator state used by the controller. They do not merely change the screen.</p>
+            <div class="fault-grid">
+              <button data-fault="disconnect" class="fault">Disconnect telemetry<span>Availability failure</span></button>
+              <button data-fault="stale" class="fault">Stale telemetry<span>10 minutes old</span></button>
+              <button data-fault="wrong_unit" class="fault">Wrong unit<span>Signed °F payload</span></button>
+              <button data-fault="corrupt_integrity" class="fault">Corrupt integrity<span>Signature failure</span></button>
+              <button data-fault="provider_unavailable" class="fault">Provider unavailable<span>Recovery supply failure</span></button>
+              <button data-fault="restore" class="fault fault-restore">Restore healthy state<span>Fresh °C telemetry</span></button>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">EVENT LOG</p>
+                <h2>What actually happened</h2>
+              </div>
+            </div>
+            <div id="events" class="events"></div>
+          </article>
+        </aside>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast"></div>
+  <script src="/app.js"></script>
+</body>
+</html>
