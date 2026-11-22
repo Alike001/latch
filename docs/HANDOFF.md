@@ -1699,3 +1699,56 @@ Hardening:
 Private reproduction of Telegraph's exact surface-probe algorithm on the redesigned 64-pair
 answers produced approximately **56.7%**, below the 65% gate. The official Python gate remains
 the authority and must be rerun locally after this patch is merged.
+
+
+---
+
+# Stage 10 official dataset gate — PASS
+
+Date: 2026-11-22
+
+Official Telegraph evaluator-kit command:
+```bash
+python -m float_runtime.train_adapter \
+  --intent SENSOR_TELEMETRY_VERIFY \
+  --data ../../evaluator/sensor-telemetry/pairs.jsonl \
+  --out runs/SENSOR_TELEMETRY_VERIFY \
+  --check-data
+```
+
+Result:
+**PASS (64 pairs)**
+
+Official metrics:
+- unique negatives: **100.0%**
+- largest single negative: **1.6%**
+- length shortcut: **51.6%**
+- held-out leak: **0.0%**
+- surface probe: **56.7%**
+- mean answer length: chosen **118** / rejected **115** characters
+
+This closes the Stage 10 data-preparation gate.
+
+Training corpus:
+- 64 pairs
+- 8 operational telemetry domains
+- 8 failure classes
+- no live Evaluation Pool re-upload required
+- immutable 40-row network-upload snapshot remains separately archived
+
+Training implementation:
+- official base: `answerdotai/ModernBERT-base`
+- one-logit sequence-classification reward head
+- PEFT LoRA
+- official LoRA targets: `Wqkv`, `Wo`, `Wi`
+- official shared-foundation delta output: safetensors
+- node scoring max length: **512 tokens**
+
+Reproducibility:
+`evaluator/sensor-telemetry/train-config.json` now pins the official default hyperparameters used for the first Latch adapter run.
+
+Hardware note:
+The official evaluator kit supports CPU fallback but explicitly warns it is slow. GPU/CUDA is the preferred training path. Export can run on CPU.
+
+Exact next stage:
+**Train the real SENSOR_TELEMETRY_VERIFY ModernBERT/LoRA adapter, capture the local validation gate, then export the safetensors delta.**
