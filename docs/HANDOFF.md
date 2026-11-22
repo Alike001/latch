@@ -934,3 +934,39 @@ After the run:
 5. do not repeat the paid call merely to recreate evidence.
 
 Do not mark Stage 7 complete until that real autonomous run succeeds.
+
+
+---
+
+# Stage 7 first live autonomous attempt — network failure, safe HOLD
+
+Date: 2026-11-22
+
+Status: **LIVE PROOF NOT YET COMPLETE**
+
+Command:
+```bash
+LATCH_LIVE_PAID=1 npm run stage7:live
+```
+
+Observed controller result:
+- event: `stage7_live_paid_recovery`
+- payer: `0x95dC03c1F3937341aEa4943fC5376085fDffBEba`
+- task: `task-cold-chain-live-001`
+- local telemetry: unavailable
+- local decision: `REBUY`
+- acquisition attempted: **true**
+- acquisition error: **fetch failed**
+- Provider decision: `HOLD`
+- final decision: `HOLD`
+- final task state: `HOLD`
+
+This is correct fail-closed behavior: the controller did not fabricate telemetry and did not continue the machine task after a network acquisition failure.
+
+Important:
+- Do **not** rerun the paid command until escrow status is checked.
+- At this checkpoint it is not yet known whether the failing fetch occurred before the 402 challenge, during the paid request, or after payment authorization.
+- Check the official Telegraph wallet/escrow status first to determine whether the spendable balance changed or an unbilled charge appeared.
+
+Exact next step:
+**Run `npx -y @telegraphprotocol/telegraph-protocol-mcp status` and compare escrow spendable/unbilled values against the pre-run state of 0.1 / 0.**
