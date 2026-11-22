@@ -1030,3 +1030,85 @@ Exact next step:
 LATCH_LIVE_PAID=1 npm run stage7:live
 ```
 Run once only, preserve the output, then immediately re-check Telegraph escrow status.
+
+
+---
+
+# Stage 7 live autonomous paid recovery — SUCCESS
+
+Date: 2026-11-22
+
+Status: **LIVE PURCHASE SUCCEEDED / ESCROW POST-CHECK PENDING**
+
+Command:
+```bash
+LATCH_LIVE_PAID=1 npm run stage7:live
+```
+
+Payer:
+`0x95dC03c1F3937341aEa4943fC5376085fDffBEba`
+
+Controller result:
+- task id: `task-cold-chain-live-001`
+- machine id: `cart-7`
+- local telemetry: unavailable
+- local decision: `REBUY`
+- acquisition attempted: **true**
+- final task state: **RUNNING**
+- Provider decision: **CONTINUE**
+- final decision: **CONTINUE**
+
+Paid Telegraph purchase:
+- Intent: `SENSOR_TELEMETRY_VERIFY_GENERAL`
+- provider id: `7317701`
+- provider slug: `latch-telemetry`
+- price: **10000 uUSDC = $0.01**
+- payment rail: **escrow**
+- latency: **42608 ms**
+- signal id: `0xf44ccf4f86719dbd2621d782581e7316be90c56e44b967694b04937f53ae057b`
+- purchased at: `2026-11-22T06:31:39.909Z`
+
+Payment receipt:
+- receipt hash: `0xc4767a0ad9c19d0900a55b2eaff5f921616bec9f6647467837ef24b86cf56258`
+- rail: `escrow`
+- payer: `0x95dc03c1f3937341aea4943fc5376085fdffbeba`
+- receipt miner field: `6159`
+- Intent: `SENSOR_TELEMETRY_VERIFY_GENERAL`
+- amount: `10000 uUSDC`
+- epoch id: **36**
+- settlement: `epoch`
+- chain: `telegraph`
+- receipt timestamp: `1795329106`
+
+Evidence Gate accepted all checked properties:
+- availability: pass
+- sensor identity: pass
+- metric identity: pass
+- unit: pass
+- value: pass
+- future timestamp: pass
+- freshness: pass
+- plausibility: pass
+- integrity policy: pass with `integrity_not_required`
+
+This proves the real autonomous runtime path:
+
+```text
+machine task
+→ local telemetry unavailable
+→ controller chooses REBUY
+→ pinned Telegraph request to miner 7317701
+→ escrow challenge signed by dedicated agent wallet
+→ $0.01 paid purchase
+→ canonical Provider response
+→ Evidence Gate passes
+→ CONTINUE
+→ task state RUNNING
+```
+
+Important:
+- Preserve both the Engine provider id `7317701` and the receipt's separate `miner: 6159` field exactly as returned.
+- Do not repeat this paid run merely to reproduce evidence.
+
+Exact next step:
+**Run `npx -y @telegraphprotocol/telegraph-protocol-mcp status` and confirm the post-call escrow debit/unbilled state. After that, Stage 7 can be marked COMPLETE.**

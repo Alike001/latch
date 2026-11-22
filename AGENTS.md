@@ -155,9 +155,9 @@ Do not build the fancy UI before the purchase + validation loop works.
 
 Mission 11 claim is already recorded under `@Alike001` in `telegraphprotocol/bounties#199`.
 
-Current stage: **Stage 7 code complete — pinned Telegraph escrow acquisition adapter merged and CI-validated; one live autonomous paid run remains**.
+Current stage: **Stage 7 live autonomous paid recovery succeeded; post-call escrow verification remains before closing the stage**.
 
-Exact next task: **From a local checkout of `main`, run `LATCH_LIVE_PAID=1 npm run stage7:live` exactly once, capture the output and post-call escrow status, then mark Stage 7 complete.**
+Exact next task: **Run the official Telegraph CLI `status`, confirm the $0.01 escrow debit/unbilled state, record the result, then mark Stage 7 complete and begin Stage 8 retry + spending authority.**
 
 ## Agent working style
 
