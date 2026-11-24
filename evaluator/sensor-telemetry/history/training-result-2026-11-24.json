@@ -1,0 +1,43 @@
+{
+  "intent": "SENSOR_TELEMETRY_VERIFY",
+  "base_model": "answerdotai/ModernBERT-base",
+  "base_model_sha256": "340ac08b74eef0d7bdec2d7981a6a3d4249bf0e6aab60634b72ad02c2b8023a9",
+  "tokenizer_sha256": "67bc76f8b9386efba1a761c1c8e5ad439fd0eaf1c2826e9dd1a205c7af4dc456",
+  "train_pairs": 55,
+  "gate_split": "validation",
+  "n_eval": 9,
+  "pairwise_accuracy": 0.8889,
+  "val_loss": 0.648599,
+  "length_baseline": 0.5556,
+  "beats_length_baseline": true,
+  "verdict": "PASS",
+  "negative_memorisation": 0.0,
+  "dataset_gate": {
+    "pairs": 64,
+    "unique_rejected_frac": 1.0,
+    "top_rejected_share": 0.0156,
+    "length_shortcut_acc": 0.5156,
+    "eval_negative_leak": 0.0,
+    "surface_probe_acc": 0.5667
+  },
+  "hyperparameters": {
+    "max_length": 512,
+    "batch_size": 1,
+    "grad_accum": 8,
+    "lora_rank": 8,
+    "lora_alpha": 32,
+    "lora_dropout": 0.1,
+    "epochs": 6,
+    "lr": 0.0001,
+    "weight_decay": 0.01,
+    "eval_split": 0.15,
+    "seed": 42
+  },
+  "tokenizer_compatibility": {
+    "original_training_tokenizer_sha256": "9fd55248d51d33976b324fc11592e28071da7d41e0e9401dfb7082e30574b7b1",
+    "original_saved_tokenizer_sha256": "3703d011b3ee259e00b59b60772f8fd54998d79e8fa5a1388d507eff28f8f09e",
+    "canonical_node_tokenizer_sha256": "67bc76f8b9386efba1a761c1c8e5ad439fd0eaf1c2826e9dd1a205c7af4dc456",
+    "training_texts_checked": 128,
+    "token_id_mismatches": 0
+  }
+}

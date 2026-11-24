@@ -57,8 +57,13 @@ The project is already committed to Mission 11 Route 2. Do not restart idea sele
 
 Mission 11 claim: **recorded** under `@Alike001`.
 
-Current build stage: **Stage 10 evaluator foundation merged — public preference material and live evaluation tooling are ready; live scorer/pool status is the next gate**.
+Current build stage: **Stage 10 evaluator adapter trained and validated — the
+official model gate passed at 0.8889 pairwise accuracy, the safetensors delta
+passed Telegraph's parser and shared-foundation runtime, and Latch's Evaluation
+Pool material is active with 3/3 eligible submitters**.
 
 Paid proof: `SENSOR_TELEMETRY_VERIFY_GENERAL` → `cold-zone-b-temp` / `temperature` returned **-18.4 C** with all canonical fields accepted at a cost of **$0.01**.
 
-Next: **Run the Stage 10 live scorer/pool status check, then upload accepted evaluation material and proceed to the official ModernBERT/LoRA adapter path if the live network state supports it**.
+Next: **Inspect the live adapter competition/registration route and immutable
+package-hosting requirements. The live telemetry scorer still uses the generic
+judgment fallback; registration and canonical promotion are not yet claimed.**

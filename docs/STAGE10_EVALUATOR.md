@@ -70,6 +70,17 @@ Stage 10 adapter GO:
 - runnable executor is reproducible;
 - registration/promotion evidence captured if we proceed on-chain.
 
+Current adapter status (2026-11-24):
+- official model gate: **PASS** at 0.8889 pairwise accuracy;
+- exported rank-8 safetensors delta: **PASS**;
+- adapterbuild Stage 1 parser: **PASS**;
+- shared-foundation load and repeat scoring: **PASS**;
+- live Evaluation Pool snapshot: **3/3 eligible submitters active**;
+- live scorer: still **GENERIC fallback**;
+- registration/canonical promotion: **not yet claimed**.
+
+See `docs/STAGE10_ADAPTER_VALIDATION.md` for hashes and compatibility findings.
+
 
 ## Official dataset gate — passed
 

@@ -1,0 +1,35 @@
+{
+  "checked_at": "2026-11-24T15:40:26.468Z",
+  "node": "https://devnode.telegraphprotocol.com",
+  "intent": {
+    "name": "SENSOR_TELEMETRY_VERIFY_GENERAL",
+    "class": "judgment",
+    "served_by": "SENSOR_TELEMETRY_VERIFY"
+  },
+  "scorer": {
+    "served_by": "GENERIC",
+    "inherited": true,
+    "routed": true,
+    "generic_fallback": true
+  },
+  "evalpool": {
+    "eligible": 354,
+    "quarantine": 390,
+    "rejected": 1,
+    "submitters": 3,
+    "eligible_submitters": 3,
+    "min_submitters": 3,
+    "active_snapshot": {
+      "corpus_version": "d59cbe7fe01335e278460cdbe94aaf4eb7a11ca180da88a715a5dd2232cbf911",
+      "rows": 354,
+      "submitters": 3,
+      "qualification": 189,
+      "ranking": 165,
+      "ranking_split_bps": 5000,
+      "quality_rules_version": "evalpool-quality-v1",
+      "published_at": "2026-11-22T21:44:51.664574Z",
+      "activation_epoch": 40
+    },
+    "current_epoch": 50
+  }
+}

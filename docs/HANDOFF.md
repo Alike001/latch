@@ -1945,3 +1945,75 @@ After a training PASS, next stage is:
 - Do not return to UI polish.
 - Do not claim the third submitter is eligible until `stage10:status` proves it.
 - Do not register an adapter before training + validation PASS.
+
+
+---
+
+# Stage 10 evaluator adapter — TRAINED AND VALIDATED
+
+Date: 2026-11-24
+
+The real `SENSOR_TELEMETRY_VERIFY` ModernBERT/LoRA adapter completed the
+official local model gate and Telegraph runtime validation.
+
+Training result:
+- corpus: 64 pairs;
+- train/eval split: 55/9, seed 42;
+- pairwise accuracy: **0.8889**;
+- length baseline: **0.5556**;
+- beats length baseline: **true**;
+- negative memorisation: **0.0**;
+- verdict: **PASS**.
+
+Validated training update budget:
+- gradient accumulation: **8**;
+- epochs: **6**;
+- optimizer updates: **36**;
+- learning rate, LoRA rank/alpha, base model, corpus and split seed unchanged.
+
+Exported package:
+- file: `SENSOR_TELEMETRY_VERIFY.safetensors`;
+- bytes: **6,776,916**;
+- SHA-256: `e748b650d19e648fac0854228a40df1b951f8aab474737c0087f8c4bb34ee2ce`;
+- keccak256: `0x9118b154f8995279eb5ea3008388d6ec9ecb54f2493a402878698ce10e08867d`;
+- foundation: `modernbert-base-lora16-v1`;
+- tokenizer: released Telegraph node hash
+  `67bc76f8b9386efba1a761c1c8e5ad439fd0eaf1c2826e9dd1a205c7af4dc456`.
+
+Runtime validation:
+- adapterbuild Stage 1: **PASS**;
+- foundation load: **PASS**;
+- repeat deterministic scoring: **PASS**;
+- score bits: `0x3e570bd9` on both runs.
+
+Final validated local archive:
+- `SENSOR_TELEMETRY_VERIFY-validated.zip`;
+- SHA-256:
+  `6b08b4029c30414243c89cc50a2a5e82242f34b906deb98f36ca1dd31d8d89d7`.
+
+Compatibility/tooling findings:
+- current Hugging Face and released Telegraph tokenizer files serialize
+  differently, but all 128 rendered training texts had identical token IDs;
+- evaluator-kit commit `1ed063e` has a post-PASS `pkg` NameError in the command
+  hint;
+- its offline class catalog omits the live `SENSOR_TELEMETRY_VERIFY` family;
+  adapter validation used the unchanged node parser with a temporary one-line
+  class synchronization matching the live judgment classification.
+
+Post-validation live status (`2026-11-24T15:40:26.468Z`):
+- Evaluation Pool rows eligible: **354**;
+- submitters: **3**;
+- eligible submitters: **3**;
+- live minimum submitters: **3**;
+- active snapshot submitters: **3**;
+- activation epoch: **40**;
+- current epoch: **50**;
+- scorer remains `GENERIC` / `generic_fallback: true`.
+
+This proves Latch's previously admitted 40-row contribution entered the active
+eligible snapshot. Do not claim adapter registration or canonical promotion yet.
+
+Exact next step:
+**Inspect the live adapter competition/registration route and immutable package
+hosting requirements, then present the exact on-chain action, wallet/fee and
+hidden-evaluation implications before requesting user confirmation to proceed.**
