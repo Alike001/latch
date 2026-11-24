@@ -2017,3 +2017,79 @@ Exact next step:
 **Inspect the live adapter competition/registration route and immutable package
 hosting requirements, then present the exact on-chain action, wallet/fee and
 hidden-evaluation implications before requesting user confirmation to proceed.**
+
+
+---
+
+# Stage 10 registration-readiness checkpoint — FREE LOCAL RUNNER SELECTED
+
+Date: 2026-11-24
+
+The current live adapter route was inspected against the official adapter kit,
+current Telegraph documentation, the live node, and the Sepolia Diamond.
+
+Three-track state:
+- Apps & Agents: **functional path complete** — live paid recovery and receipt
+  evidence already exist;
+- Miners / Providers: **complete and live** — miner `7317701`
+  (`latch-telemetry`) is healthy and compatible for
+  `SENSOR_TELEMETRY_VERIFY_GENERAL`;
+- Evaluators: training, export, runtime validation, and Evaluation Pool
+  activation are complete; public runner, registration, and hidden competition
+  remain.
+
+Registration target:
+- family/prefix: `SENSOR_TELEMETRY_VERIFY`;
+- class: `judgment`;
+- current family champion: none;
+- current resolved scorer: `GENERIC` fallback;
+- package keccak256:
+  `0x9118b154f8995279eb5ea3008388d6ec9ecb54f2493a402878698ce10e08867d`.
+
+Live Sepolia state observed on 2026-11-24:
+- Diamond: `0x72a70e949362670Bf8bceAd24eFC5b8f950aa08b`;
+- test USDC: `0xcc194e1a843B658526D0D5C431f670028582Ae17`;
+- `machinaToken()`: zero address;
+- live adapter bond from `entityBonds()`: `100000` test-USDC base units
+  (`$0.10`), despite a stale `$5` example in current documentation.
+
+Re-read every value immediately before registration. No wallet transaction has
+been sent and no adapter has been registered.
+
+Hosting decision:
+- use the official `adapterexec` locally;
+- expose it through the user's existing free ngrok account and stable dev
+  domain;
+- host the package separately at an immutable, commit-pinned public URL;
+- keep the laptop awake and online until the candidate becomes `active` or
+  `rejected`.
+
+The free ngrok route was smoke-tested with a validator-like Go HTTP user agent;
+the request reached the local origin rather than the browser interstitial.
+
+After an adapter becomes active, normal scoring runs on the validators' locally
+loaded foundation and package, not through the author's laptop. The immutable
+package URL should remain available, and the project must not promise that the
+network can never request future revalidation. Temporary local hosting is
+therefore acceptable for the competition window, not the preferred long-term
+production posture.
+
+Local runner assets:
+- package extracted to
+  `/home/ali/.local/share/latch-evaluator/package/SENSOR_TELEMETRY_VERIFY.safetensors`;
+- package SHA-256 verified as
+  `e748b650d19e648fac0854228a40df1b951f8aab474737c0087f8c4bb34ee2ce`;
+- foundation ONNX download is resumable but incomplete at
+  `/home/ali/.local/share/latch-evaluator/foundation/foundation_lora_fp32.onnx`;
+- expected ONNX size: `599117769` bytes;
+- expected ONNX SHA-256:
+  `0a49b325304bb4cf292e683929689d0457966be264f60bfc94d0072b614bf8e6`.
+
+Compact resume artifact:
+`.thoughts/handoffs/2026-11-24-stage10-evaluator-registration.md`
+
+Exact next task:
+**Finish and verify the official foundation download, start the pinned local
+`adapterexec`, expose it through ngrok, and pass a public batch preflight. Do
+not register until that preflight passes and the user explicitly confirms the
+final wallet transactions.**
