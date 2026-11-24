@@ -2093,3 +2093,50 @@ Exact next task:
 `adapterexec`, expose it through ngrok, and pass a public batch preflight. Do
 not register until that preflight passes and the user explicitly confirms the
 final wallet transactions.**
+
+---
+
+# Stage 10 evaluator registration submitted — PENDING NETWORK ACTIVATION
+
+Date: 2026-11-24
+
+The official foundation and engine downloads completed and independently
+matched their published SHA-256 hashes. The pinned `adapterexec` loaded the
+Latch package with the expected foundation, adapter, and tokenizer identities.
+The prepared two-item batch passed twice locally and twice through the public
+ngrok HTTPS runner with byte-identical responses and score bits `0x3e570bd9`.
+
+After explicit user confirmation, the dedicated Latch Sepolia wallet approved
+exactly `100000` test-USDC base units and registered the adapter:
+
+- registration ID: `235`;
+- intent prefix: `SENSOR_TELEMETRY_VERIFY`;
+- package keccak256:
+  `0x9118b154f8995279eb5ea3008388d6ec9ecb54f2493a402878698ce10e08867d`;
+- approval transaction:
+  `0x06480f016b5b266f8fb80857516758de4aa9b26e9360d545de4302ab910ed6fb`;
+- registration transaction:
+  `0x69c0f7b7d7e94633addb88e74e1fd3b7089e2dad674ba15f9b363d05acdbfe0d`;
+- registration block: `12204737`;
+- bond pulled: `100000` base units (`0.10` test USDC);
+- post-registration wallet test-USDC balance: `800000` base units;
+- post-registration allowance: `0`.
+
+Current activation state at the checkpoint: the transaction is confirmed
+on-chain, but the dev node's `/api/wasm` index has not yet exposed registration
+`235`. No validator batch has reached the runner and no rejection is present.
+The network reports the next three-hour epoch at
+`2026-11-24T22:25:29Z`; the official pipeline may wait for that confirmed epoch
+before the remote check.
+
+The laptop currently runs four transient user services:
+
+- `latch-adapterexec.service` — official evaluator executor;
+- `latch-ngrok.service` — public TLS tunnel;
+- `latch-evaluator-monitor.service` — polls registration `235` once per minute;
+- `latch-evaluator-awake.service` — blocks idle sleep during validation.
+
+Keep the laptop powered, online, and awake until registration `235` becomes
+`active` or `rejected`. Do not claim canonical evaluator activation while it is
+pending. Once terminal, preserve the node status, score/rejection reason, and
+runner logs, then update `npm run stage10:status`.

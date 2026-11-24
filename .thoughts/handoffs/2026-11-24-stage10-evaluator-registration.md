@@ -123,3 +123,18 @@ or re-uploading the 40 Evaluation Pool rows.
 ## Resume Prompt
 
 Continue Latch from `docs/HANDOFF.md` and `.thoughts/handoffs/2026-11-24-stage10-evaluator-registration.md`. Mission 11 Route 2 and the three-track strategy are locked. The Provider and paid recovery paths are complete; the telemetry adapter is trained and runtime-validated but not registered. Resume with the free local `adapterexec` + ngrok path by finishing and verifying the official foundation download. Do not re-upload the 40 rows, expose wallet secrets, register before public batch preflight, or touch the unrelated dirty worktree files.
+
+## Registration Submitted Update
+
+Registration `235` was submitted successfully on 2026-11-24 after local and
+public batch preflights passed twice. Approval transaction:
+`0x06480f016b5b266f8fb80857516758de4aa9b26e9360d545de4302ab910ed6fb`.
+Registration transaction:
+`0x69c0f7b7d7e94633addb88e74e1fd3b7089e2dad674ba15f9b363d05acdbfe0d`.
+The exact `100000`-unit bond was pulled and allowance returned to zero.
+
+At the last check, `/api/wasm` had not indexed registration `235`; there was no
+validator request or rejection yet. The adapter executor, ngrok tunnel,
+one-minute monitor, and sleep inhibitor are active as user services. Next epoch:
+`2026-11-24T22:25:29Z`. Keep the laptop online and monitor until `active` or
+`rejected`; do not submit another registration.
