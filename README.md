@@ -49,6 +49,14 @@ Latch does **not** replace collision avoidance, emergency stop, certified functi
 
 ## Try Latch safely
 
+Public reviewer preview: **[latch-control-room.onrender.com](https://latch-control-room.onrender.com)**
+
+The preview runs on Render's free tier. It sleeps after 15 minutes without
+inbound traffic and can take about one minute to wake on the next request.
+Because preview sessions are held in memory, a sleep, restart, or redeploy
+resets the current browser scenario. This deployment is for reproducible
+review and does not enable live Telegraph spending or contain wallet secrets.
+
 Independent developers can run the complete failure lab without a wallet,
 private key, API key, or testnet funds:
 
