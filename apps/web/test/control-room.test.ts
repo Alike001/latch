@@ -149,4 +149,64 @@ describe("Stage 9 control-room HTTP surface", () => {
       await running.close();
     }
   });
+
+  it("isolates public control-room state by browser session", async () => {
+    const running = await startControlRoomServer({
+      host: "127.0.0.1",
+      port: 0,
+      runtimeFactory: () => new ControlRoomRuntime({ now: fixedNow }),
+    });
+
+    try {
+      const base = `http://127.0.0.1:${running.port}`;
+      const firstState = await fetch(base + "/api/state");
+      const cookie = firstState.headers.get("set-cookie");
+
+      expect(cookie).toContain("latch_session=");
+      expect(cookie).toContain("HttpOnly");
+      expect(cookie).toContain("SameSite=Lax");
+
+      const firstFault = await fetch(base + "/api/fault", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: cookie?.split(";")[0] ?? "",
+        },
+        body: JSON.stringify({ fault: "disconnect" }),
+      });
+      const firstFaultState = await firstFault.json();
+
+      expect(firstFaultState.telemetry.status).toBe("unavailable");
+
+      const secondState = await fetch(base + "/api/state");
+      const secondBody = await secondState.json();
+
+      expect(secondState.headers.get("set-cookie")).toContain(
+        "latch_session=",
+      );
+      expect(secondBody.telemetry.status).toBe("healthy");
+      expect(secondBody.task.state).toBe("RUNNING");
+    } finally {
+      await running.close();
+    }
+  });
+
+  it("marks new public session cookies secure behind HTTPS", async () => {
+    const running = await startControlRoomServer({
+      host: "127.0.0.1",
+      port: 0,
+      runtimeFactory: () => new ControlRoomRuntime({ now: fixedNow }),
+    });
+
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:${running.port}/api/state`,
+        { headers: { "X-Forwarded-Proto": "https" } },
+      );
+
+      expect(response.headers.get("set-cookie")).toContain("Secure");
+    } finally {
+      await running.close();
+    }
+  });
 });

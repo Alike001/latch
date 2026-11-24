@@ -1,4 +1,5 @@
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
+import { randomUUID } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
@@ -62,22 +63,131 @@ export interface ControlRoomServerOptions {
   port?: number;
   liveTelegraphEnabled?: boolean;
   runtime?: ControlRoomRuntime;
+  runtimeFactory?: () => ControlRoomRuntime;
+  maxSessions?: number;
+  sessionTtlMs?: number;
+}
+
+const SESSION_COOKIE = "latch_session";
+const DEFAULT_MAX_SESSIONS = 256;
+const DEFAULT_SESSION_TTL_MS = 24 * 60 * 60 * 1000;
+
+interface RuntimeSession {
+  runtime: ControlRoomRuntime;
+  lastSeenAt: number;
+}
+
+function cookieValue(request: IncomingMessage, name: string): string | null {
+  const header = request.headers.cookie;
+
+  if (!header) {
+    return null;
+  }
+
+  for (const item of header.split(";")) {
+    const separator = item.indexOf("=");
+
+    if (separator === -1) {
+      continue;
+    }
+
+    const key = item.slice(0, separator).trim();
+
+    if (key === name) {
+      return item.slice(separator + 1).trim();
+    }
+  }
+
+  return null;
+}
+
+class ControlRoomSessions {
+  private readonly sessions = new Map<string, RuntimeSession>();
+
+  constructor(
+    private readonly createRuntime: () => ControlRoomRuntime,
+    private readonly fixedRuntime: ControlRoomRuntime | undefined,
+    private readonly maxSessions: number,
+    private readonly sessionTtlMs: number,
+  ) {}
+
+  forRequest(
+    request: IncomingMessage,
+    response: ServerResponse,
+  ): ControlRoomRuntime {
+    if (this.fixedRuntime) {
+      return this.fixedRuntime;
+    }
+
+    const now = Date.now();
+    this.prune(now);
+
+    const existingId = cookieValue(request, SESSION_COOKIE);
+    const existing = existingId ? this.sessions.get(existingId) : undefined;
+
+    if (existing) {
+      existing.lastSeenAt = now;
+      return existing.runtime;
+    }
+
+    if (this.sessions.size >= this.maxSessions) {
+      const oldest = [...this.sessions.entries()].sort(
+        ([, left], [, right]) => left.lastSeenAt - right.lastSeenAt,
+      )[0];
+
+      if (oldest) {
+        this.sessions.delete(oldest[0]);
+      }
+    }
+
+    const id = randomUUID();
+    const runtime = this.createRuntime();
+    this.sessions.set(id, { runtime, lastSeenAt: now });
+
+    const forwardedProtocol = request.headers["x-forwarded-proto"];
+    const secure = Array.isArray(forwardedProtocol)
+      ? forwardedProtocol.includes("https")
+      : forwardedProtocol === "https";
+    const maxAgeSeconds = Math.max(1, Math.floor(this.sessionTtlMs / 1000));
+    response.setHeader(
+      "Set-Cookie",
+      `${SESSION_COOKIE}=${id}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${maxAgeSeconds}${secure ? "; Secure" : ""}`,
+    );
+
+    return runtime;
+  }
+
+  private prune(now: number): void {
+    for (const [id, session] of this.sessions) {
+      if (now - session.lastSeenAt >= this.sessionTtlMs) {
+        this.sessions.delete(id);
+      }
+    }
+  }
 }
 
 export async function startControlRoomServer(
   options: ControlRoomServerOptions = {},
 ) {
-  const runtime =
-    options.runtime ??
-    new ControlRoomRuntime({
-      liveTelegraphEnabled: options.liveTelegraphEnabled ?? false,
-    });
+  const sessions = new ControlRoomSessions(
+    options.runtimeFactory ??
+      (() =>
+        new ControlRoomRuntime({
+          liveTelegraphEnabled: options.liveTelegraphEnabled ?? false,
+        })),
+    options.runtime,
+    options.maxSessions ?? DEFAULT_MAX_SESSIONS,
+    options.sessionTtlMs ?? DEFAULT_SESSION_TTL_MS,
+  );
 
   const server = createServer(async (request, response) => {
     const url = new URL(
       request.url ?? "/",
       `http://${request.headers.host ?? "localhost"}`,
     );
+    let requestRuntime: ControlRoomRuntime | undefined;
+    const runtime = () =>
+      (requestRuntime ??= sessions.forRequest(request, response));
 
     try {
       if (request.method === "GET" && url.pathname === "/") {
@@ -113,7 +223,7 @@ export async function startControlRoomServer(
       }
 
       if (request.method === "GET" && url.pathname === "/api/state") {
-        return json(response, 200, runtime.state());
+        return json(response, 200, runtime().state());
       }
 
       if (request.method === "POST" && url.pathname === "/api/fault") {
@@ -133,7 +243,7 @@ export async function startControlRoomServer(
           return json(response, 400, { error: "unknown_fault" });
         }
 
-        return json(response, 200, runtime.injectFault(fault));
+        return json(response, 200, runtime().injectFault(fault));
       }
 
       if (request.method === "POST" && url.pathname === "/api/spend") {
@@ -146,7 +256,7 @@ export async function startControlRoomServer(
         return json(
           response,
           200,
-          runtime.setSpendAuthorized(body.authorized),
+          runtime().setSpendAuthorized(body.authorized),
         );
       }
 
@@ -160,11 +270,11 @@ export async function startControlRoomServer(
           });
         }
 
-        return json(response, 200, await runtime.recover(mode));
+        return json(response, 200, await runtime().recover(mode));
       }
 
       if (request.method === "POST" && url.pathname === "/api/reset") {
-        return json(response, 200, runtime.resetSession());
+        return json(response, 200, runtime().resetSession());
       }
 
       return json(response, 404, { error: "not_found" });
@@ -193,7 +303,7 @@ export async function startControlRoomServer(
   return {
     host,
     port: address.port,
-    runtime,
+    runtime: options.runtime ?? null,
     close: () =>
       new Promise<void>((resolve, reject) => {
         server.close((error) => (error ? reject(error) : resolve()));

@@ -70,6 +70,11 @@ The initial state should show:
 - spending: authorized;
 - real session spend: zero.
 
+Each browser receives an isolated in-memory control-room session. One tester's
+faults, spend revocation, attempts, and reset do not mutate another tester's
+session. Sessions expire automatically and do not persist across server
+restarts.
+
 The historical Telegraph receipt is preserved proof from an earlier paid
 testnet recovery. It is not a receipt created by this simulation session.
 
