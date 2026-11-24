@@ -1,0 +1,83 @@
+name: Independent test report
+description: Report an independent reproduction of Latch's safe recovery workflow
+title: "[Independent test]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for independently testing Latch. Honest failures and unexpected results are useful. Do not include private keys, wallet secrets, API keys, customer data, or protected evaluation material.
+
+  - type: textarea
+    id: relationship
+    attributes:
+      label: Relationship to Latch
+      description: State whether you are independent, a collaborator, or otherwise connected to the project.
+      placeholder: I am not part of the Latch project. I found it through...
+    validations:
+      required: true
+
+  - type: input
+    id: commit
+    attributes:
+      label: Tested commit
+      description: Paste the output of git rev-parse HEAD.
+      placeholder: 40-character Git commit
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Include operating system, Node.js version, npm version, and browser.
+      placeholder: Ubuntu 24.04; Node.js 24.x; npm 11.x; Firefox...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: verification
+    attributes:
+      label: Verification gate
+      description: Did npm run verify:independent complete successfully?
+      options:
+        - Passed
+        - Failed
+        - Not run
+    validations:
+      required: true
+
+  - type: textarea
+    id: scenarios
+    attributes:
+      label: Scenario results
+      description: Report each scenario attempted and its observed decision, attempts, and spend.
+      placeholder: |
+        Missing telemetry: PASS — REBUY then CONTINUE, 1 attempt, 0 uUSDC
+        Provider outage: PASS — HOLD, 2 attempts, 0 uUSDC
+        Revoked spending: FAIL — expected..., observed...
+    validations:
+      required: true
+
+  - type: textarea
+    id: unexpected
+    attributes:
+      label: Unexpected behavior or usability problems
+      description: Include exact reproduction steps. A clean run may be reported as "None observed."
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Public-safe evidence
+      description: Add screenshots, logs, or links that contain no secrets or protected material.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety confirmation
+      options:
+        - label: I used simulation mode and did not include secrets or protected evaluation material in this report.
+          required: true

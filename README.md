@@ -47,6 +47,23 @@ Each track must independently meet Telegraph's requirements. We will not add com
 
 Latch does **not** replace collision avoidance, emergency stop, certified functional safety, or other local machine-safety systems. Telegraph intelligence is used for operational task continuation and recovery.
 
+## Try Latch safely
+
+Independent developers can run the complete failure lab without a wallet,
+private key, API key, or testnet funds:
+
+```bash
+npm install
+npm run verify:independent
+npm run start:web
+```
+
+Open `http://127.0.0.1:4173/control-room`. The default mode cannot spend real
+or testnet funds and never fabricates a Telegraph receipt. Follow the
+[independent testing guide](docs/INDEPENDENT_TESTING.md) to reproduce missing,
+stale, wrong-unit, corrupted-integrity, Provider-outage, and revoked-spend
+scenarios, then submit an **Independent test report** through GitHub Issues.
+
 ## Continuity
 
 **AI agents and future chats must read `AGENTS.md` first, then `docs/HANDOFF.md` before changing scope or implementation.**

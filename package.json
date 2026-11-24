@@ -11,6 +11,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "validate:fixtures": "tsx scripts/validate-fixtures.ts",
+    "verify:independent": "npm run typecheck && npm test && npm run validate:fixtures",
     "start:provider": "tsx services/provider-api/src/server.ts",
     "start:web": "tsx apps/web/src/server.ts",
     "validate:miner": "node scripts/validate-stage5-readiness.mjs miner/latch-telemetry.yaml",
