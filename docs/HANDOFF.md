@@ -39,6 +39,10 @@ Do not restart idea selection. Continue from the documented stopping point.
 - Exact next submission action: deploy the verified Instrument Panel UI, obtain
   one genuine independent test report, then record the 2–5 minute demo. Do not
   begin ACP work until the numeric use case and unclaimed status are confirmed.
+- The Instrument Panel UI is now deployed, CI passed, and public smoke tests
+  passed. The independent-tester invitation is GitHub issue `#17`; the timed
+  recording script is `docs/DEMO_RECORDING_SCRIPT.md`; current official-form
+  readiness is tracked in `docs/SUBMISSION_READINESS.md`.
 
 ## Builder rule
 
