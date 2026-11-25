@@ -2466,3 +2466,41 @@ on-chain argument checks. The fork was stopped afterward.
 No live approval or registration transaction was sent; live allowance remains
 zero. The next action requires explicit user approval for the exact live
 test-USDC approval and `registerWasm` transactions.
+
+## Evaluator registration 243 — SUBMITTED, AWAITING NODE INDEXING
+
+After explicit user approval, the live preconditions were checked again: the
+owner matched the local protected wallet, the adapter bond remained `100000`,
+the allowance was zero, and the v2 Codespace executor and ngrok tunnel were
+healthy.
+
+The exact `100000`-unit test-USDC approval succeeded:
+
+- transaction: `0x8ce75d6cf470c0c9629f867c0112b170d15ad0cb19ad8dda8708521c7ebc4858`;
+- block: `12208871`;
+- gas used: `127802`.
+
+With that live allowance, the exact `registerWasm` dry call returned `243`.
+The identical call was then submitted successfully:
+
+- registration ID: `243`;
+- transaction: `0xd3af1fde4ed882b12a4182ccc47d04609d4eb4ae0b04d8f2b8d041ee50853931`;
+- block: `12208876`;
+- gas used: `2326258`;
+- package Keccak-256:
+  `0xe5e1a494f59653f008348e61cc3513812b17fa5bf1dd10643bc222321b277bec`;
+- bond transferred: `100000` test-USDC base units;
+- post-registration wallet balance: `700000`;
+- post-registration allowance: `0`.
+
+The receipt's `WasmRegistered` event records ID `243`, the evaluator owner,
+`SENSOR_TELEMETRY_VERIFY`, the immutable v2 package URL, the stable ngrok
+runnable URL and the expected package hash. At this checkpoint the Telegraph
+node has not yet indexed ID `243`; this is the normal immediate post-confirmation
+state. The v2 executor and tunnel remain online.
+
+Exact next step:
+**Keep the Codespace awake and monitor registration `243` through node indexing,
+remote batch validation, package download, Stage 1 and hidden competition.
+Preserve every state transition and do not submit another registration or
+upload Evaluation Pool rows.**
