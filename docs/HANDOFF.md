@@ -2236,3 +2236,57 @@ actual evaluator owner, preserve the transaction and indexed `deregistered`
 state, and read the released-bond amount/unlock time. Before any fresh
 registration, expose the Codespace executor through public HTTPS and repeat the
 30-item preflight over that public route.**
+
+---
+
+# Stage 10 registration 235 — DEREGISTERED, BOND RELEASED
+
+Date: 2026-11-25
+
+The existing evaluator owner credential was recovered from the user's local
+wallet backup and verified against the on-chain registration owner without
+printing or relocating the private key. Its local backup already had `0600`
+permissions.
+
+After explicit user authorization, the evaluator owner sent exactly one
+recovery transaction:
+
+- call: `deregisterEntity(uint256,uint8)(235, 2)`;
+- transaction:
+  `0xbb8207ffb3fa94f9a41ee76580f91dd2baa9c29b6359efb9834cafe59563fc87`;
+- block: `12208175`;
+- status: success;
+- gas used: `377389`.
+
+The Diamond immediately reported:
+
+- released bond: `100000` test-USDC base units (`0.10`);
+- unlock timestamp: `2026-11-27T07:44:48Z`;
+- wallet test-USDC balance before withdrawal: `800000` base units.
+
+The Telegraph node indexed the transaction at `2026-11-25T07:55:15Z`:
+
+- registration ID: `235`;
+- activation status: `deregistered`;
+- stage: `deactivated`;
+- champion: false;
+- score: none.
+
+The exact package hash slot is now freed under the documented registration
+rules. No withdrawal, token approval, package mutation, Evaluation Pool upload
+or re-registration occurred.
+
+Post-recovery live Stage 10 status:
+
+- scorer: `GENERIC` fallback;
+- canonical telemetry evaluator: none;
+- eligible Evaluation Pool rows: `354`;
+- eligible submitters: `3` (minimum `3`);
+- current epoch: `53`.
+
+Exact next step:
+**Expose the verified 4-core/16-GB Codespace executor through public HTTPS,
+repeat the exact 30-item preflight over that public route, and prove the
+Codespace can remain awake throughout validation. Do not re-register until the
+public preflight passes and the user explicitly confirms the fresh approval and
+registration transactions.**

@@ -190,3 +190,51 @@ Exact next gate:
 node indexes `deregistered`, verify the released bond amount and unlock time.
 Do not re-register until the bond state is preserved and the Codespace executor
 has also passed a public HTTPS preflight.**
+
+## Bond Recovery Completed
+
+Date: 2026-11-25
+
+The evaluator owner credential was recovered from the user's existing local
+wallet backup, verified in memory against
+`0x95dc03c1f3937341aea4943fc5376085fdffbeba`, and confirmed to already have
+owner-only file permissions (`0600`). The key was never printed, copied into
+the repository, added to shell history, or sent to the Codespace.
+
+After explicit user authorization, registration `235` was deregistered:
+
+- function: `deregisterEntity(uint256,uint8)(235, 2)`;
+- transaction:
+  `0xbb8207ffb3fa94f9a41ee76580f91dd2baa9c29b6359efb9834cafe59563fc87`;
+- block: `12208175`;
+- receipt status: success;
+- gas used: `377389`;
+- confirmations waited: 2.
+
+Live post-transaction state:
+
+- released bond: `100000` test-USDC base units (`0.10` test USDC);
+- unlock timestamp: `1795765488` = `2026-11-27T07:44:48Z`
+  (`2026-11-27T08:44:48+01:00` Lagos);
+- wallet test-USDC remains `800000` base units until withdrawal;
+- node indexed registration `235` at `2026-11-25T07:55:15Z` as
+  `activation_status: deregistered`, `stage: deactivated`;
+- no approval, withdrawal, package mutation or re-registration was sent.
+
+Post-recovery `npm run stage10:status` at `2026-11-25T07:55:45.115Z`:
+
+- intent class: `judgment`;
+- canonical: `null`;
+- scorer: `GENERIC`, `generic_fallback: true`;
+- eligible rows: `354`;
+- eligible submitters: `3` of required `3`;
+- active snapshot remains activation epoch `40`;
+- current epoch: `53`.
+
+Exact next gate:
+
+**Run the verified Codespace executor through a public HTTPS Codespaces port,
+repeat the 30-item benchmark over that public route, and prove the Codespace
+will remain awake through the validation window. Only then re-read bond,
+allowance, balance and live registration rules and request explicit approval
+for a fresh registration using the now-freed exact package hash.**
