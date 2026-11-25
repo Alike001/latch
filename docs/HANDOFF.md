@@ -2504,3 +2504,59 @@ Exact next step:
 remote batch validation, package download, Stage 1 and hidden competition.
 Preserve every state transition and do not submit another registration or
 upload Evaluation Pool rows.**
+
+---
+
+# Stage 10 registration 243 — REJECTED AT PUBLIC QUALITY GATE
+
+Date: 2026-11-25
+
+Epoch `55` supplied the first confirmed post-registration seed. The public
+runner accepted and completed the exact validator batch:
+
+- 30 texts / 15 preference pairs;
+- HTTP `200`;
+- elapsed: **3m49.935s**;
+- correct foundation, tokenizer and v2 adapter identities;
+- zero transport, ordering or scoring errors.
+
+The adapter ordered only **9/15 pairs correctly (60%)**, below the required
+`70%`, so registration `243` was rejected before package download and hidden
+competition. This is the first real network quality result for the adapter;
+registration `235` never reached this gate because its laptop runner missed the
+batch deadline.
+
+Post-rejection research ruled out the Codespace, ngrok, timeout, package hash,
+identity echo, response ordering, tokenizer and v2 provenance metadata. The
+failure is semantic generalization:
+
+- local validation was `8/9` on a random split of the same templated 64-row
+  file, with no separate validation or test file;
+- the training corpus used eight scenarios and one simple five-field JSON
+  answer shape;
+- none of the exact 40 uploaded rows remained unchanged in the final training
+  corpus (`35` had changed answers and `5` prompts were absent);
+- the live batch included richer USGS, NOAA and signed-printer evidence plus
+  only two exact Latch-uploaded rows;
+- failed cases included physical plausibility, below-target thermal-band logic,
+  a non-numeric value and an unknown unit.
+
+Miner/Provider status was checked separately and remains healthy:
+
+- on-chain registration ID: `6159`;
+- Engine provider ID: `7317701`;
+- activation: `active`, no rejection or retry;
+- direct `/health` and `/telemetry`: HTTP `200` with fresh canonical telemetry;
+- pinned Engine route: HTTP `402` with the expected `$0.01` payment offers;
+- no new paid request was made.
+
+The remaining work is saved in:
+
+- `.thoughts/plans/2026-11-25-latch-completion.md`;
+- `.thoughts/handoffs/2026-11-25-evaluator-rejection-recovery.md`.
+
+Exact next step:
+**Preserve the remaining runner evidence, inspect registrations `235` and `243`
+for safe bond recovery, and present any wallet transactions for explicit user
+approval. Then lock the working Apps and Miner submissions before deciding
+whether the one gated Evaluator recovery attempt has enough time and data.**
