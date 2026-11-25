@@ -2185,3 +2185,54 @@ deregistration transaction until the official duplicate-hash and bond-recovery
 path is re-checked. Before any retry, solve the remote batch deadline with a
 runner that can reliably finish the same 30-item batch well below five minutes,
 then repeat local and public preflight.
+
+---
+
+# Stage 10 Codespaces recovery — LOCAL BENCHMARK PASS
+
+Date: 2026-11-25
+
+The GitHub Codespace `congenial-memory-69wj5g6vp4jq345jx` was changed from the
+default 2-core/8-GB machine to `standardLinux32gb` (4 cores, 16 GB RAM, 32 GB
+storage). The VM itself reported 4 CPUs and 15 GiB usable RAM. No repository
+file was changed in the Codespace; the official executor and verified public
+artifacts were staged under `/home/codespace/.local/share/latch-evaluator`.
+
+The official `adapterexec` was built from pinned adapter-kit commit
+`1ed063e2f0066cfaf0e124d66ec6a17b7a6121fd`. Foundation, engine and adapter
+hashes all matched the recorded release/package hashes.
+
+A 30-item benchmark used the exact token-length sequence observed in the three
+failed validator requests. Its synthetic public token content preserves the
+deadline-critical compute shape without attempting to recover hidden material.
+
+- run 1: **219.120 seconds**, 30/30 results, zero errors;
+- run 2: **214.875 seconds**, 30/30 results, zero errors;
+- identity echoes matched on both runs;
+- run 2 score bits exactly matched run 1;
+- worst margin below five minutes: **80.880 seconds**;
+- both runs passed the preferred under-four-minute gate.
+
+Recovery research against current official Telegraph docs and the live Sepolia
+Diamond established:
+
+- registration `235` belongs to evaluator address
+  `0x95dc03c1f3937341aea4943fc5376085fdffbeba`;
+- current adapter bond: `100000` test-USDC base units;
+- deregistration call: `deregisterEntity(uint256,uint8)(235, 2)`;
+- a read-only call simulation from the actual owner succeeds;
+- deregistration releases the full bond, withdrawable after the two-day delay
+  with `withdrawMinerBond()`;
+- deregistration frees the slot, so the exact same adapter binary/hash may be
+  registered again later with a new registration ID.
+
+No wallet transaction was sent. Registration `235` is still `rejected`, the
+owner's allowance is still zero, and the 40 Evaluation Pool rows were not
+re-uploaded.
+
+Exact next step:
+**After explicit user confirmation, deregister registration `235` from its
+actual evaluator owner, preserve the transaction and indexed `deregistered`
+state, and read the released-bond amount/unlock time. Before any fresh
+registration, expose the Codespace executor through public HTTPS and repeat the
+30-item preflight over that public route.**

@@ -126,3 +126,67 @@ bond, and only then prepare a valid retry for
 ## Resume Prompt
 
 Continue Latch from `AGENTS.md`, `docs/HANDOFF.md`, and `.thoughts/handoffs/2026-11-25-evaluator-codespaces-recovery.md`. Mission 11 Route 2 and the three-track strategy are locked. Registration `235` was rejected only because the awake laptop took about five minutes for the validator's 30-item batch; do not re-upload Evaluation Pool rows or re-register yet. The user has opened a free GitHub Codespace for `Alike001/latch`. First verify/change its machine type to at least four cores/16 GB, then investigate the official bond-recovery and duplicate-hash route, benchmark the pinned official adapter executor with a realistic 30-item workload, and preserve all wallet secrets. Do not touch the unrelated dirty worktree paths.
+
+## Codespaces Recovery Checkpoint
+
+Date: 2026-11-25
+
+Codespace compute:
+
+- codespace: `congenial-memory-69wj5g6vp4jq345jx`;
+- original machine: `basicLinux32gb` (2 cores, 8 GB RAM, 32 GB storage);
+- changed machine: `standardLinux32gb` (4 cores, 16 GB RAM, 32 GB storage);
+- verified inside the VM: 4 CPUs and 15 GiB usable RAM;
+- repository checkout was not modified; the pre-existing untracked
+  `package-lock.json` was left untouched;
+- executor assets live only under
+  `/home/codespace/.local/share/latch-evaluator`.
+
+Pinned runtime verification:
+
+- official adapter kit commit:
+  `1ed063e2f0066cfaf0e124d66ec6a17b7a6121fd`;
+- foundation SHA-256: verified;
+- engine SHA-256: verified;
+- adapter SHA-256: verified;
+- executor loaded the expected foundation, adapter and tokenizer identities.
+
+Validator-shaped benchmark:
+
+- batch size: 30 items;
+- token lengths used the exact observed validator profile, in order:
+  `219, 219, 182, 176, 201, 199, 195, 191, 205, 200, 213, 218,
+  201, 201, 198, 198, 177, 171, 180, 185, 214, 214, 227, 227, 195,
+  175, 214, 214, 224, 224`;
+- token content was synthetic public text, not reconstructed hidden material;
+- run 1: **219.120 s**, 30/30 results, zero errors, identities matched;
+- run 2: **214.875 s**, 30/30 results, zero errors, identities matched;
+- run 2 score bits were byte-for-byte identical to run 1;
+- worst observed margin below the five-minute deadline: **80.880 s**;
+- both runs passed the preferred under-four-minute gate.
+
+Official/live recovery findings:
+
+- registration `235` is owned by evaluator address
+  `0x95dc03c1f3937341aea4943fc5376085fdffbeba`;
+- the older test wallet in the general handoff is not the registration owner;
+- live `entityBonds()` still reports an adapter bond of `100000` test-USDC
+  base units;
+- the owner currently has `800000` test-USDC base units, allowance `0`, and
+  `releasedMinerBond(owner) = (0, 0)` before deregistration;
+- official docs specify `deregisterEntity(registrationId, 2)` for a scoring
+  module, followed after the two-day unlock by `withdrawMinerBond()`;
+- a read-only `eth_call` simulation of
+  `deregisterEntity(uint256,uint8)(235, 2)` from the actual owner succeeded;
+- official docs explicitly state that deregistration frees the package slot and
+  permits the exact same binary/hash to be registered again under a fresh ID;
+- registration `235` remains `rejected`; no deregistration, withdrawal,
+  approval or re-registration transaction was sent.
+
+Exact next gate:
+
+**Obtain explicit user confirmation before sending
+`deregisterEntity(uint256,uint8)(235, 2)` from the evaluator owner. After the
+node indexes `deregistered`, verify the released bond amount and unlock time.
+Do not re-register until the bond state is preserved and the Codespace executor
+has also passed a public HTTPS preflight.**
