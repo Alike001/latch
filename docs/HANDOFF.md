@@ -2341,3 +2341,53 @@ Exact next step:
 current epoch. If they remain valid, present the exact fresh approval and
 registration calls for explicit user confirmation. Keep the proven Codespace
 runner online throughout seed-epoch selection and remote validation.**
+
+---
+
+# Stage 10 exact-hash retry blocked — ALLOWANCE REVOKED
+
+Date: 2026-11-25
+
+After explicit user authorization, the evaluator owner approved exactly
+`100000` test-USDC base units for a fresh registration:
+
+- approval transaction:
+  `0x0656696dbab583f13f30cc25040297bcb84b8d92805118b9f105601bdd75b879`;
+- block: `12208514`;
+- status: success;
+- gas used: `127802`.
+
+Before broadcasting `registerWasm`, the exact call was simulated against the
+live Diamond. It reverted with:
+
+`IntentRegistryFacet: duplicate wasm hash`
+
+No registration transaction was sent and no new bond was taken. This live
+contract result contradicts the current official documentation statement that
+deregistering frees the exact binary/hash for registration by the same author.
+Registration `235` remains deregistered and its released `100000`-unit bond
+remains preserved for withdrawal at `2026-11-27T07:44:48Z`.
+
+The temporary token allowance was immediately removed:
+
+- revocation transaction:
+  `0xc81b81c86b0654eafb36ebd35f73fee063db28a58bd9098b592d98c429a05803`;
+- block: `12208526`;
+- status: success;
+- gas used: `23877`;
+- final allowance: `0`;
+- final wallet test-USDC balance: `800000` base units.
+
+The pinned official package parser provides a safe retry mechanism. `lora-v1`
+metadata explicitly permits ignored `x-*` extension keys. A new immutable
+package can therefore add an `x-retry-of` provenance field while preserving
+every tensor and every scoring-relevant field. This creates a fresh package
+hash without retraining or changing evaluator behavior. The resulting package
+must still pass the official parser, Stage 1, repeated bit-identical scoring,
+local 30-item benchmark and public HTTPS 30-item benchmark before registration.
+
+Exact next step:
+**Obtain explicit user approval to create a byte-distinct, behavior-identical
+package with one allowed `x-retry-of` metadata extension. Validate and host it
+immutably, update the Codespace executor to that exact package, and repeat all
+identity and public benchmark gates before requesting registration approval.**

@@ -280,3 +280,38 @@ Exact next gate:
 **Refresh all live read-only registration inputs and request explicit user
 approval before the fresh test-USDC approval and `registerWasm` transactions.
 Do not re-upload Evaluation Pool rows or alter the package hash.**
+
+## Exact-Hash Registration Preflight Blocked
+
+Date: 2026-11-25
+
+The user explicitly approved the fresh test-USDC approval and registration.
+The `100000`-unit approval succeeded in transaction
+`0x0656696dbab583f13f30cc25040297bcb84b8d92805118b9f105601bdd75b879`
+at block `12208514`.
+
+The required live `registerWasm` simulation then reverted with
+`IntentRegistryFacet: duplicate wasm hash`. No registration transaction was
+broadcast and no new bond was taken. This proves the deployed facet still
+reserves the old `(author, wasm hash)` after registration `235` was
+deregistered, despite current official documentation stating that the slot is
+freed.
+
+The temporary allowance was safely reset to zero in transaction
+`0xc81b81c86b0654eafb36ebd35f73fee063db28a58bd9098b592d98c429a05803`
+at block `12208526`. The wallet still holds `800000` test-USDC base units, and
+the previously released `100000`-unit bond remains queued for withdrawal after
+`2026-11-27T07:44:48Z`.
+
+Pinned parser research found the supported recovery route: `lora-v1`
+safetensors metadata accepts ignored keys prefixed with `x-`. Adding a single
+`x-retry-of` provenance value creates a new file/hash without changing tensors,
+model inputs, scoring fields or output bits. This must be produced as a new
+artifact, never by overwriting the validated original, and must pass the full
+official validation and public benchmark sequence before registration.
+
+Exact next gate:
+
+**Get explicit approval before creating and hosting the new immutable package.
+Do not retrain, alter tensors, re-upload Evaluation Pool rows, or send another
+token approval until the new hash passes every local and public gate.**
