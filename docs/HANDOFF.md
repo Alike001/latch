@@ -2715,12 +2715,20 @@ Read-only account checks confirmed:
 - a third truthful Mission 11 progress-update draft;
 - the remaining submission checklist.
 
-No public comment, commit, push, demo upload or H2 form submission was made in
-this checkpoint. The remaining external actions require the final public-safe
-documentation to be reviewed and authorized. A genuine independent developer
+After explicit authorization, the public-safe submission checkpoint and the
+previous nine evaluator-recovery commits were pushed to `main` at commit
+`c583f490bbb849882d0e33bd0a54f5872dc5ec1e`. GitHub CI passed. The third
+Mission 11 progress update was posted and recorded by the bounty bot:
+
+- update:
+  `https://github.com/telegraphprotocol/bounties/issues/199#issuecomment-7167840974`;
+- bot receipt:
+  `https://github.com/telegraphprotocol/bounties/issues/199#issuecomment-7167849298`.
+
+No demo upload or H2 form submission was made. A genuine independent developer
 test is still missing and must not be fabricated.
 
 Exact next step:
-**Review the submission drafts, then obtain authorization for the final
-commit/push and third public progress update. In parallel, arrange one genuine
-independent test and record the 2–5 minute demo.**
+**Arrange one genuine independent test and record the 2–5 minute demo. Then add
+the contact and permission choices and submit Apps and Miner through the H2
+website.**

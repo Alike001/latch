@@ -263,8 +263,10 @@ the go/no-go gates.
 - `docs/H2_SUBMISSION_DRAFTS.md` now contains separate Apps and Provider form
   copy, commercial answers, evidence, accurate limitations, a no-spend
   3.5-minute demo script and the final checklist.
-- Still required: authorization to commit/push the public-safe docs and post the
-  third update, one genuine independent test report, a published 2–5 minute
+- The public-safe checkpoint and accumulated recovery commits were pushed at
+  `c583f490bbb849882d0e33bd0a54f5872dc5ec1e`; GitHub CI passed.
+- The third update was posted to Mission 11 and recorded by the progress bot.
+- Still required: one genuine independent test report, a published 2–5 minute
   demo, user contact/permission choices, and the two official form submissions.
 
 ## Verification Checkpoint

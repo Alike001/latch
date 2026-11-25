@@ -269,8 +269,8 @@ Post only after reviewing the links and deciding the public/showcase wording:
 - [x] Required bounties repository star for `Alike001`
 - [x] Beginner-friendly runbook and safe public deployment
 - [x] Accurate testnet/simulation/adoption limitations
-- [ ] Commit and push the final public-safe documentation after authorization
-- [ ] Review and post the third progress update after authorization
+- [x] Commit and push the final public-safe documentation after authorization
+- [x] Review and post the third progress update after authorization
 - [ ] Obtain one genuine independent test report; do not fabricate it
 - [ ] Record and publish the 2–5 minute demo
 - [ ] Fill contact and permission fields
