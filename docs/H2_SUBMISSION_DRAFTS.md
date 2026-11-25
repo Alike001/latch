@@ -17,6 +17,7 @@ Replace bracketed placeholders before using the official form.
 - Reviewer app: `https://latch-control-room.onrender.com`
 - Provider: `https://latch-telemetry-provider.onrender.com`
 - Demo: `[DEMO_URL]`
+- Recording script: `docs/DEMO_RECORDING_SCRIPT.md`
 - Network: Ethereum Sepolia / Telegraph testnet
 - Bounties repository star: verified for `Alike001` on 2026-11-25
 - Showcase permission: `[PUBLIC_ASSET_PERMISSION]`

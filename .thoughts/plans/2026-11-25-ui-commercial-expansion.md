@@ -66,7 +66,10 @@ The rendered UI scenario matrix and desktop/mobile visual checks are recorded in
 
 ## Phase D — Submission polish
 
-Status: **in progress**.
+Status: **in progress**. The public UI is deployed and smoke-tested, the public
+independent-tester request is open as GitHub issue `#17`, and the exact timed
+recording script is in `docs/DEMO_RECORDING_SCRIPT.md`. A genuine independent
+report and uploaded demo URL are still outstanding.
 
 - Update submission drafts and demo sequence to match the new interface.
 - Preserve screenshots and verification output without overwriting prior evidence.

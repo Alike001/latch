@@ -100,3 +100,6 @@ completion plan.
 
 The Stage 11 browser scenario matrix and desktop/mobile visual evidence are in
 `evidence/stage11-ui/verification.md`.
+
+The exact 3-minute-20-second browser walkthrough, narration and recording-safety
+checklist are in `docs/DEMO_RECORDING_SCRIPT.md`.
