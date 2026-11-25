@@ -2391,3 +2391,53 @@ Exact next step:
 package with one allowed `x-retry-of` metadata extension. Validate and host it
 immutably, update the Codespace executor to that exact package, and repeat all
 identity and public benchmark gates before requesting registration approval.**
+
+---
+
+# Stage 10 retry-safe evaluator package — VALIDATED AND HOSTED
+
+Date: 2026-11-25
+
+After explicit user approval, a byte-distinct retry package was created from
+the validated v1 adapter. The only semantic addition is the parser-supported,
+scoring-ignored metadata field:
+
+`x-retry-of=keccak256:0x9118b154f8995279eb5ea3008388d6ec9ecb54f2493a402878698ce10e08867d`
+
+Every tensor byte and every scoring-relevant runtime field remains unchanged.
+The v2 package identities are:
+
+- SHA-256: `11b2709c75498ff713d0f7cce91a5a9ee493f6b23df6ffc9b6bc9124f5a93677`;
+- Keccak-256: `0xe5e1a494f59653f008348e61cc3513812b17fa5bf1dd10643bc222321b277bec`;
+- bytes: `6777004`;
+- tensor-data SHA-256: `939118c354f9b91dc36b38ce201d710b685b012cf0360ce647eada6f1963bd6f`;
+- artifact branch: `artifacts/evaluator-package-v2`;
+- immutable artifact commit: `f03e75a1144f887f898bfd2fb8e9518b995410be`.
+
+The package loaded successfully in the official `adapterexec` built from
+adapter-kit commit `1ed063e2f0066cfaf0e124d66ec6a17b7a6121fd`. A one-item comparison returned
+the same score bits as v1 (`1063466350`). The exact 30-item validator-shaped
+fixture then passed both execution paths:
+
+- Codespace-local: HTTP `200`, **229.127485 seconds**, 30/30 numeric results,
+  zero errors;
+- public ngrok HTTPS: HTTP `200`, **222.132252 seconds**, 30/30 numeric results,
+  zero errors;
+- all 30 score bits matched v1 in both runs;
+- response SHA-256 for both deterministic responses:
+  `f6fb7ced9e343b5d7262504a9813e0b6af1932cec5849152b5a6ce1bb21c3113`.
+
+The immutable GitHub raw artifact was downloaded independently inside the
+Codespace. It was exactly `6777004` bytes, matched the published SHA-256 and was
+byte-identical to the package serving the successful public benchmark. The
+4-core/16-GB Codespace executor and stable ngrok route remain on v2. No wallet
+transaction, token approval, evaluator registration or Evaluation Pool upload
+occurred during this package recovery.
+
+Exact next step:
+**Refresh the live bond, wallet balance and allowance, scorer, epoch and
+registration inputs. Simulate `registerWasm` with the new package hash and
+immutable commit-pinned URL. If the fresh hash clears the duplicate check,
+request explicit user approval for the exact test-USDC approval and evaluator
+registration transactions. Keep the Codespace executor and ngrok route awake
+through the complete validator window.**
