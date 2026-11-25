@@ -2560,3 +2560,37 @@ Exact next step:
 for safe bond recovery, and present any wallet transactions for explicit user
 approval. Then lock the working Apps and Miner submissions before deciding
 whether the one gated Evaluator recovery attempt has enough time and data.**
+
+## Registration 243 evidence preserved — RUNNER STOPPED
+
+The public qualification evidence is now preserved without committing other
+contributors' full row content:
+
+- `evidence/stage10-evaluator/registration-243-validator-summary.json`;
+- `evidence/stage10-evaluator/registration-243-adapterexec.txt`.
+
+The summary records all 30 token lengths and score bits, per-pair outcome and
+margin, request identity/input root, runtime and terminal status. The
+4-core/16-GB Codespace was then stopped, not deleted; registration `243` is
+already terminal and no longer needs a public runner.
+
+Live recovery state:
+
+- wallet test-USDC: `700000`;
+- Diamond allowance: `0`;
+- released amount from deregistered registration `235`: `100000`;
+- current unlock: `2026-11-27T07:44:48Z`;
+- registration `243`: rejected, not yet deregistered.
+
+An ephemeral current-Sepolia fork proved that
+`deregisterEntity(uint256,uint8)(243, 2)` succeeds and adds the second bond to
+the existing release, producing `200000` released units. The contract uses one
+release timestamp per owner, so deregistration resets the combined amount's
+unlock to two days after that transaction. A live read-only simulation of the
+same call also succeeds. No wallet transaction was sent.
+
+Exact next step:
+**Request explicit user approval for `deregisterEntity(243, 2)`. If approved,
+send it from the evaluator owner, preserve the receipt and exact combined unlock
+time, then proceed to Phase 2 in
+`.thoughts/plans/2026-11-25-latch-completion.md`.**

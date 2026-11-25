@@ -36,6 +36,9 @@ telemetry remains visibly labelled as the software-only demo vertical.
 
 ## Phase 1: Preserve evidence and recover resources
 
+Status: **evidence preserved; runner stopped; wallet recovery awaits explicit
+approval**.
+
 ### Goal
 
 Close registrations `235` and `243` safely while preserving every validator
@@ -70,6 +73,21 @@ No simulated chain state is accepted as recovery proof.
 ### Stop Condition
 
 Stop before any wallet transaction without explicit user authorization.
+
+### Execution Checkpoint — 2026-11-25
+
+- Sanitized qualification evidence and the exact executor scoring log are under
+  `evidence/stage10-evaluator/`.
+- The Codespace `latch-evaluator-runner-7vwg59q7xvq93pwpw` was stopped, not
+  deleted.
+- Live released balance remains `100000`, unlocking
+  `2026-11-27T07:44:48Z`; wallet balance is `700000` and allowance is zero.
+- A forked `deregisterEntity(243, 2)` succeeded and consolidated the released
+  amount to `200000`, resetting the shared two-day unlock. A same-argument live
+  `eth_call` also succeeds.
+- Recommended recovery is to deregister `243` once explicitly approved, accept
+  the approximately eight-hour delay to the first bond, then withdraw the full
+  `200000` after the new unlock instead of splitting recovery across two dates.
 
 ## Phase 2: Lock the two qualifying tracks
 

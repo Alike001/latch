@@ -1,0 +1,196 @@
+{
+  "schema": 1,
+  "captured_at": "2026-11-25",
+  "registration": {
+    "id": 243,
+    "transaction": "0xd3af1fde4ed882b12a4182ccc47d04609d4eb4ae0b04d8f2b8d041ee50853931",
+    "intent": "SENSOR_TELEMETRY_VERIFY",
+    "activation_status": "rejected",
+    "stage": "rejected",
+    "rejection_reason": "remote executor check failed before download: rejected: at its runnable URL the adapter ordered 9 of 15 public pairs correctly (60.0%), below the 70% floor"
+  },
+  "identity": {
+    "foundation_sha256": "0a49b325304bb4cf292e683929689d0457966be264f60bfc94d0072b614bf8e6",
+    "adapter_keccak256": "e5e1a494f59653f008348e61cc3513812b17fa5bf1dd10643bc222321b277bec",
+    "tokenizer_sha256": "67bc76f8b9386efba1a761c1c8e5ad439fd0eaf1c2826e9dd1a205c7af4dc456",
+    "input_root": "d598fca0840da2c7c8ea9d7ef949daf099a7224a6073cfa5bd5c313b2321e402"
+  },
+  "request": {
+    "received_at": "2026-11-25T13:11:05Z",
+    "completed_at": "2026-11-25T13:14:55Z",
+    "http_status": 200,
+    "elapsed_seconds": 229.935,
+    "texts": 30,
+    "pairs": 15,
+    "token_lengths": [
+      221,
+      221,
+      182,
+      176,
+      222,
+      220,
+      192,
+      197,
+      222,
+      222,
+      198,
+      198,
+      222,
+      222,
+      218,
+      218,
+      195,
+      197,
+      223,
+      223,
+      214,
+      214,
+      222,
+      222,
+      216,
+      218,
+      203,
+      201,
+      194,
+      194
+    ]
+  },
+  "score_bits": [
+    1069521360,
+    1069377826,
+    1068932250,
+    1068454905,
+    1071628395,
+    1072232324,
+    1072750396,
+    1072090205,
+    1071448708,
+    1071360132,
+    1071824329,
+    1070995626,
+    1070668620,
+    1070470884,
+    1070173139,
+    1070226112,
+    1072059144,
+    1072477902,
+    1070499897,
+    1070421157,
+    1069044916,
+    1069018460,
+    1069854583,
+    1069902846,
+    1074371754,
+    1074602396,
+    1073747639,
+    1073061755,
+    1073788041,
+    1073929513
+  ],
+  "pair_results": [
+    {
+      "pair": 1,
+      "category": "printer_exact_recorded_value",
+      "margin": 0.017111,
+      "correct": true
+    },
+    {
+      "pair": 2,
+      "category": "usgs_stale_heartbeat",
+      "margin": 0.056904,
+      "correct": true
+    },
+    {
+      "pair": 3,
+      "category": "usgs_implausible_gage_height",
+      "margin": -0.071994,
+      "correct": false
+    },
+    {
+      "pair": 4,
+      "category": "usgs_heartbeat",
+      "margin": 0.078701,
+      "correct": true
+    },
+    {
+      "pair": 5,
+      "category": "printer_exact_recorded_value",
+      "margin": 0.010559,
+      "correct": true
+    },
+    {
+      "pair": 6,
+      "category": "noaa_unit",
+      "margin": 0.098789,
+      "correct": true
+    },
+    {
+      "pair": 7,
+      "category": "printer_exact_recorded_value",
+      "margin": 0.023572,
+      "correct": true
+    },
+    {
+      "pair": 8,
+      "category": "printer_below_target_thermal_band",
+      "margin": -0.006315,
+      "correct": false
+    },
+    {
+      "pair": 9,
+      "category": "latch_non_numeric_value",
+      "margin": -0.049920,
+      "correct": false
+    },
+    {
+      "pair": 10,
+      "category": "printer_signature_validity",
+      "margin": 0.009387,
+      "correct": true
+    },
+    {
+      "pair": 11,
+      "category": "printer_above_target_thermal_band",
+      "margin": 0.003154,
+      "correct": true
+    },
+    {
+      "pair": 12,
+      "category": "printer_below_target_thermal_band",
+      "margin": -0.005753,
+      "correct": false
+    },
+    {
+      "pair": 13,
+      "category": "usgs_implausible_gage_height",
+      "margin": -0.054989,
+      "correct": false
+    },
+    {
+      "pair": 14,
+      "category": "usgs_implausible_gage_height",
+      "margin": 0.082457,
+      "correct": true
+    },
+    {
+      "pair": 15,
+      "category": "latch_wrong_unit",
+      "margin": -0.033730,
+      "correct": false
+    }
+  ],
+  "result": {
+    "correct_pairs": 9,
+    "total_pairs": 15,
+    "accuracy": 0.6,
+    "required_accuracy": 0.7,
+    "runtime_gate_passed": true,
+    "quality_gate_passed": false,
+    "package_download_reached": false,
+    "hidden_competition_reached": false
+  },
+  "privacy": {
+    "full_public_pair_text_committed": false,
+    "note": "The runnable endpoint received public qualification pairs, not the hidden competition split. This artifact preserves only diagnostic categories and numeric evidence, not other contributors' full row content."
+  }
+}
