@@ -2441,3 +2441,28 @@ immutable commit-pinned URL. If the fresh hash clears the duplicate check,
 request explicit user approval for the exact test-USDC approval and evaluator
 registration transactions. Keep the Codespace executor and ngrok route awake
 through the complete validator window.**
+
+## Fresh-hash registration preflight — PASS
+
+The live state was refreshed immediately after package publication:
+
+- adapter bond: `100000` test-USDC base units;
+- evaluator-wallet balance: `800000` base units;
+- live Diamond allowance: `0`;
+- released prior bond: `100000`, unlock timestamp `1795765488`;
+- current epoch: `54`;
+- telemetry canonical: none; scorer remains the `GENERIC` judgment fallback;
+- Evaluation Pool: `354` eligible rows and `3/3` eligible submitters.
+
+Because a live `eth_call` cannot pass the bond transfer with allowance zero, an
+ephemeral Anvil fork of current Sepolia impersonated the evaluator owner. Only
+inside that disposable fork, it approved `100000` and simulated the exact v2
+registration arguments: fresh package hash, commit-pinned raw URL,
+`SENSOR_TELEMETRY_VERIFY`, the existing owner as payout address, and the stable
+ngrok runnable URL. `registerWasm` returned prospective registration ID `243`.
+This proves the fresh hash clears the duplicate-hash guard and all current
+on-chain argument checks. The fork was stopped afterward.
+
+No live approval or registration transaction was sent; live allowance remains
+zero. The next action requires explicit user approval for the exact live
+test-USDC approval and `registerWasm` transactions.
