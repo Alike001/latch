@@ -1,0 +1,41 @@
+{
+  "checked_at": "2026-11-25T16:03:17.000Z",
+  "commit": "5c0eae991523b772521e7ffaf124e4f437170687",
+  "apps_agents": {
+    "typecheck": "pass",
+    "test_files": 9,
+    "tests_passed": 77,
+    "fixtures_passed": 7,
+    "paid_evidence": "evidence/stage7-paid-recovery-summary.json",
+    "paid_intent": "SENSOR_TELEMETRY_VERIFY_GENERAL",
+    "paid_provider_id": "7317701",
+    "paid_cost_uusdc": 10000,
+    "paid_latency_ms": 42608,
+    "final_decision": "CONTINUE",
+    "public_control_room_health": "ok"
+  },
+  "miner_provider": {
+    "registration_id": 6159,
+    "engine_provider_id": 7317701,
+    "slug": "latch-telemetry",
+    "activation_status": "active",
+    "rejection_reason": null,
+    "retrying": false,
+    "provider_health": "ok",
+    "canonical_telemetry": "pass",
+    "engine_unpaid_probe_status": 402,
+    "engine_payment_challenge_present": true,
+    "unknown_sensor_status": 404,
+    "unknown_sensor_code": "sensor_not_shareable",
+    "unsupported_metric_status": 422,
+    "unsupported_metric_code": "metric_not_supported"
+  },
+  "evaluator": {
+    "qualifying": false,
+    "registration_243_status": "deregistered",
+    "registration_243_stage": "deactivated",
+    "no_reregistration_or_pool_upload": true
+  },
+  "wallet_writes_during_phase2": 0,
+  "new_paid_requests_during_phase2": 0
+}

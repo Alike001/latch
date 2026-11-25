@@ -2594,3 +2594,133 @@ Exact next step:
 send it from the evaluator owner, preserve the receipt and exact combined unlock
 time, then proceed to Phase 2 in
 `.thoughts/plans/2026-11-25-latch-completion.md`.**
+
+## Registration 243 deregistered — BONDS CONSOLIDATED
+
+After explicit user approval, the evaluator owner sent exactly one recovery
+transaction:
+
+- call: `deregisterEntity(uint256,uint8)(243, 2)`;
+- transaction:
+  `0xe2bf31df869d689341870eb94434f357c4607fefa1a4fb4c60d555f482769ea3`;
+- block: `12210502` at `2026-11-25T15:48:12Z`;
+- status: success with two confirmations observed;
+- gas used: `181549`.
+
+The live Diamond state at block `12210512` reports:
+
+- combined released bond: `200000` test-USDC base units (`0.20`);
+- shared unlock timestamp: `1795794492` = `2026-11-27T15:48:12Z`;
+- evaluator-wallet test-USDC balance: `700000`;
+- Diamond allowance: `0`.
+
+The transaction emitted the release timestamp exactly two days after its block
+timestamp. No withdrawal, approval, registration, package mutation or
+Evaluation Pool upload occurred. The first immediate node read still showed the
+previous rejected state; the node then indexed registration `243` at
+`2026-11-25T15:55:15Z` as `deregistered` / `deactivated`, agreeing with the
+chain receipt.
+Public recovery evidence is preserved in
+`evidence/stage10-evaluator/registration-243-deregistration.json`.
+
+Exact next step:
+**Proceed to Phase 2: lock and verify the working Apps & Agents and
+Miner/Provider submissions. Withdraw the combined `200000` only after the
+unlock and separate explicit approval.**
+
+## Phase 2 submission lock — APPS AND MINER VERIFIED
+
+Date: 2026-11-25
+
+The two qualifying tracks were refreshed without another paid request:
+
+- TypeScript passed;
+- 9 test files / 77 tests passed;
+- all 7 deterministic fixtures passed;
+- Miner registration `6159` remains active, with no rejection or retry;
+- public Provider health and fresh canonical telemetry passed;
+- public control room health passed;
+- unknown sensor refusal: HTTP `404`, `sensor_not_shareable`;
+- unsupported metric refusal: HTTP `422`, `metric_not_supported`;
+- pinned Engine provider `7317701`: expected unpaid HTTP `402` payment
+  challenge;
+- no wallet write and no new paid request occurred.
+
+The paid autonomous recovery has a public-safe summary at
+`evidence/stage7-paid-recovery-summary.json`: missing local telemetry
+caused `REBUY`, the pinned Telegraph purchase cost `10000` uUSDC with `42608`
+ms recorded latency, the returned canonical telemetry passed the Evidence Gate,
+and the controller chose `CONTINUE`.
+
+Submission verification is documented in `docs/SUBMISSION_RUNBOOK.md`; the
+machine-readable checkpoint is `evidence/phase2-submission-lock.json`; the
+artifact index is `evidence/README.md`. The cold-chain source remains explicitly
+labelled as simulated, while Telegraph payment, Provider registration, routing
+and receipt evidence are real testnet integrations.
+
+The pre-registration `npm run validate:miner` script now intentionally stops on
+an identity collision because `7317701` / `latch-telemetry` is already
+registered. This is expected; the live registration and endpoint checks are the
+post-registration source of truth.
+
+Exact next step:
+**Make the Phase 3 go/no-go decision using only independent, source-separated
+material and the remaining time. Do not retrain or register unless every gate
+in the completion plan can be met without delaying Apps and Miner submission.**
+
+## Phase 3 evaluator recovery decision — NO-GO
+
+Date: 2026-11-25
+
+The one permitted Evaluator recovery attempt will not proceed for this
+submission. The current repository has 64 templated pairs across eight
+synthetic scenarios, but no source-separated split, no independent 40–60-pair
+final test, no category-level independent results and no multi-seed stability
+evidence. The captured public diagnostic remains `9/15`, below the plan's
+required `12/15` gate.
+
+Starting GPU retraining from this state would be another blind attempt and
+could delay the working Apps and Miner tracks. Registration `243` remains
+deregistered, the 40 Evaluation Pool rows will not be uploaded again, and no
+new adapter will be registered for this submission. The rejected adapter and
+corpus remain useful future research evidence.
+
+Exact next step:
+**Execute Phase 4 for Apps & Agents and Miner/Provider only: re-check the live
+rules and submission surfaces, complete independent testing and demo evidence,
+then prepare the two truthful submissions. Do not claim an Evaluator entry.**
+
+## Phase 4 submission preparation — DRAFTS READY
+
+The official H2 rules were refreshed on 2026-11-25. The deadline remains
+December 1, 2026 at 23:59 UTC. Entries must be independently testable and
+include project details, a 2–5 minute demo, beginner-friendly run steps, real
+evidence, a public summary and showcase/buyer-introduction choices. Apps must
+show a genuine autonomous purchase and a meaningful outcome. The submitting
+GitHub account must star `telegraphprotocol/bounties`.
+
+Read-only account checks confirmed:
+
+- GitHub account: `Alike001`;
+- required bounties-repository star: present;
+- Mission 11 progress updates: November 21 and November 24;
+- latest public CI on `origin/main`: green.
+
+`docs/H2_SUBMISSION_DRAFTS.md` contains:
+
+- separate Apps & Agents and Miners / Providers submission copy;
+- the five required Apps commercial answers;
+- exact evidence and limitation language;
+- a no-spend 3.5-minute demo script;
+- a third truthful Mission 11 progress-update draft;
+- the remaining submission checklist.
+
+No public comment, commit, push, demo upload or H2 form submission was made in
+this checkpoint. The remaining external actions require the final public-safe
+documentation to be reviewed and authorized. A genuine independent developer
+test is still missing and must not be fabricated.
+
+Exact next step:
+**Review the submission drafts, then obtain authorization for the final
+commit/push and third public progress update. In parallel, arrange one genuine
+independent test and record the 2–5 minute demo.**

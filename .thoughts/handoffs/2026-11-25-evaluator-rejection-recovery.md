@@ -68,13 +68,19 @@ Unrelated dirty files remain untouched:
   `2026-11-27T07:44:48Z`; wallet `700000`, allowance zero.
 - Fork test: `deregisterEntity(243, 2)` succeeds, changes the released amount to
   `200000`, and resets the shared unlock to two days after deregistration. The
-  exact live `eth_call` also succeeds. No wallet transaction was sent.
+  exact live `eth_call` also succeeds.
+- After explicit approval, the live deregistration succeeded in transaction
+  `0xe2bf31df869d689341870eb94434f357c4607fefa1a4fb4c60d555f482769ea3`
+  at block `12210502`. Two confirmations were observed. The combined released
+  amount is `200000`, unlocking at `2026-11-27T15:48:12Z`; wallet balance
+  remains `700000` and Diamond allowance remains zero.
+- The Telegraph node indexed registration `243` at
+  `2026-11-25T15:55:15Z` as `deregistered` / `deactivated`, matching the chain
+  receipt.
 
 ## Open Questions
 
-- Exact bond state and required recovery transaction for registration `243`.
-- Whether a broader source-separated corpus can clear the plan gates before the
-  deadline without delaying the two working tracks.
+- None for the current Evaluator submission: the recovery attempt is a no-go.
 
 ## Risks Or Blockers
 
@@ -89,13 +95,9 @@ Unrelated dirty files remain untouched:
 
 ## Next Steps
 
-1. Obtain explicit approval before sending
-   `deregisterEntity(uint256,uint8)(243, 2)` from the evaluator owner.
-2. Record the resulting combined released amount and exact unlock timestamp.
-3. Withdraw the full released amount after unlock, again only with explicit
+1. Execute Phase 4 for the Apps and Miner submissions only.
+2. Withdraw the full released amount after unlock, again only with explicit
    approval.
-4. Execute Phase 2 of the completion plan before deciding whether Phase 3 has
-   enough time and material.
 
 ## Resume Prompt
 
@@ -104,8 +106,9 @@ Continue Latch from `AGENTS.md`, `docs/HANDOFF.md`,
 `.thoughts/plans/2026-11-25-latch-completion.md`. Registration 243 is rejected
 for `9/15` public-pair accuracy after the runtime passed; do not re-register v2
 or re-upload Evaluation Pool rows. Evidence is archived and the Codespace is
-stopped. The next wallet action is `deregisterEntity(243, 2)`, which requires
-explicit approval and will consolidate both released bonds while resetting the
-shared two-day unlock. Then lock the active Apps and Miner submissions before
-one gated evaluator recovery decision. Do not touch unrelated dirty files or
+stopped. Registration `243` has been deregistered; the combined `200000` bond
+unlocks at `2026-11-27T15:48:12Z`. Phase 2 is locked and Phase 3 is a no-go:
+do not retrain, re-register or re-upload Evaluation Pool rows for this
+submission. Continue with Phase 4 for Apps and Miner only. Withdrawal still
+requires separate explicit approval. Do not touch unrelated dirty files or
 expose secrets.

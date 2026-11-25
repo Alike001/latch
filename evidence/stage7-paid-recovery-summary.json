@@ -1,0 +1,51 @@
+{
+  "network": "ethereum-sepolia-telegraph-testnet",
+  "payer": "0x95dc03c1f3937341aea4943fc5376085fdffbeba",
+  "intent": "SENSOR_TELEMETRY_VERIFY_GENERAL",
+  "provider_id": "7317701",
+  "provider_slug": "latch-telemetry",
+  "local_decision": "REBUY",
+  "purchase": {
+    "price_uusdc": 10000,
+    "latency_ms": 42608,
+    "payment_rail": "escrow",
+    "signal_id": "0xf44ccf4f86719dbd2621d782581e7316be90c56e44b967694b04937f53ae057b",
+    "purchased_at": "2026-11-22T06:31:39.909Z",
+    "receipt": {
+      "receipt_hash": "0xc4767a0ad9c19d0900a55b2eaff5f921616bec9f6647467837ef24b86cf56258",
+      "miner_registration_id": "6159",
+      "amount_uusdc": "10000",
+      "epoch_id": 36,
+      "settlement": "epoch",
+      "timestamp": 1795329106
+    }
+  },
+  "evidence_gate": {
+    "accepted": true,
+    "checks": {
+      "availability": true,
+      "sensor": true,
+      "metric": true,
+      "unit": true,
+      "value": true,
+      "future_timestamp": true,
+      "freshness": true,
+      "plausibility": true,
+      "integrity": "not_required_by_canonical_paid_response"
+    }
+  },
+  "final_decision": "CONTINUE",
+  "task_state": "RUNNING",
+  "failed_closed_attempt": {
+    "acquisition_attempted": true,
+    "acquisition_error": "fetch failed",
+    "final_decision": "HOLD",
+    "successful_purchase_claimed": false
+  },
+  "limitations": [
+    "The machine and sensor are simulated.",
+    "The Telegraph request, escrow receipt, Provider response and decision evidence are real testnet results.",
+    "This is same-project Provider consumption, not independent adoption.",
+    "The raw local logs remain in a pre-existing untracked directory and are not part of this public-safe summary."
+  ]
+}

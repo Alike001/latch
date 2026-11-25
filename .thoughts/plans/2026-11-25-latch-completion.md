@@ -36,8 +36,8 @@ telemetry remains visibly labelled as the software-only demo vertical.
 
 ## Phase 1: Preserve evidence and recover resources
 
-Status: **evidence preserved; runner stopped; wallet recovery awaits explicit
-approval**.
+Status: **evidence preserved; runner stopped; registration `243` deregistered;
+combined bond queued for withdrawal after unlock**.
 
 ### Goal
 
@@ -88,6 +88,16 @@ Stop before any wallet transaction without explicit user authorization.
 - Recommended recovery is to deregister `243` once explicitly approved, accept
   the approximately eight-hour delay to the first bond, then withdraw the full
   `200000` after the new unlock instead of splitting recovery across two dates.
+- Explicit approval was received and the live deregistration succeeded in
+  transaction
+  `0xe2bf31df869d689341870eb94434f357c4607fefa1a4fb4c60d555f482769ea3`
+  at block `12210502`, with two confirmations observed.
+- The live Diamond now reports `200000` released and an exact shared unlock of
+  `2026-11-27T15:48:12Z`. Wallet test-USDC remains `700000`; allowance is zero.
+- The Telegraph node indexed registration `243` as `deregistered` /
+  `deactivated` at `2026-11-25T15:55:15Z`, so the receipt and indexed state
+  agree.
+- Withdrawal remains a separate wallet action requiring explicit approval.
 
 ## Phase 2: Lock the two qualifying tracks
 
@@ -127,7 +137,33 @@ Provider registration, routing and receipts are real testnet integrations.
 
 Do not claim a live sensor, physical safety guarantee or independent adoption.
 
+### Execution Checkpoint — 2026-11-25
+
+- `npm run verify:independent` passed TypeScript, 9 test files / 77 tests and
+  all 7 deterministic fixtures.
+- The live Miner registration `6159` is active with no rejection or retry.
+- The public Provider health and fresh canonical telemetry probes passed; the
+  public control room is healthy.
+- Unknown sensors fail with HTTP `404` / `sensor_not_shareable`; unsupported
+  metrics fail with HTTP `422` / `metric_not_supported`. Automated tests cover
+  stale, malformed and integrity-failed telemetry.
+- The pinned Engine route for provider `7317701` returned the expected unpaid
+  HTTP `402` payment challenge. No new purchase was made.
+- The existing paid evidence preserves the `10000` uUSDC cost, `42608` ms
+  latency, escrow receipt and final `CONTINUE` decision.
+- `docs/SUBMISSION_RUNBOOK.md`, `evidence/README.md` and
+  `evidence/phase2-submission-lock.json` now provide the clean reviewer path
+  and evidence index.
+- The pre-registration `npm run validate:miner` guard predictably reports the
+  already-registered `7317701` identity as a collision; live registration state
+  is the correct post-registration check.
+
+Status: **Phase 2 locked. Proceed to the gated Phase 3 time/material decision
+without delaying Apps or Miner submission work.**
+
 ## Phase 3: One evaluator recovery attempt
+
+Status: **NO-GO for this submission. Do not retrain or register again.**
 
 ### Goal
 
@@ -167,7 +203,29 @@ examples.
 
 If any check fails, abandon the Evaluator track and do not register again.
 
+### Go/No-Go Decision — 2026-11-25
+
+The repository does not currently contain the evidence required to begin the
+one allowed recovery attempt:
+
+- the 64-pair corpus is generated from only eight templated scenarios;
+- there is no source-separated train/validation/final-test dataset;
+- there is no independent 40–60-pair final test;
+- there are no category-level independent results or multi-seed stability
+  measurements;
+- the captured public diagnostic is `9/15`, below the required `12/15` gate;
+- GPU retraining still requires a separate manual runtime, while Apps and Miner
+  need final demo, independent test and submission work.
+
+Because the preconditions fail before training, another adapter would be a
+blind retry and would risk delaying the two qualifying tracks. Phase 3 is
+therefore closed as a no-go for this submission. Preserve the corpus and
+failure evidence for future work; do not re-register or upload more Evaluation
+Pool rows.
+
 ## Phase 4: Independent test, demo and submissions
+
+Status: **in progress; submission drafts and demo script prepared**.
 
 ### Goal
 
@@ -193,6 +251,21 @@ Submit the strongest truthful entries before the deadline.
 
 Do not delay the two working submissions for an evaluator that has not passed
 the go/no-go gates.
+
+### Execution Checkpoint — 2026-11-25
+
+- Official rules were refreshed: deadline remains
+  `2026-12-01T23:59:00Z`; final entries go through the H2 website.
+- Required account prerequisite is satisfied: GitHub user `Alike001` has
+  starred `telegraphprotocol/bounties`.
+- Two public progress updates already exist on Mission 11 across November 21
+  and 24. A truthful third update draft is ready but has not been posted.
+- `docs/H2_SUBMISSION_DRAFTS.md` now contains separate Apps and Provider form
+  copy, commercial answers, evidence, accurate limitations, a no-spend
+  3.5-minute demo script and the final checklist.
+- Still required: authorization to commit/push the public-safe docs and post the
+  third update, one genuine independent test report, a published 2–5 minute
+  demo, user contact/permission choices, and the two official form submissions.
 
 ## Verification Checkpoint
 

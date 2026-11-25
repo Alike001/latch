@@ -82,13 +82,16 @@ The project is already committed to Mission 11 Route 2. Do not restart idea sele
 
 Mission 11 claim: **recorded** under `@Alike001`.
 
-Current build stage: **Stage 10 evaluator adapter trained and validated — the
-official model gate passed at 0.8889 pairwise accuracy, the safetensors delta
-passed Telegraph's parser and shared-foundation runtime, and Latch's Evaluation
-Pool material is active with 3/3 eligible submitters**.
+Current build stage: **Apps & Agents paid autonomous recovery and the live
+Miner/Provider are working and locked for submission verification**.
 
 Paid proof: `SENSOR_TELEMETRY_VERIFY_GENERAL` → `cold-zone-b-temp` / `temperature` returned **-18.4 C** with all canonical fields accepted at a cost of **$0.01**.
 
-Next: **Inspect the live adapter competition/registration route and immutable
-package-hosting requirements. The live telemetry scorer still uses the generic
-judgment fallback; registration and canonical promotion are not yet claimed.**
+Evaluator status: registration `243` passed its public runtime but ordered only
+9/15 public pairs correctly, below the 70% floor. It was rejected and safely
+deregistered. Latch does not currently claim a qualifying Evaluator entry.
+
+Next: **Use the [submission verification runbook](docs/SUBMISSION_RUNBOOK.md)
+to reproduce the Apps and Miner tracks, then decide whether one source-separated
+Evaluator retraining attempt can clear every documented gate without delaying
+the two working submissions.**
