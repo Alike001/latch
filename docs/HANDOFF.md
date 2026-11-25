@@ -2140,3 +2140,48 @@ Keep the laptop powered, online, and awake until registration `235` becomes
 `active` or `rejected`. Do not claim canonical evaluator activation while it is
 pending. Once terminal, preserve the node status, score/rejection reason, and
 runner logs, then update `npm run stage10:status`.
+
+---
+
+# Stage 10 registration 235 rejected — REMOTE BATCH DEADLINE
+
+Date: 2026-11-25
+
+Registration `235` reached the remote executor three times. The executor was
+reachable and scored the validator's 30-item batch, but each attempt ran into an
+approximately five-minute request deadline at the final items:
+
+- attempt 1: `2026-11-25 01:11:31`–`01:16:05` local time; items 27–29 were
+  cancelled;
+- attempt 2: `2026-11-25 02:11:16`–`02:16:06` local time; item 29 was
+  cancelled;
+- attempt 3: `2026-11-25 03:11:16`–`03:16:05` local time; item 29 was
+  cancelled.
+
+The live registry terminal state is:
+
+- activation status: `rejected`;
+- stage: `rejected`;
+- rejection reason: `gave up after 3 failed evaluation attempts: remote
+  executor unreachable: remote executor: temporary failure (status 503)`;
+- updated at: `2026-11-25T02:16:05Z`;
+- champion: none;
+- evaluation score: not produced.
+
+This evidence shows a transport/runtime deadline failure, not an adapter
+identity mismatch, download/hash failure, Stage 1 failure, or hidden-score
+loss. The repeated 30-item workloads were deterministic, but the laptop needed
+almost exactly the entire five-minute request window.
+
+Post-rejection wallet state:
+
+- wallet test USDC: `800000` base units (`0.8`);
+- allowance: `0`;
+- the `0.1` test-USDC bond was not automatically returned at rejection.
+
+The executor, ngrok tunnel, monitor, and sleep inhibitor were stopped after the
+terminal rejection to release local resources. Do not register again or send a
+deregistration transaction until the official duplicate-hash and bond-recovery
+path is re-checked. Before any retry, solve the remote batch deadline with a
+runner that can reliably finish the same 30-item batch well below five minutes,
+then repeat local and public preflight.

@@ -138,3 +138,19 @@ validator request or rejection yet. The adapter executor, ngrok tunnel,
 one-minute monitor, and sleep inhibitor are active as user services. Next epoch:
 `2026-11-24T22:25:29Z`. Keep the laptop online and monitor until `active` or
 `rejected`; do not submit another registration.
+
+## Terminal Registration Result
+
+Registration `235` was rejected at `2026-11-25T02:16:05Z` after three remote
+attempts. The endpoint was reachable and processed the 30-item batch each time,
+but the laptop took almost exactly five minutes; the final one to three items
+were cancelled when the request deadline expired. The registry reason is:
+`gave up after 3 failed evaluation attempts: remote executor unreachable:
+remote executor: temporary failure (status 503)`.
+
+This is a runner performance/deadline failure, not a package hash, identity,
+Stage 1, or hidden evaluation failure. The wallet still has `0.8` test USDC and
+allowance `0`, so the `0.1` bond was not automatically returned. All four
+temporary services were stopped after rejection. Do not re-register or
+deregister until the official duplicate-hash/bond-recovery route is checked and
+a runner can complete the same batch comfortably below five minutes.
