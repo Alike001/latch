@@ -238,3 +238,45 @@ repeat the 30-item benchmark over that public route, and prove the Codespace
 will remain awake through the validation window. Only then re-read bond,
 allowance, balance and live registration rules and request explicit approval
 for a fresh registration using the now-freed exact package hash.**
+
+## Public HTTPS Runner Completed
+
+Date: 2026-11-25
+
+The native Codespaces public-port route terminated the realistic long request
+at about 100 seconds, so it is not suitable for this evaluator even though its
+one-item smoke test passed.
+
+A fresh runner was created as
+`latch-evaluator-runner-7vwg59q7xvq93pwpw` with:
+
+- `standardLinux32gb` (4 cores, 16 GB RAM, 32 GB storage);
+- a 240-minute idle timeout confirmed through the GitHub API;
+- verified foundation, engine and adapter hashes;
+- official `adapterexec` built from pinned commit
+  `1ed063e2f0066cfaf0e124d66ec6a17b7a6121fd`;
+- the ngrok credential injected as a GitHub Codespaces secret and never
+  displayed or copied into the repository.
+
+The account's stable ngrok HTTPS development domain forwarded directly to the
+official executor. A single 30-item public POST using the exact observed token
+length sequence completed successfully:
+
+- HTTP `200`;
+- elapsed `213.142` seconds;
+- 30 numeric results, zero errors;
+- matching foundation, adapter and tokenizer identity echoes;
+- response SHA-256
+  `d3ff00c185726df8cd703acf8fb783c76d2de32604a9016f9327e114702341a9`;
+- `86.858` seconds of margin below the previously observed five-minute
+  validator deadline.
+
+The old Codespace was stopped after the synthetic fixture check; it was not
+deleted. The new runner remains available. No wallet or registration action was
+sent.
+
+Exact next gate:
+
+**Refresh all live read-only registration inputs and request explicit user
+approval before the fresh test-USDC approval and `registerWasm` transactions.
+Do not re-upload Evaluation Pool rows or alter the package hash.**

@@ -2290,3 +2290,54 @@ repeat the exact 30-item preflight over that public route, and prove the
 Codespace can remain awake throughout validation. Do not re-register until the
 public preflight passes and the user explicitly confirms the fresh approval and
 registration transactions.**
+
+---
+
+# Stage 10 Codespaces recovery — PUBLIC HTTPS BENCHMARK PASS
+
+Date: 2026-11-25
+
+The native GitHub Codespaces public-port proxy was rejected for the evaluator
+runner after a realistic 30-item request was cut at approximately 100 seconds.
+The executor itself continued correctly, but that proxy could not carry a
+single three-to-four-minute validator request.
+
+A replacement Codespace was therefore created without deleting the original:
+
+- name: `latch-evaluator-runner-7vwg59q7xvq93pwpw`;
+- machine: `standardLinux32gb` (4 cores, 16 GB RAM, 32 GB storage);
+- configured idle timeout: 240 minutes;
+- the original Codespace was stopped after the benchmark fixture was checked;
+- no repository checkout file was modified in either Codespace.
+
+The ngrok credential is available only as a GitHub Codespaces secret. It was
+never printed, placed in the repository, copied to a command argument, or
+written into the runner assets. The official ngrok agent exposes the executor
+through the account's existing stable HTTPS development domain.
+
+The new runner independently downloaded and verified the pinned public
+artifacts, built `adapterexec` from commit
+`1ed063e2f0066cfaf0e124d66ec6a17b7a6121fd`, and loaded the expected foundation,
+adapter and tokenizer identities.
+
+The public ngrok benchmark used one 30-item POST with the exact observed token
+length profile and synthetic valid token IDs:
+
+- HTTP status: `200`;
+- elapsed: **213.142 seconds**;
+- results: `30/30` numeric scores;
+- errors: `0`;
+- identity echoes: foundation, adapter and tokenizer all matched;
+- response SHA-256:
+  `d3ff00c185726df8cd703acf8fb783c76d2de32604a9016f9327e114702341a9`;
+- margin below the observed five-minute validator deadline: **86.858 seconds**.
+
+This removes the compute and public-transport blockers that caused registration
+`235` to fail. No withdrawal, approval, package mutation, Evaluation Pool
+upload or re-registration occurred.
+
+Exact next step:
+**Re-read the live bond, balance, allowance, registration state, scorer and
+current epoch. If they remain valid, present the exact fresh approval and
+registration calls for explicit user confirmation. Keep the proven Codespace
+runner online throughout seed-epoch selection and remote validation.**
