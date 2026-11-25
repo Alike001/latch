@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "builder": "github.com/telegraphprotocol/telegraph-wasm-baseline/cmd/adapterbuild",
+  "builder_version": "adapterbuild/2",
+  "intent": "SENSOR_TELEMETRY_VERIFY",
+  "class": "judgment",
+  "abi": "lora-v1",
+  "foundation": {
+    "hash": "0a49b325304bb4cf292e683929689d0457966be264f60bfc94d0072b614bf8e6",
+    "version": "modernbert-base-lora16-v1"
+  },
+  "tokenizer_hash": "67bc76f8b9386efba1a761c1c8e5ad439fd0eaf1c2826e9dd1a205c7af4dc456",
+  "rank": 8,
+  "alpha": 32,
+  "target_modules": [
+    "Wi",
+    "Wo",
+    "Wqkv"
+  ],
+  "max_tokens": 512,
+  "tensors": 178,
+  "delta_bytes": 6761476,
+  "package": {
+    "file": "SENSOR_TELEMETRY_VERIFY.safetensors",
+    "sha256": "11b2709c75498ff713d0f7cce91a5a9ee493f6b23df6ffc9b6bc9124f5a93677",
+    "bytes": 6777004
+  },
+  "keccak256": "0xe5e1a494f59653f008348e61cc3513812b17fa5bf1dd10643bc222321b277bec",
+  "retry": {
+    "metadata_key": "x-retry-of",
+    "metadata_value": "keccak256:0x9118b154f8995279eb5ea3008388d6ec9ecb54f2493a402878698ce10e08867d",
+    "reason": "The live registry retains deregistered package hashes. This extension creates a fresh package identity without changing scoring tensors or runtime fields."
+  },
+  "verification": {
+    "stage1": true,
+    "loaded": true,
+    "official_adapter_kit_commit": "1ed063e2f0066cfaf0e124d66ec6a17b7a6121fd",
+    "tensor_data_sha256": "939118c354f9b91dc36b38ce201d710b685b012cf0360ce647eada6f1963bd6f",
+    "tensor_data_matches_v1": true,
+    "single_item_score": 1063466350,
+    "single_item_matches_v1": true,
+    "local_batch": {
+      "items": 30,
+      "numeric_results": 30,
+      "errors": 0,
+      "seconds": "229.127485",
+      "score_bits_match_v1": true,
+      "response_sha256": "f6fb7ced9e343b5d7262504a9813e0b6af1932cec5849152b5a6ce1bb21c3113"
+    },
+    "public_batch": {
+      "transport": "ngrok HTTPS",
+      "items": 30,
+      "numeric_results": 30,
+      "errors": 0,
+      "seconds": "222.132252",
+      "score_bits_match_v1": true,
+      "response_sha256": "f6fb7ced9e343b5d7262504a9813e0b6af1932cec5849152b5a6ce1bb21c3113"
+    }
+  },
+  "validated_at": "2026-11-25T09:45:32Z",
+  "validation_note": "Validated with the official adapterexec against the live node's judgment classification. The x-* extension is accepted by the official parser and is ignored by scoring."
+}
