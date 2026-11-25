@@ -18,6 +18,28 @@ Do not restart idea selection. Continue from the documented stopping point.
 - **Mission claim:** recorded under `@Alike001` in `telegraphprotocol/bounties#199`
 - **Claim bot timestamp:** `2026-11-21T15:34:37Z`
 
+### 2026-11-25 submission and commercial checkpoint
+
+- Apps & Agents and Miner/Provider are the only planned submission tracks.
+- `npm run verify:independent` last passed 77 tests plus typecheck and all seven
+  fixtures.
+- Miner registration `6159` / Engine provider `7317701` is active and healthy.
+- Evaluator registration `243` was deregistered after its 9/15 public quality
+  result; do not retrain, re-register or re-upload the 40 rows for this submission.
+- Direction A — Instrument Panel is approved for the final UI/UX pass.
+- Telegraph administrator guidance prioritizes finished Apps & Agents and
+  reusable commercial extensions, particularly Tencent, ByteDance and Virtuals.
+- The strongest gated follow-on is Virtuals — Telegraph Intelligence Marketplace
+  for ACP. It is not current functionality and must not be claimed until a real
+  ACP integration works.
+- Commercial guidance and opportunity analysis:
+  `docs/COMMERCIAL_USE_CASE_STRATEGY.md`.
+- UI and expansion execution plan:
+  `.thoughts/plans/2026-11-25-ui-commercial-expansion.md`.
+- Exact next submission action: deploy the verified Instrument Panel UI, obtain
+  one genuine independent test report, then record the 2–5 minute demo. Do not
+  begin ACP work until the numeric use case and unclaimed status are confirmed.
+
 ## Builder rule
 
 The project exists to solve a Telegraph problem, not to build a random hackathon app and bolt Telegraph onto it.

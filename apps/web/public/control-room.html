@@ -3,152 +3,169 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Latch — Control Room</title>
-  <meta name="description" content="Latch operations control room for Telegraph-powered machine telemetry recovery.">
+  <title>Latch — Recovery Control Room</title>
+  <meta name="description" content="Operate and inspect Telegraph-powered machine telemetry recovery with deterministic evidence checks.">
   <link rel="stylesheet" href="/styles.css">
 </head>
-<body>
-  <div class="shell">
-    <header class="topbar">
-      <a class="brand-block brand-link" href="/">
-        <div class="mark">L</div>
-        <div>
-          <div class="brand">Latch</div>
-          <div class="subbrand">Operations control room</div>
-        </div>
+<body class="control-page">
+  <a class="skip-link" href="#main">Skip to control room</a>
+  <div class="app-shell">
+    <header class="instrument-header">
+      <a class="wordmark" href="/" aria-label="Latch home">
+        <span class="wordmark-mark" aria-hidden="true">L</span>
+        <span><strong>Latch</strong><small>Intelligence assurance</small></span>
       </a>
-      <div class="top-meta">
-        <a class="tag tag-link" href="/">← Product</a>
-        <span class="tag">Mission 11 · Route 2</span>
-        <span id="mode-badge" class="tag tag-mode">Loading…</span>
+      <div class="header-signals">
+        <span class="header-coordinate">MISSION 11 / ROUTE 2</span>
+        <span id="mode-badge" class="system-badge">Loading runtime</span>
       </div>
     </header>
 
-    <main class="control-main">
-      <section class="control-head">
-        <div>
-          <p class="eyebrow">LIVE OPERATIONS</p>
-          <h1 class="control-title">Recovery control room</h1>
-          <p class="control-lede">Inject a telemetry failure, run recovery, and inspect exactly why the task continued or failed closed.</p>
+    <main id="main" class="control-main">
+      <section class="command-hero" aria-labelledby="control-title">
+        <div class="command-copy">
+          <p class="section-index">OPERATIONS / RECOVERY CONTROL ROOM</p>
+          <h1 id="control-title">Trust the evidence<br>before the machine moves.</h1>
+          <p>Break a required signal, authorize a bounded recovery, and inspect why Latch chose to continue or fail closed.</p>
         </div>
-        <div class="hero-actions">
-          <button id="recover-sim" class="button button-primary">Run recovery</button>
-          <button id="recover-live" class="button button-danger">Live Telegraph recovery</button>
-          <button id="reset" class="button button-ghost">Reset</button>
+        <div class="command-actions" aria-label="Recovery actions">
+          <button id="recover-sim" class="button button-primary">
+            <span>Run safe recovery</span><small>Simulation · no spend</small>
+          </button>
+          <button id="recover-live" class="button button-live">
+            <span>Run live Telegraph</span><small>Testnet · up to $0.01</small>
+          </button>
+          <button id="reset" class="button button-quiet">Reset session</button>
         </div>
       </section>
 
-      <section class="metrics" id="metrics"></section>
+      <section id="metrics" class="status-strip" aria-label="Current operating state"></section>
 
-      <section class="grid-main">
-        <div class="stack">
-          <article class="panel task-panel">
-            <div class="panel-head">
+      <section class="sequence-panel" aria-labelledby="sequence-title">
+        <div class="panel-heading sequence-heading">
+          <div>
+            <p class="section-index">AUTONOMOUS RECOVERY SEQUENCE</p>
+            <h2 id="sequence-title">Decision path</h2>
+          </div>
+          <p id="sequence-summary" class="sequence-summary">System ready. Introduce a failure to begin.</p>
+        </div>
+        <div id="recovery-rail" class="recovery-rail"></div>
+      </section>
+
+      <div class="control-layout">
+        <div class="primary-workbench">
+          <section class="instrument-panel task-instrument" aria-labelledby="task-name">
+            <div class="panel-heading">
               <div>
-                <p class="eyebrow">MACHINE TASK</p>
+                <p class="section-index">01 / MACHINE TASK</p>
                 <h2 id="task-name">—</h2>
               </div>
-              <span id="task-state" class="state-pill">—</span>
+              <span id="task-state" class="state-chip">—</span>
             </div>
-            <div class="machine-line">
-              <div class="machine-icon">C7</div>
-              <div>
-                <strong id="machine-id">—</strong>
-                <span>Autonomous cold-chain cart</span>
+            <div class="machine-route">
+              <div class="machine-identity">
+                <span class="machine-glyph" aria-hidden="true">C7</span>
+                <span><strong id="machine-id">—</strong><small>Autonomous cold-chain cart</small></span>
               </div>
-              <div class="route-line">
+              <div class="route-track" aria-label="Route from Cold Zone B to Outbound Dock">
                 <span>Cold Zone B</span><i></i><span>Outbound Dock</span>
               </div>
             </div>
-          </article>
+          </section>
 
-          <article class="panel">
-            <div class="panel-head">
+          <section class="instrument-panel" aria-labelledby="telemetry-title">
+            <div class="panel-heading">
               <div>
-                <p class="eyebrow">LOCAL TELEMETRY</p>
-                <h2>cold-zone-b-temp</h2>
+                <p class="section-index">02 / REQUIRED SIGNAL</p>
+                <h2 id="telemetry-title">cold-zone-b-temp</h2>
               </div>
-              <span id="telemetry-state" class="state-pill">—</span>
+              <span id="telemetry-state" class="state-chip">—</span>
             </div>
-            <div id="telemetry-detail" class="telemetry-detail"></div>
-          </article>
+            <div id="telemetry-detail" class="telemetry-readout"></div>
+          </section>
 
-          <article class="panel decision-panel">
-            <div class="panel-head">
+          <section class="instrument-panel gate-panel" aria-labelledby="gate-title">
+            <div class="panel-heading">
               <div>
-                <p class="eyebrow">DECISION TRACE</p>
-                <h2>Evidence Gate</h2>
+                <p class="section-index">03 / DETERMINISTIC VERIFICATION</p>
+                <h2 id="gate-title">Evidence Gate</h2>
               </div>
-              <span id="decision-pill" class="decision-pill neutral">NO RUN</span>
+              <span id="decision-pill" class="state-chip">No run</span>
             </div>
-            <div id="checks" class="checks empty-state">Inject a failure and run recovery to inspect the Gate.</div>
-          </article>
+            <p class="panel-intro">Payment success never authorizes machine action. Every returned signal must pass the policy below.</p>
+            <div id="checks" class="gate-matrix empty-state">Run recovery to inspect evidence checks.</div>
+          </section>
 
-          <article class="panel">
-            <div class="panel-head">
+          <section class="instrument-panel proof-panel" aria-labelledby="proof-title">
+            <div class="panel-heading">
               <div>
-                <p class="eyebrow">TELEGRAPH EVIDENCE</p>
-                <h2>Purchase & receipt</h2>
+                <p class="section-index">04 / TELEGRAPH PROOF</p>
+                <h2 id="proof-title">Purchase and receipt</h2>
               </div>
-              <span class="provider-id">Miner 7317701</span>
+              <span class="provider-label">REG 6159 · ENGINE 7317701</span>
             </div>
-            <div id="purchase" class="purchase empty-state">No real Telegraph purchase in this control-room session.</div>
-            <div class="historical-proof">
-              <span>Verified Stage 7 receipt</span>
-              <code id="historical-receipt">—</code>
-            </div>
-          </article>
+            <div id="purchase" class="purchase-grid empty-state">No purchase in this control-room session.</div>
+            <details class="proof-drawer">
+              <summary>Inspect preserved live proof</summary>
+              <div class="proof-ledger">
+                <div><span>Environment</span><strong>Sepolia testnet</strong></div>
+                <div><span>Amount</span><strong>$0.01 test USDC</strong></div>
+                <div><span>Final decision</span><strong class="signal-good">CONTINUE</strong></div>
+                <div class="proof-hash"><span>Receipt hash</span><code id="historical-receipt">—</code></div>
+              </div>
+            </details>
+          </section>
         </div>
 
-        <aside class="stack">
-          <article class="panel sticky">
-            <div class="panel-head">
-              <div>
-                <p class="eyebrow">SPEND AUTHORITY</p>
-                <h2>Recovery policy</h2>
-              </div>
-              <span id="spend-state" class="state-pill">—</span>
+        <aside class="operator-console" aria-label="Operator controls">
+          <section class="operator-guide">
+            <p class="section-index">GUIDED DEMO / 90 SECONDS</p>
+            <ol>
+              <li><span>1</span><p><strong>Break a signal</strong><small>Choose a failure below.</small></p></li>
+              <li><span>2</span><p><strong>Run safe recovery</strong><small>Exercise the real policy and Gate with no payment.</small></p></li>
+              <li><span>3</span><p><strong>Inspect the proof</strong><small>Follow the decision path and evidence result.</small></p></li>
+            </ol>
+          </section>
+
+          <section class="console-section" aria-labelledby="fault-title">
+            <div class="console-heading">
+              <div><p class="section-index">FAILURE LAB</p><h2 id="fault-title">Choose a fault</h2></div>
+              <span id="fault-status" class="console-status">Healthy</span>
             </div>
-            <div id="spend-detail" class="policy-list"></div>
-            <div class="split-actions">
-              <button id="authorize" class="button button-ghost">Authorize</button>
+            <div class="fault-list">
+              <button data-fault="disconnect" class="fault-control"><span>01</span><p><strong>Disconnect telemetry</strong><small>Availability failure</small></p></button>
+              <button data-fault="stale" class="fault-control"><span>02</span><p><strong>Age the reading</strong><small>10 minutes stale</small></p></button>
+              <button data-fault="wrong_unit" class="fault-control"><span>03</span><p><strong>Change the unit</strong><small>Signed °F payload</small></p></button>
+              <button data-fault="corrupt_integrity" class="fault-control"><span>04</span><p><strong>Break integrity</strong><small>Signature failure</small></p></button>
+              <button data-fault="provider_unavailable" class="fault-control"><span>05</span><p><strong>Drop the Provider</strong><small>Supply failure</small></p></button>
+              <button data-fault="restore" class="fault-control restore-control"><span>↺</span><p><strong>Restore healthy state</strong><small>Fresh °C telemetry</small></p></button>
+            </div>
+          </section>
+
+          <section class="console-section" aria-labelledby="spend-title">
+            <div class="console-heading">
+              <div><p class="section-index">SPEND AUTHORITY</p><h2 id="spend-title">Bounded policy</h2></div>
+              <span id="spend-state" class="state-chip">—</span>
+            </div>
+            <div id="spend-detail" class="policy-table"></div>
+            <div class="dual-actions">
+              <button id="authorize" class="button button-quiet">Authorize</button>
               <button id="revoke" class="button button-danger">Revoke spend</button>
             </div>
-          </article>
+          </section>
 
-          <article class="panel">
-            <div class="panel-head">
-              <div>
-                <p class="eyebrow">SCENARIO CONTROLS</p>
-                <h2>Failure injection</h2>
-              </div>
+          <section class="console-section" aria-labelledby="events-title">
+            <div class="console-heading">
+              <div><p class="section-index">AUDIT TRAIL</p><h2 id="events-title">Runtime events</h2></div>
             </div>
-            <p class="muted">These controls change the real simulator/runtime state. Restore before starting a different scenario.</p>
-            <div class="fault-grid">
-              <button data-fault="disconnect" class="fault">Disconnect telemetry<span>Availability failure</span></button>
-              <button data-fault="stale" class="fault">Stale telemetry<span>10 minutes old</span></button>
-              <button data-fault="wrong_unit" class="fault">Wrong unit<span>Signed °F payload</span></button>
-              <button data-fault="corrupt_integrity" class="fault">Corrupt integrity<span>Signature failure</span></button>
-              <button data-fault="provider_unavailable" class="fault">Provider unavailable<span>Supply failure</span></button>
-              <button data-fault="restore" class="fault fault-restore">Restore healthy state<span>Fresh °C telemetry</span></button>
-            </div>
-          </article>
-
-          <article class="panel">
-            <div class="panel-head">
-              <div>
-                <p class="eyebrow">EVENT LOG</p>
-                <h2>Runtime evidence</h2>
-              </div>
-            </div>
-            <div id="events" class="events"></div>
-          </article>
+            <div id="events" class="event-stream"></div>
+          </section>
         </aside>
-      </section>
+      </div>
     </main>
   </div>
 
-  <div id="toast" class="toast"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script src="/app.js"></script>
 </body>
 </html>

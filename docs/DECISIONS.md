@@ -26,3 +26,24 @@ Telegraph is operational task-continuation intelligence, not collision avoidance
 
 ## D009 — Build order
 Contracts/fixtures → simulator → Evidence Gate → Provider → Telegraph registration → controller → paid purchase → retry/spend authority → UI → evaluator → independent adoption.
+
+## D010 — Evaluator submission
+Registration 243 passed runtime but failed its public quality gate at 9/15. The
+Evaluator track is a no-go for this submission. Do not retrain, re-register or
+re-upload the existing material without new evidence clearing the documented
+quality gates.
+
+## D011 — Submission focus
+Submit the independently qualifying Apps & Agents and Miner/Provider
+contributions. Public product copy must not imply that the Evaluator qualified.
+
+## D012 — UI direction
+Use the Instrument Panel direction: one visible Detect → Authorize → Acquire →
+Verify → Decide sequence, explicit simulation/testnet labels, restrained status
+color and progressive disclosure for raw payment evidence.
+
+## D013 — Commercial expansion
+Administrator guidance prioritizes reusable Apps & Agents work and the Tencent,
+ByteDance and Virtuals opportunities. Finish Latch first. The strongest adjacent
+candidate is Virtuals — Telegraph Intelligence Marketplace for ACP, but it may
+only be claimed after availability is confirmed and a real ACP integration works.

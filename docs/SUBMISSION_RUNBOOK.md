@@ -37,7 +37,9 @@ npm run start:web
 ```
 
 Open `http://127.0.0.1:4173/control-room` and follow
-`docs/INDEPENDENT_TESTING.md`. Confirm these paths:
+the on-screen 90-second guide. The five-stage rail makes Detect, Authorize,
+Acquire, Verify and Decide visible as separate states. Use
+`docs/INDEPENDENT_TESTING.md` for the complete matrix and confirm these paths:
 
 - missing telemetry → `REBUY` → accepted remote evidence → `CONTINUE`;
 - stale, wrong-unit or corrupt-integrity local evidence is rejected;
@@ -95,3 +97,6 @@ Evaluator registrations `235` and `243` are not qualifying submissions.
 Registration `243` was rejected at 9/15 public pairs and later deregistered.
 Do not claim an Evaluator track unless a future adapter clears every gate in the
 completion plan.
+
+The Stage 11 browser scenario matrix and desktop/mobile visual evidence are in
+`evidence/stage11-ui/verification.md`.

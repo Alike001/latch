@@ -12,6 +12,7 @@ proof during submission week.
 | `stage10-evaluator/registration-243-validator-summary.json` | Sanitized 30-item public qualification result and 9/15 outcome |
 | `stage10-evaluator/registration-243-adapterexec.txt` | Exact executor scoring log for registration 243 |
 | `stage10-evaluator/registration-243-deregistration.json` | Sepolia receipt, indexed state, combined released bond and unlock timestamp |
+| `stage11-ui/verification.md` | Instrument Panel verification, browser scenario matrix and desktop/mobile screenshot index |
 
 The pre-existing untracked `stage7-live/` directory remains unmodified and is
 not part of the public commit. Its relevant public-safe facts are preserved in

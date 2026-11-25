@@ -197,17 +197,19 @@ collision safety. The machine shown here is simulated.”
 
 ### 0:25–1:05 — Working app with a new safe input
 
-Open the control room, reset the session, disconnect telemetry and run recovery
-in simulation mode. Point out `REBUY`, the bounded acquisition attempt, the
-Evidence Gate fields and final `CONTINUE`. State that this safe reviewer run
-spends zero and creates no Telegraph receipt.
+Open the control room and use the on-screen 90-second guide. Reset the session,
+choose **Disconnect telemetry**, then choose **Run safe recovery**. Follow the
+five-stage rail from Detect through Decide: point out `REBUY`, authorized bounded
+acquisition, the Evidence Gate result and final `CONTINUE`. State that this safe
+reviewer run spends zero and creates no Telegraph receipt.
 
 ### 1:05–1:45 — Real Telegraph integration evidence
 
-Open `evidence/stage7-paid-recovery-summary.json`. Show the pinned
-provider `7317701`, `10000` uUSDC cost, `42608` ms latency, signal ID, escrow
-receipt, accepted Evidence Gate and final `CONTINUE`. Explain that the real
-purchase was preserved rather than repeated for the video.
+Open **Inspect preserved live proof** in the control room, then open
+`evidence/stage7-paid-recovery-summary.json` for the complete record. Show Miner
+registration `6159`, Engine provider `7317701`, `10000` uUSDC cost, `42608` ms
+latency, signal ID, escrow receipt, accepted Evidence Gate and final `CONTINUE`.
+Explain that the real purchase was preserved rather than repeated for the video.
 
 ### 1:45–2:20 — Break it
 

@@ -1,6 +1,7 @@
-const qs = (s) => document.querySelector(s);
-const qsa = (s) => [...document.querySelectorAll(s)];
+const qs = (selector) => document.querySelector(selector);
+const qsa = (selector) => [...document.querySelectorAll(selector)];
 let current = null;
+let busy = false;
 
 function esc(value) {
   return String(value ?? "—")
@@ -16,20 +17,22 @@ function dollars(uusdc) {
 
 function time(value) {
   if (!value) return "—";
-  const d = new Date(value);
-  return Number.isNaN(d.getTime()) ? value : d.toLocaleTimeString([], {hour: "2-digit", minute: "2-digit", second: "2-digit"});
+  const date = new Date(value);
+  return Number.isNaN(date.getTime())
+    ? value
+    : date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
 }
 
-function tone(action) {
-  if (["CONTINUE", "RUNNING", "healthy", "AUTHORIZED"].includes(action)) return "good";
-  if (["REBUY", "WAITING_FOR_TELEMETRY", "stale", "wrong_unit"].includes(action)) return "warn";
-  if (["HOLD", "ESCALATE", "ESCALATED", "unavailable", "integrity_failed", "REVOKED"].includes(action)) return "bad";
+function tone(value) {
+  if (["CONTINUE", "RUNNING", "healthy", "AUTHORIZED"].includes(value)) return "good";
+  if (["REBUY", "WAITING_FOR_TELEMETRY", "stale", "wrong_unit"].includes(value)) return "warn";
+  if (["HOLD", "ESCALATE", "ESCALATED", "unavailable", "integrity_failed", "REVOKED"].includes(value)) return "bad";
   return "";
 }
 
 async function api(path, options) {
   const response = await fetch(path, {
-    headers: {"Content-Type": "application/json"},
+    headers: { "Content-Type": "application/json" },
     ...options,
   });
   const body = await response.json();
@@ -38,11 +41,20 @@ async function api(path, options) {
 }
 
 function toast(message) {
-  const el = qs("#toast");
-  el.textContent = message;
-  el.classList.add("show");
-  clearTimeout(window.__toast);
-  window.__toast = setTimeout(() => el.classList.remove("show"), 4200);
+  const element = qs("#toast");
+  element.textContent = message;
+  element.classList.add("show");
+  clearTimeout(window.__latchToast);
+  window.__latchToast = setTimeout(() => element.classList.remove("show"), 4200);
+}
+
+function setBusy(value) {
+  busy = value;
+  document.body.setAttribute("aria-busy", String(value));
+  qsa("button").forEach((button) => { button.disabled = value; });
+  if (!value && current) {
+    qs("#recover-live").disabled = !current.product.liveTelegraphEnabled;
+  }
 }
 
 function renderMetrics(state) {
@@ -50,145 +62,213 @@ function renderMetrics(state) {
   const attemptKey = "cold-zone-b-temp::temperature";
   const attempts = session.attemptsByCapability[attemptKey] || 0;
   const items = [
-    ["Machine state", state.task.state, state.task.machineId],
-    ["Telemetry", state.telemetry.status, state.telemetry.snapshot.reading ? state.telemetry.snapshot.reading.value + " " + state.telemetry.snapshot.reading.unit : "No reading"],
-    ["Spend authority", session.authorized ? "AUTHORIZED" : "REVOKED", "Max " + dollars(state.spend.policy.maxPerPurchaseUusdc) + " / purchase"],
-    ["Session", dollars(session.spentUusdc), attempts + " / " + state.spend.policy.maxAttemptsPerCapability + " attempts"],
+    ["MACHINE STATE", state.task.state, state.task.machineId],
+    ["LOCAL SIGNAL", state.telemetry.status, state.telemetry.snapshot.reading ? `${state.telemetry.snapshot.reading.value} ${state.telemetry.snapshot.reading.unit}` : "No reading"],
+    ["SPEND AUTHORITY", session.authorized ? "AUTHORIZED" : "REVOKED", `Max ${dollars(state.spend.policy.maxPerPurchaseUusdc)} / purchase`],
+    ["SESSION EXPOSURE", dollars(session.spentUusdc), `${attempts} / ${state.spend.policy.maxAttemptsPerCapability} attempts used`],
   ];
+
   qs("#metrics").innerHTML = items.map(([label, value, sub]) => `
-    <div class="metric">
-      <div class="metric-label">${esc(label)}</div>
-      <div class="metric-value">${esc(value)}</div>
-      <div class="metric-sub">${esc(sub)}</div>
+    <div class="status-item">
+      <span class="status-label">${esc(label)}</span>
+      <strong class="status-value">${esc(value)}</strong>
+      <small class="status-sub">${esc(sub)}</small>
     </div>
   `).join("");
 }
 
+function railStep(index, label, value, detail, stateClass) {
+  return `<div class="rail-step ${esc(stateClass)}"><span>${index} / ${esc(label)}</span><strong>${esc(value)}</strong><small>${esc(detail)}</small></div>`;
+}
+
+function renderRecoveryRail(state) {
+  const recovery = state.latestRecovery;
+  const result = recovery?.result;
+  const decision = result?.finalDecision;
+  const faulted = state.telemetry.fault !== "none" || !state.provider.available;
+  const authorized = state.spend.session.authorized;
+  let detect;
+  let acquire;
+  let verify;
+  let decide;
+
+  if (result) {
+    detect = [result.localDecision.accepted ? "Local accepted" : "Gap confirmed", result.localDecision.action, result.localDecision.accepted ? "done" : "warn"];
+    if (!result.acquisitionAttempted) {
+      acquire = ["Not attempted", result.spendBlock?.reason || "Acquisition blocked", "bad"];
+    } else if (result.purchases.length) {
+      acquire = ["Telegraph paid", `${dollars(result.purchases.at(-1).priceUusdc)} · receipt preserved`, "done"];
+    } else if (result.acquisitionErrors.length) {
+      acquire = ["Provider failed", `${result.attemptsUsed} attempts · zero spend`, "bad"];
+    } else {
+      acquire = ["Remote simulated", "Policy exercised · zero real spend", "done"];
+    }
+    verify = [decision.accepted ? "Evidence passed" : "Evidence rejected", `${decision.checks.filter((check) => check.ok).length} / ${decision.checks.length} checks passed`, decision.accepted ? "done" : "bad"];
+    decide = [decision.action, decision.reason || "Final machine decision", tone(decision.action) === "good" ? "done" : tone(decision.action)];
+  } else {
+    detect = faulted ? ["Fault detected", state.telemetry.status, "warn"] : ["Monitoring", "Local signal healthy", "done"];
+    acquire = ["Standing by", faulted && authorized ? "Ready for bounded recovery" : "No acquisition requested", faulted && authorized ? "active" : ""];
+    verify = ["Awaiting signal", "Gate has not run", ""];
+    decide = [state.task.state === "RUNNING" ? "Task running" : "Task paused", state.task.state, tone(state.task.state) === "good" ? "done" : "warn"];
+  }
+
+  const authority = authorized
+    ? [result ? "Authorized" : "Policy ready", `Max ${dollars(state.spend.policy.maxPerPurchaseUusdc)} · ${state.spend.policy.maxAttemptsPerCapability} attempts`, result || faulted ? "done" : ""]
+    : ["Spend revoked", "Purchases are blocked", "bad"];
+
+  qs("#recovery-rail").innerHTML = [
+    railStep("01", "DETECT", ...detect),
+    railStep("02", "AUTHORIZE", ...authority),
+    railStep("03", "ACQUIRE", ...acquire),
+    railStep("04", "VERIFY", ...verify),
+    railStep("05", "DECIDE", ...decide),
+  ].join("");
+
+  qs("#sequence-summary").textContent = result
+    ? recovery.mode === "live"
+      ? `Live Telegraph recovery completed with final decision ${decision.action}.`
+      : `Safe simulation completed with final decision ${decision.action}; no payment receipt was invented.`
+    : faulted
+      ? "Fault injected. Confirm authority, then run the recovery sequence."
+      : "System ready. Introduce a failure to begin.";
+}
+
 function renderTelemetry(state) {
-  const s = state.telemetry.snapshot;
-  const r = s.reading;
-  qs("#telemetry-detail").innerHTML = [
-    ["Source", r?.source || s.source],
-    ["Value", r ? r.value + " " + r.unit : "Unavailable"],
-    ["Observed", r ? time(r.observedAt) : "—"],
+  const snapshot = state.telemetry.snapshot;
+  const reading = snapshot.reading;
+  const items = [
+    ["Source", reading?.source || snapshot.source],
+    ["Value", reading ? `${reading.value} ${reading.unit}` : "Unavailable"],
+    ["Observed", reading ? time(reading.observedAt) : "—"],
     ["Integrity", state.telemetry.integrityVerified === null ? "No reading" : state.telemetry.integrityVerified ? "Verified" : "Failed"],
-  ].map(([label, value]) => `<div class="datum"><label>${esc(label)}</label><strong>${esc(value)}</strong></div>`).join("");
+  ];
+  qs("#telemetry-detail").innerHTML = items.map(([label, value]) => `<div class="readout"><label>${esc(label)}</label><strong>${esc(value)}</strong></div>`).join("");
 }
 
 function renderChecks(state) {
-  const result = state.latestRecovery?.result;
-  const decision = result?.finalDecision;
+  const decision = state.latestRecovery?.result.finalDecision;
   const pill = qs("#decision-pill");
   if (!decision) {
     pill.textContent = "NO RUN";
-    pill.className = "decision-pill neutral";
-    qs("#checks").className = "checks empty-state";
+    pill.className = "state-chip";
+    qs("#checks").className = "gate-matrix empty-state";
     qs("#checks").textContent = "Run recovery to inspect evidence checks.";
     return;
   }
   pill.textContent = decision.action;
-  pill.className = "decision-pill " + tone(decision.action);
-  qs("#checks").className = "checks";
-  qs("#checks").innerHTML = decision.checks.map((c) => `
-    <div class="check">
-      <span>${esc(c.key.replaceAll("_", " "))}</span>
-      <strong class="${c.ok ? "ok" : "no"}">${c.ok ? "PASS" : esc(c.reason || "FAIL")}</strong>
-    </div>
+  pill.className = `state-chip ${tone(decision.action)}`;
+  qs("#checks").className = "gate-matrix";
+  qs("#checks").innerHTML = decision.checks.map((check) => `
+    <div class="gate-check"><span>${esc(check.key.replaceAll("_", " "))}</span><strong class="${check.ok ? "ok" : "no"}">${check.ok ? "PASS" : esc(check.reason || "FAIL")}</strong></div>
   `).join("");
 }
 
 function renderPurchase(state) {
   const recovery = state.latestRecovery;
   const purchase = recovery?.result.purchases?.at(-1);
-  const el = qs("#purchase");
+  const element = qs("#purchase");
   if (!purchase) {
-    el.className = "purchase empty-state";
-    el.textContent = recovery?.mode === "simulation" && recovery.result.acquisitionAttempted
-      ? "Simulation recovery completed without inventing a Telegraph receipt. No real payment evidence exists for this run."
+    element.className = "purchase-grid empty-state";
+    element.textContent = recovery?.mode === "simulation" && recovery.result.acquisitionAttempted
+      ? "Safe simulation exercised acquisition policy and verification without inventing a Telegraph payment or receipt."
       : "No purchase in this control-room session.";
   } else {
-    const receiptHash = purchase.paymentReceipt?.receipt_hash || "—";
-    el.className = "purchase";
-    el.innerHTML = [
-      ["Provider", purchase.providerId || "—"],
-      ["Price", dollars(purchase.priceUusdc)],
-      ["Latency", purchase.latencyMs + " ms"],
-      ["Rail", purchase.paymentRail || "—"],
-      ["Signal", purchase.signalId || "—"],
-      ["Receipt", receiptHash],
-    ].map(([label, value]) => `<div class="purchase-item"><label>${esc(label)}</label><code>${esc(value)}</code></div>`).join("");
+    element.className = "purchase-grid";
+    const fields = [
+      ["Provider", purchase.providerId || "—"], ["Price", dollars(purchase.priceUusdc)], ["Latency", `${purchase.latencyMs} ms`],
+      ["Rail", purchase.paymentRail || "—"], ["Signal", purchase.signalId || "—"], ["Receipt", purchase.paymentReceipt?.receipt_hash || "—"],
+    ];
+    element.innerHTML = fields.map(([label, value]) => `<div class="purchase-field"><label>${esc(label)}</label><code>${esc(value)}</code></div>`).join("");
   }
   qs("#historical-receipt").textContent = state.historicalLiveProof.receiptHash;
 }
 
 function renderSpend(state) {
-  const p = state.spend.policy;
-  const s = state.spend.session;
-  const status = s.authorized ? "AUTHORIZED" : "REVOKED";
+  const policy = state.spend.policy;
+  const session = state.spend.session;
+  const status = session.authorized ? "AUTHORIZED" : "REVOKED";
   const pill = qs("#spend-state");
   pill.textContent = status;
-  pill.className = "state-pill " + tone(status);
-  qs("#spend-detail").innerHTML = [
-    ["Per purchase", dollars(p.maxPerPurchaseUusdc)],
-    ["Max attempts / capability", p.maxAttemptsPerCapability],
-    ["Session cap", dollars(p.maxSessionSpendUusdc)],
-    ["Spent / reserved", dollars(s.spentUusdc) + " / " + dollars(s.reservedUusdc)],
-  ].map(([label, value]) => `<div class="policy-row"><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`).join("");
+  pill.className = `state-chip ${tone(status)}`;
+  const rows = [
+    ["Per purchase", dollars(policy.maxPerPurchaseUusdc)],
+    ["Attempts / capability", policy.maxAttemptsPerCapability],
+    ["Session cap", dollars(policy.maxSessionSpendUusdc)],
+    ["Spent / reserved", `${dollars(session.spentUusdc)} / ${dollars(session.reservedUusdc)}`],
+  ];
+  qs("#spend-detail").innerHTML = rows.map(([label, value]) => `<div class="policy-row"><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`).join("");
 }
 
 function renderEvents(state) {
-  qs("#events").innerHTML = state.events.slice(0, 14).map((e) => `
-    <div class="event">
-      <strong>${esc(e.kind.toUpperCase())} · ${esc(time(e.at))}</strong>
-      <span>${esc(e.message)}</span>
-    </div>
+  qs("#events").innerHTML = state.events.slice(0, 14).map((event) => `
+    <div class="event"><strong>${esc(event.kind.toUpperCase())} / ${esc(time(event.at))}</strong><span>${esc(event.message)}</span></div>
   `).join("");
+}
+
+function renderFaults(state) {
+  const activeFaults = new Set();
+  if (state.telemetry.fault !== "none") activeFaults.add(state.telemetry.fault);
+  if (!state.provider.available) activeFaults.add("provider_unavailable");
+  qsa("[data-fault]").forEach((button) => {
+    const active = activeFaults.has(button.dataset.fault);
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
+  const status = qs("#fault-status");
+  status.textContent = activeFaults.size ? `${activeFaults.size} active` : "Healthy";
+  status.className = `console-status ${activeFaults.size ? "bad" : ""}`;
 }
 
 function render(state) {
   current = state;
   const mode = qs("#mode-badge");
-  mode.textContent = state.product.liveTelegraphEnabled ? "LIVE TELEGRAPH ENABLED" : "SAFE SIMULATION";
-  mode.className = "tag tag-mode " + (state.product.liveTelegraphEnabled ? "live" : "sim");
-  qs("#recover-live").disabled = !state.product.liveTelegraphEnabled;
+  mode.textContent = state.product.liveTelegraphEnabled ? "LIVE TESTNET ENABLED" : "SAFE SIMULATION";
+  mode.className = `system-badge ${state.product.liveTelegraphEnabled ? "live" : "sim"}`;
+  qs("#recover-live").disabled = busy || !state.product.liveTelegraphEnabled;
 
   qs("#task-name").textContent = state.task.name;
   qs("#machine-id").textContent = state.task.machineId;
   qs("#task-state").textContent = state.task.state;
-  qs("#task-state").className = "state-pill " + tone(state.task.state);
+  qs("#task-state").className = `state-chip ${tone(state.task.state)}`;
   qs("#telemetry-state").textContent = state.telemetry.status;
-  qs("#telemetry-state").className = "state-pill " + tone(state.telemetry.status);
+  qs("#telemetry-state").className = `state-chip ${tone(state.telemetry.status)}`;
 
   renderMetrics(state);
+  renderRecoveryRail(state);
   renderTelemetry(state);
   renderChecks(state);
   renderPurchase(state);
   renderSpend(state);
   renderEvents(state);
+  renderFaults(state);
 }
 
 async function refresh() {
-  try { render(await api("/api/state")); } catch (e) { toast(e.message); }
+  try { render(await api("/api/state")); } catch (error) { toast(error.message); }
 }
 
 async function mutate(path, body) {
+  if (busy) return;
+  setBusy(true);
   try {
-    render(await api(path, {method: "POST", body: JSON.stringify(body || {})}));
-  } catch (e) {
-    toast(e.message);
+    render(await api(path, { method: "POST", body: JSON.stringify(body || {}) }));
+  } catch (error) {
+    toast(error.message);
+  } finally {
+    setBusy(false);
   }
 }
 
-qs("#recover-sim").addEventListener("click", () => mutate("/api/recover", {mode: "simulation"}));
+qs("#recover-sim").addEventListener("click", () => mutate("/api/recover", { mode: "simulation" }));
 qs("#recover-live").addEventListener("click", () => {
   if (!current?.product.liveTelegraphEnabled) return;
-  const ok = confirm("This can spend up to $0.01 test USDC per attempt from the dedicated Telegraph escrow. Continue?");
-  if (ok) mutate("/api/recover", {mode: "live"});
+  const confirmed = confirm("This can spend up to $0.01 test USDC per attempt from the dedicated Telegraph escrow. Continue?");
+  if (confirmed) mutate("/api/recover", { mode: "live" });
 });
-qs("#authorize").addEventListener("click", () => mutate("/api/spend", {authorized: true}));
-qs("#revoke").addEventListener("click", () => mutate("/api/spend", {authorized: false}));
+qs("#authorize").addEventListener("click", () => mutate("/api/spend", { authorized: true }));
+qs("#revoke").addEventListener("click", () => mutate("/api/spend", { authorized: false }));
 qs("#reset").addEventListener("click", () => mutate("/api/reset", {}));
-qsa("[data-fault]").forEach((button) => button.addEventListener("click", () => mutate("/api/fault", {fault: button.dataset.fault})));
+qsa("[data-fault]").forEach((button) => button.addEventListener("click", () => mutate("/api/fault", { fault: button.dataset.fault })));
 
 refresh();
-setInterval(refresh, 3000);
+setInterval(() => { if (!busy) refresh(); }, 3000);

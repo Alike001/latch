@@ -109,7 +109,9 @@ describe("Stage 9 control-room HTTP surface", () => {
 
       const page = await fetch(base + "/control-room");
       expect(page.status).toBe(200);
-      expect(await page.text()).toContain("Recovery control room");
+      expect(await page.text()).toContain(
+        "Trust the evidence<br>before the machine moves.",
+      );
 
       const fault = await fetch(base + "/api/fault", {
         method: "POST",
